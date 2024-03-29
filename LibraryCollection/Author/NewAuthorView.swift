@@ -108,12 +108,12 @@ struct NewAuthorView: View {
                 }
             } //Form
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .buttonStyle(CustomButtonStyle())
-                }
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Button("Cancel") {
+//                        dismiss()
+//                    }
+//                    .buttonStyle(CustomButtonStyle())
+//                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         PerformValidationAndSave()

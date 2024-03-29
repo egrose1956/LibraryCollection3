@@ -14,41 +14,12 @@ class PersistenceController {
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
                         
         let container = NSPersistentCloudKitContainer(name: "DataModel")
-        
-//#if DEBUG
-//        // Only initialize the schema when building the app with the
-//        // Debug build configuration.
-//        do {
-//            // Use the container to initialize the development schema.
-//            try container.initializeCloudKitSchema(options: [])
-//        } catch {
-//            let logger = appLogger()
-//            logger.log(level: .info, message: "initializeCloudKitSchema has failed.")
-//        }
-//
-//#endif
 
-//        // Create a store description for a local store
-//        let localStoreLocation = URL(fileURLWithPath: "Bundle.main.applicationSupportDirectory")
-//        let localStoreDescription =
-//                NSPersistentStoreDescription(url: localStoreLocation)
-//        localStoreDescription.configuration = "Default"
-//
         // Create a store description for a CloudKit-backed local store
-        let cloudStoreLocation = URL(fileURLWithPath: "iCloud/com/RiverThree/LibraryCollection")
+        let cloudStoreLocation = URL(fileURLWithPath: "Bundle.main.applicationSupportDirectory")
         let cloudStoreDescription = NSPersistentStoreDescription(url: cloudStoreLocation)
         cloudStoreDescription.configuration = "Default"
         cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.RiverThree.LibraryCollection")
-
-        // Update the container's list of store descriptions
-//        container.persistentStoreDescriptions = [
-//            localStoreDescription
-//        ]
-//        
-//    #if DEBUG
-//        print(container.persistentStoreDescriptions)
-//    #endif
-        
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -58,14 +29,10 @@ class PersistenceController {
         
         container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         container.viewContext.undoManager = nil
-        
-        
 
-        
         return container
         
     }()
-    
     
     func save() {
         
