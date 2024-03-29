@@ -23,6 +23,7 @@
 		069034412B965C5A00F8FE31 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0690343F2B965C5A00F8FE31 /* Search.swift */; };
 		069034452B9F87E000F8FE31 /* CoAuthorsAndNarratorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069034442B9F87E000F8FE31 /* CoAuthorsAndNarratorsView.swift */; };
 		069034472B9F8AFE00F8FE31 /* CoAuthorsAndNarratorsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069034462B9F8AFE00F8FE31 /* CoAuthorsAndNarratorsExtension.swift */; };
+		06A36F712BB7037300380DD9 /* LibraryCollection.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 06AB77622BB62547006EA52B /* LibraryCollection.entitlements */; };
 		06C1550D2B5C3354005D2635 /* TitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C1550C2B5C3354005D2635 /* TitlesView.swift */; };
 		06C155172B5DE714005D2635 /* NameFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C155162B5DE714005D2635 /* NameFormatter.swift */; };
 		06C1551D2B5EDF1E005D2635 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C1551B2B5EDF1E005D2635 /* Launch Screen.storyboard */; };
@@ -331,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A36F712BB7037300380DD9 /* LibraryCollection.entitlements in Resources */,
 				06C1551D2B5EDF1E005D2635 /* Launch Screen.storyboard in Resources */,
 				060F93902B5B463500CAACDD /* Preview Assets.xcassets in Resources */,
 				060F938D2B5B463500CAACDD /* Assets.xcassets in Resources */,
