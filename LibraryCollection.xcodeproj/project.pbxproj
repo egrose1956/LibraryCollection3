@@ -23,7 +23,7 @@
 		069034412B965C5A00F8FE31 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0690343F2B965C5A00F8FE31 /* Search.swift */; };
 		069034452B9F87E000F8FE31 /* CoAuthorsAndNarratorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069034442B9F87E000F8FE31 /* CoAuthorsAndNarratorsView.swift */; };
 		069034472B9F8AFE00F8FE31 /* CoAuthorsAndNarratorsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069034462B9F8AFE00F8FE31 /* CoAuthorsAndNarratorsExtension.swift */; };
-		06A36F712BB7037300380DD9 /* LibraryCollection.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 06AB77622BB62547006EA52B /* LibraryCollection.entitlements */; };
+		06A36F752BB709D700380DD9 /* LibraryCollection.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 06A36F742BB709C500380DD9 /* LibraryCollection.entitlements */; };
 		06C1550D2B5C3354005D2635 /* TitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C1550C2B5C3354005D2635 /* TitlesView.swift */; };
 		06C155172B5DE714005D2635 /* NameFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C155162B5DE714005D2635 /* NameFormatter.swift */; };
 		06C1551D2B5EDF1E005D2635 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06C1551B2B5EDF1E005D2635 /* Launch Screen.storyboard */; };
@@ -79,7 +79,7 @@
 		0690343F2B965C5A00F8FE31 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		069034442B9F87E000F8FE31 /* CoAuthorsAndNarratorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoAuthorsAndNarratorsView.swift; sourceTree = "<group>"; };
 		069034462B9F8AFE00F8FE31 /* CoAuthorsAndNarratorsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoAuthorsAndNarratorsExtension.swift; sourceTree = "<group>"; };
-		06AB77622BB62547006EA52B /* LibraryCollection.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibraryCollection.entitlements; sourceTree = "<group>"; };
+		06A36F742BB709C500380DD9 /* LibraryCollection.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LibraryCollection.entitlements; sourceTree = SOURCE_ROOT; };
 		06C1550C2B5C3354005D2635 /* TitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlesView.swift; sourceTree = "<group>"; };
 		06C155162B5DE714005D2635 /* NameFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameFormatter.swift; sourceTree = "<group>"; };
 		06C1551B2B5EDF1E005D2635 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 				060F93982B5B476200CAACDD /* DataRelated */,
 				069034482B9FB3A700F8FE31 /* Helper Files */,
 				060F938C2B5B463500CAACDD /* Assets.xcassets */,
-				06AB77622BB62547006EA52B /* LibraryCollection.entitlements */,
+				06A36F742BB709C500380DD9 /* LibraryCollection.entitlements */,
 				06C1551B2B5EDF1E005D2635 /* Launch Screen.storyboard */,
 				060F93922B5B463500CAACDD /* Info.plist */,
 				060F938E2B5B463500CAACDD /* Preview Content */,
@@ -332,7 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06A36F712BB7037300380DD9 /* LibraryCollection.entitlements in Resources */,
+				06A36F752BB709D700380DD9 /* LibraryCollection.entitlements in Resources */,
 				06C1551D2B5EDF1E005D2635 /* Launch Screen.storyboard in Resources */,
 				060F93902B5B463500CAACDD /* Preview Assets.xcassets in Resources */,
 				060F938D2B5B463500CAACDD /* Assets.xcassets in Resources */,
@@ -528,7 +528,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = LibraryCollection/LibraryCollection.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"LibraryCollection/Preview Content\"";
 				DEVELOPMENT_TEAM = X5W96NXHAE;
 				ENABLE_PREVIEWS = YES;
@@ -562,7 +562,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = LibraryCollection/LibraryCollection.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"LibraryCollection/Preview Content\"";
 				DEVELOPMENT_TEAM = X5W96NXHAE;
 				ENABLE_PREVIEWS = YES;
