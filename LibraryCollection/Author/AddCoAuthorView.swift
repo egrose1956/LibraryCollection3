@@ -144,10 +144,18 @@ struct AddCoAuthorView: View {
                 .accessibilityLabel("Last Name is missing or too short.")
             }
             .toolbar {
-                NavigationLink("Edit Author", destination: EditAuthorView(authorIdString: authorIdString,
-                                                                          authorLastName: authorLastName,
-                                                                          authorFirstName: authorFirstName,
-                                                                          authorMiddleName: authorMiddleName))
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink("Edit Author", destination: EditAuthorView(authorIdString: authorIdString,
+                                                                              authorLastName: authorLastName,
+                                                                              authorFirstName: authorFirstName,
+                                                                              authorMiddleName: authorMiddleName))
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    NavigationLink("Return to Main Screen") {
+                        ContentView()
+                    }
+                    .buttonStyle(CustomButtonStyle())
+                }
             } //VStack
             .onAppear {
                 focusedField = .authorFirstName

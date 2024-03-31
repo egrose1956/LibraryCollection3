@@ -128,6 +128,14 @@ struct EditAuthorView: View {
         .onDisappear {
             UpdateAuthor()
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView(returning: true)
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .font(.title2)
     } //Body

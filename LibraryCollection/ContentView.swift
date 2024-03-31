@@ -10,20 +10,23 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var createNewAuthor: Bool = false
+    @State var returning: Bool = false
     
     enum FilterOptions {
         case worksTitles, authors, narrators, unknown
     }
-    @State var filter: FilterOptions
-
+    @State var filter: FilterOptions = .authors
+    
     var body: some View {
         
-        VStack(alignment: .center) {
-            Text("LibraryCollection")
-                .font(.title)
-                .fontWeight(.bold)
+        if !returning {
+            VStack(alignment: .center) {
+                Text("LibraryCollection")
+                    .font(.title)
+                    .fontWeight(.bold)
+            }
         }
-        NavigationStack {
+        NavigationStack() {
             VStack {
                 switch filter {
                 case .authors:
@@ -35,7 +38,6 @@ struct ContentView: View {
                 default:
                     AuthorsView()
                 }
-
                 Section {
                     Image("oldbigbookshelf")
                         .resizable()
@@ -49,7 +51,7 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Viewing Options", systemImage: "text.justify") {
                         Button("View Titles") { filter = .worksTitles }
-                        Button("View Authors") { filter = .authors}
+                        Button("View Authors") { filter = .authors }
                         Button("View Narrators") { filter = .narrators }
                     }
                 }

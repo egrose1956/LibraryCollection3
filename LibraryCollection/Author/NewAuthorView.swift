@@ -11,7 +11,7 @@ struct NewAuthorView: View {
     
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
-    
+       
     @State var author: FetchedResults<Author>.Element?
     @State var filteredTitles: [String] = []
         
@@ -108,12 +108,12 @@ struct NewAuthorView: View {
                 }
             } //Form
             .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button("Cancel") {
-//                        dismiss()
-//                    }
-//                    .buttonStyle(CustomButtonStyle())
-//                }
+                ToolbarItem(placement: .bottomBar) {
+                    NavigationLink("Return to Main Screen") {
+                        ContentView(returning: true)
+                    }
+                    .buttonStyle(CustomButtonStyle())
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         PerformValidationAndSave()

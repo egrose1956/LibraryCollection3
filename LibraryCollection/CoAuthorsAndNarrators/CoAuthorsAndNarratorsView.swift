@@ -56,5 +56,13 @@ struct CoAuthorsAndNarratorsView: View {
             LoadCoAuthors()
             LoadNarrators()
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView(returning: true)
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
     }
 }

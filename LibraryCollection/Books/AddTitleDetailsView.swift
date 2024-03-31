@@ -219,6 +219,14 @@ struct AddTitleDetailsView: View {
             .autocorrectionDisabled(true)
             .safeAreaPadding(20)
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView()
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
     }
 }
 

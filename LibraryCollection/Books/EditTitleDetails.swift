@@ -178,6 +178,12 @@ struct EditTitleDetails: View {
                                destination: AddNarratorView(titleIdString: titleIdString, titleName: title))
                 
             }
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView(returning: true)
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
         }
     }
     

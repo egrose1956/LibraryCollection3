@@ -26,9 +26,13 @@ class PersistenceController {
                 fatalError("Core Data failed to load: \(error.localizedDescription)")
             }
         })
-        
+
         container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         container.viewContext.undoManager = nil
+        
+#if DEBUG
+        print(container.persistentStoreDescriptions[0].url?.absoluteURL.path.removingPercentEncoding)
+#endif
 
         return container
         

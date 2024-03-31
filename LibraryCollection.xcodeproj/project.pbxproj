@@ -217,13 +217,13 @@
 				06C155292B61BB59005D2635 /* EditAuthorView.swift */,
 				06EBEB902B9007DA00CEFC63 /* EditAuthorExtension.swift */,
 				06C4ED3A2B67F93500F866B3 /* AuthorsView.swift */,
+				06F8D2D72BA8BC9500F04945 /* AuthorsViewExtension.swift */,
 				06C4ED5B2B6C2DC400F866B3 /* NewAuthorView.swift */,
 				06EBEB892B9007C600CEFC63 /* NewAuthorExtension.swift */,
 				065C6ECF2B90F5CA00208BB4 /* AddCoAuthorView.swift */,
 				06EBEB882B9007C600CEFC63 /* AddCoAuthorExtension.swift */,
 				065C6ED32B90F66000208BB4 /* AuthorsWorksView.swift */,
 				06EBEB952B9007F200CEFC63 /* AuthorsWorksViewExtension.swift */,
-				06F8D2D72BA8BC9500F04945 /* AuthorsViewExtension.swift */,
 			);
 			path = Author;
 			sourceTree = "<group>";

@@ -222,6 +222,14 @@ struct AddNarratorView: View {
                 ValidateNarratorAndSave()
             }
         } //Nav Stack
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView(returning: true)
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
     }
 }
 
