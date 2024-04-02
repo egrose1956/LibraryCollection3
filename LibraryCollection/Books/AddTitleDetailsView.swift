@@ -173,13 +173,7 @@ struct AddTitleDetailsView: View {
                     
                     Button("Cancel Without Saving") { dismiss() }
                     
-                    Button("Save") {
-                        if !detailsHaveBeenSaved {
-                            SaveTitleDetails() //includes the title and titleauthor entries
-                            detailsHaveBeenSaved = true
-                            dismiss()
-                        }
-                    }
+                    
                 }
                 .buttonStyle(CustomButtonStyle())
                 
@@ -223,6 +217,16 @@ struct AddTitleDetailsView: View {
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView()
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save") {
+                    if !detailsHaveBeenSaved {
+                        SaveTitleDetails() //includes the title and titleauthor entries
+                        detailsHaveBeenSaved = true
+                        dismiss()
+                    }
                 }
                 .buttonStyle(CustomButtonStyle())
             }

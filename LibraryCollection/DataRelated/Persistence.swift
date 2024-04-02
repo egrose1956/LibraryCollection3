@@ -31,7 +31,7 @@ class PersistenceController {
         container.viewContext.undoManager = nil
         
 #if DEBUG
-        print(container.persistentStoreDescriptions[0].url?.absoluteURL.path.removingPercentEncoding)
+        print(container.persistentStoreDescriptions[0].url?.absoluteURL.path.removingPercentEncoding as Any)
 #endif
 
         return container

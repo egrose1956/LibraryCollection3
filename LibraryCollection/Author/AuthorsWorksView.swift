@@ -27,7 +27,6 @@ struct AuthorsWorksView: View {
             NavigationStack {
                 ScrollView {
                     ForEach (filteredTitles, id:\.self) { selectedItem in
-                        //GetComponentValues(componentString: title)
                         NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",
                                        destination: EditTitleDetails(authorIdString: authorIdString,
                                                                      titleIdString: selectedItem.components(separatedBy: "*")[1]))
@@ -45,10 +44,4 @@ struct AuthorsWorksView: View {
         titleIdString = componentString.components(separatedBy: "*")[1]
     }
 }
-/*
- old code...not working as expected.
- NavigationLink("\(title.components(separatedBy: "*")[0])",
-       destination: EditTitleDetails(authorIdString: authorIdString,
-                                     titleIdString: title.components(separatedBy: "*")[1]))
-.accessibilityLabel("Displaying details for \(title.components(separatedBy: "*")[0])")
- */
+

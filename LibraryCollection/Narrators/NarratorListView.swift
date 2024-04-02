@@ -24,6 +24,8 @@ struct NarratorListView: View {
     @State var titleName: String = ""
     @State var filteredNarrators: [String] = []
     @State var nameFormatter = NameFormatter()
+    @State var deleteWarning: Bool = false
+    @State var narratorIdString: String = ""
     
     var body: some View {
         NavigationStack {
@@ -35,15 +37,25 @@ struct NarratorListView: View {
                     Text("Narrators For: \(titleName)")
                         .accessibilityLabel("Narrators For: \(titleName)")
                 }
-                
-                List(narrators, id: \.narratorId) { narrator in
-
-                    NavigationLink(destination: EditNarrator(narrator: narrator)) {
-                        Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
-                                                               firstName: narrator.wrappedNarratorFirstName,
-                                                               middleName: narrator.wrappedNarratorMiddleName))
+                if !narrators.isEmpty {
+                    List(narrators, id: \.narratorId) { narrator in
+                        
+                        NavigationLink(destination: EditNarrator(narrator: narrator)) {
+                            Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
+                                                                     firstName: narrator.wrappedNarratorFirstName,
+                                                                     middleName: narrator.wrappedNarratorMiddleName))
                             .accessibilityLabel("Proceeding to edit \(narrator.wrappedNarratorFirstName) \(narrator.narratorLastName)")
+                        }
                     }
+//                    .swipeActions(allowsFullSwipe: false) {
+//                        Button("Deleting") {
+//                            deleteWarning = true
+//                            narratorIdString = narrator!.narratorId.uuidString
+//                            
+//                            
+//                        }
+//                        .tint(.red)
+//                    }
                 }
             }
         }
@@ -53,6 +65,7 @@ struct NarratorListView: View {
             }
         }
         .foregroundColor(Color.accentColor)
+        
 //        .toolbar {
 //            TODO: A link to all titles narrator has performed, authors they have read for?? Edit??
 //        }

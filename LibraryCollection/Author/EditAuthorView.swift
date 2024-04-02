@@ -84,6 +84,9 @@ struct EditAuthorView: View {
                 VStack(alignment: .center) {
                     AuthorsWorksView(authorIdString: authorIdString)
                 }
+                .frame(maxWidth: .infinity)
+                .font(.subheadline)
+                .foregroundColor(Color.accentColor)
                 
             }
             .onSubmit {
@@ -122,7 +125,8 @@ struct EditAuthorView: View {
         }
         .onAppear {
             authorIdString = authorIdString
-            moc.refreshAllObjects()
+            
+            //moc.refreshAllObjects()
         }
         .safeAreaPadding(20)
         .onDisappear {

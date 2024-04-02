@@ -71,7 +71,9 @@ extension AuthorsView {
             if !authorToDelete.isEmpty {
                 moc.delete(authorToDelete[0])
             }
+            
             try moc.save()
+            moc.refreshAllObjects()
             
         } catch let error as NSError {
             let logger = appLogger()
@@ -202,7 +204,7 @@ extension AuthorsView {
             
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "TitleAuthorAndAuthorDelete error in AuthorsViewExtension. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "TitleDetailsDelete error in AuthorsViewExtension. \(error), \(error.localizedDescription)")
         }
         
     }

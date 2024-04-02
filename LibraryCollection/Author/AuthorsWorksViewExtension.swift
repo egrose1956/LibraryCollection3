@@ -32,8 +32,10 @@ extension AuthorsWorksView {
                 _fetchRequestTitle.resultType = NSFetchRequestResultType.managedObjectResultType
                 
                 let result = try moc.fetch(_fetchRequestTitle)
-                let resultString = result[0].title + "*" + titleId
-                filteredTitles.append(resultString)
+                for _ in (0..<result.count) {
+                    let resultString = result[0].title + "*" + titleId
+                    filteredTitles.append(resultString)
+                }
             }
         } catch let error as NSError {
             let logger = appLogger()
