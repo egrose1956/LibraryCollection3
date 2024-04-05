@@ -191,7 +191,7 @@ struct EditTitleDetails: View {
         
         //this brings back title
         GetTitleById()
-        
+        authorIdString = GetAuthorId(filter: titleIdString)
         GetTitleDetailsById()
         GetCoAuthors()
         

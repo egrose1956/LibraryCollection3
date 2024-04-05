@@ -44,6 +44,7 @@ struct AuthorsView: View {
                     Text("Authors")
                         .font(.title3)
                         .fontWeight(.bold)
+                        .foregroundStyle(Color.accentColor)
                     List {
                         ForEach (authors) { author in
                             NavigationLink {
@@ -62,9 +63,13 @@ struct AuthorsView: View {
                                 
                             }
                             .swipeActions(allowsFullSwipe: false) {
-                                Button("Deleting") {
+                                Button() {
                                     deleteWarning = true
                                     authorIdString = author.authorId.uuidString
+                                } label: {
+                                    Label("Delete", systemImage: "trash.fill")
+                                }
+                                .tint(.red)
 #if DEBUG
                                     // if in debug mode and the function is uncommented...
                                     // this functionality is included for the developer to clean data
@@ -73,8 +78,6 @@ struct AuthorsView: View {
                                     
                                      //deleteRelatedAuthorFiles(authorIdString: authorIdString)
 #endif
-                                }
-                                .tint(.red)
                             }
                         }
                     }

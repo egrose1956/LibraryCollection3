@@ -37,7 +37,7 @@ struct NewAuthorView: View {
     @FocusState private var focusedField: Field?
     
     var body: some View {
-        NavigationStack {
+        //NavigationStack {
             Form {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
@@ -135,7 +135,7 @@ struct NewAuthorView: View {
             .onAppear {
                 focusedField = .authorFirstName
             }
-        } //navStack
+       // } //navStack
         .safeAreaPadding(20)
     } //body
 }

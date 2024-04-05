@@ -23,9 +23,8 @@ extension TitlesView {
         do {
             let id = try moc.fetch(_fetchId)
             if id.count > 0 {
-                for i in 0..<id.count {
-                    idString = id[i].authorId.uuidString
-                }
+                //specified return of only one record
+                idString = id[0].authorId.uuidString
             }
         } catch let error as NSError {
             let logger = appLogger()
@@ -81,6 +80,39 @@ extension TitlesView {
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "No fetch from SearchResultsExtension:GetAllTitlesByTitle. \(error), \(error.localizedDescription)")
+        }
+    }
+    
+    func DeleteSelectedTitle(titleId: String, authorId: String) {
+        
+        guard !authorId.isEmpty else {return}
+        guard !titleId.isEmpty else {return}
+        
+        //get all the titles matching the search criteria
+        let _fetchRequest = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
+        
+        _fetchRequest.predicate = NSPredicate(format: "titleId = %@ AND authorId = %@", titleId, authorId)
+        _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
+        _fetchRequest.fetchLimit = 1
+
+            do {
+                 let _title = try moc.fetch(_fetchRequest)
+
+                if _title.count > 0 {
+                    moc.delete(_title[0])
+                }
+                
+            } catch let error as NSError {
+                let logger = appLogger()
+                logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")
+            }
+        
+        do {
+            try moc.save()
+            moc.refreshAllObjects()
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")
         }
     }
 }

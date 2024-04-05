@@ -101,6 +101,30 @@ extension EditTitleDetails {
         }
     }
     
+    func GetAuthorId(filter: String) -> String {
+        
+        var idString: String = ""
+        
+        let _fetchId = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
+        _fetchId.predicate = NSPredicate(format: "titleId == %@", filter)
+        _fetchId.resultType = NSFetchRequestResultType.managedObjectResultType
+        _fetchId.fetchLimit = 1
+        
+        do {
+            let id = try moc.fetch(_fetchId)
+            if id.count > 0 {
+                for i in 0..<id.count {
+                    idString = id[i].authorId.uuidString
+                }
+            }
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "No fetch from TitleListViewExtension:GetAuthorId. \(error), \(error.localizedDescription)")
+        }
+        
+        return idString
+    }
+    
     func SaveTitleChanges() {
   
         if titleIdString.isEmpty {

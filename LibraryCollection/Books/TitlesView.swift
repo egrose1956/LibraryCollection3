@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TitlesView: View {
     
     @Environment(\.managedObjectContext) var moc
-    @Environment(\.dismiss) var dismiss
     
     @FetchRequest(sortDescriptors: [
         SortDescriptor(\.title)
@@ -21,7 +21,6 @@ struct TitlesView: View {
     @State var resultString: String = ""
     @State var titleIdString: String = ""
     @State var title: String = ""
-    @State private var newTitleAndDetails: Bool = false
     @State private var safeToDelete: Bool = false
        
     var body: some View {
@@ -32,51 +31,46 @@ struct TitlesView: View {
                         Image(systemName: "books.vertical")
                             .font(.largeTitle)
                     } description: {
-                        Text("Add New Title and Details")
+                        Text("No Books Available. Add an Author or add a new title to a current author.")
                     } actions: {
-                        Button("Create Book Details") {
-                            newTitleAndDetails.toggle()
-                        }
-                        .buttonStyle(CustomButtonStyle())
+
                     }
                 } else {
                     Text("Titles")
                         .font(.title3)
                         .fontWeight(.bold)
+                        .foregroundStyle(Color.accentColor)
+                    
                     List {
-                        ForEach(titles) { title in
+                        ForEach (titles) { selectedItem in
                             NavigationLink {
-                                EditTitleDetails(titleIdString: title.titleId.uuidString)
+                                EditTitleDetails(titleIdString: selectedItem.titleId.uuidString)
                             } label: {
-                                Text(title.title.isEmpty ? "" : title.title)
-                            } //label
+                                Text(selectedItem.title.isEmpty ? "" : selectedItem.title)
+                            }
                             .swipeActions(allowsFullSwipe: false) {
                                 Button(role: .destructive) {
-                                    safeToDelete.toggle()
-                                    moc.delete(title)
-                                    do {
-                                        try moc.save()
-                                    } catch {
-                                        let logger = appLogger()
-                                        logger.log(level: .info, message: "Save of title delete failed.")
-                                    }
+                                    titleIdString = selectedItem.titleId.uuidString
+                                    safeToDelete = true
                                 } label: {
                                     Label("Delete", systemImage: "trash.fill")
                                 }
+                                .tint(.red)
                             }
                         }
                     }
+                    .font(.title2)
+                    .foregroundStyle(Color.accentColor)
+                    .alert("Confirm action", isPresented: $safeToDelete) {
+                        Button("Delete? This can't be undone.", role: .destructive) {
+                            if authorIdString.isEmpty {
+                                authorIdString = GetAuthorId(filter: titleIdString)
+                            }
+                            DeleteSelectedTitle(titleId: titleIdString, authorId: authorIdString)
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    }
                 }
-            }
-            .font(.title2)
-            .foregroundStyle(Color.accentColor)
-            .alert("Confirm action", isPresented: $safeToDelete) {
-                Button("Delete? This can't be undone.", role: .destructive){}
-                Button("Cancel", role: .cancel) { dismiss() }
-            }
-            // to add another book for an existing author
-            if newTitleAndDetails {
-                AddTitleDetailsView(authorIdString: authorIdString)
             }
         }
     }

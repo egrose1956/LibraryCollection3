@@ -170,10 +170,7 @@ struct AddTitleDetailsView: View {
                 }
                 
                 HStack {
-                    
                     Button("Cancel Without Saving") { dismiss() }
-                    
-                    
                 }
                 .buttonStyle(CustomButtonStyle())
                 
@@ -224,6 +221,7 @@ struct AddTitleDetailsView: View {
                 Button("Save") {
                     if !detailsHaveBeenSaved {
                         SaveTitleDetails() //includes the title and titleauthor entries
+                        moc.refreshAllObjects()
                         detailsHaveBeenSaved = true
                         dismiss()
                     }
