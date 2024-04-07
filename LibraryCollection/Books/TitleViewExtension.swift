@@ -96,12 +96,21 @@ extension TitlesView {
         _fetchRequest.fetchLimit = 1
 
             do {
-                 let _title = try moc.fetch(_fetchRequest)
+                 let _titleAuthor = try moc.fetch(_fetchRequest)
 
-                if _title.count > 0 {
-                    moc.delete(_title[0])
+                if _titleAuthor.count > 0 {
+                    moc.delete(_titleAuthor[0])
+                    
+                    let _fetchTitle = NSFetchRequest<Title>(entityName: "Title")
+                    _fetchTitle.predicate = NSPredicate(format: "titleId = %@", titleId)
+                    _fetchTitle.resultType = NSFetchRequestResultType.managedObjectResultType
+                    _fetchTitle.fetchLimit = 1
+                    
+                    let _title = try moc.fetch(_fetchTitle)
+                    if _title.count > 0 {
+                        moc.delete(_title[0])
+                    }
                 }
-                
             } catch let error as NSError {
                 let logger = appLogger()
                 logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")
@@ -109,7 +118,7 @@ extension TitlesView {
         
         do {
             try moc.save()
-            moc.refreshAllObjects()
+            
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")

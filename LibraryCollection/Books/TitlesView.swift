@@ -67,6 +67,7 @@ struct TitlesView: View {
                                 authorIdString = GetAuthorId(filter: titleIdString)
                             }
                             DeleteSelectedTitle(titleId: titleIdString, authorId: authorIdString)
+                            moc.refreshAllObjects()
                         }
                         Button("Cancel", role: .cancel) {}
                     }

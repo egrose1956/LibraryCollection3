@@ -13,7 +13,7 @@ struct ContentView: View {
     @State var returning: Bool = false
     
     enum FilterOptions {
-        case worksTitles, authors, narrators, unknown
+        case worksTitles, authors, narrators, unknown, aboutView
     }
     @State var filter: FilterOptions = .authors
     
@@ -35,6 +35,8 @@ struct ContentView: View {
                     TitlesView()
                 case .narrators:
                     NarratorListView()
+                case .aboutView:
+                    AboutView()
                 default:
                     AuthorsView()
                 }
@@ -53,6 +55,7 @@ struct ContentView: View {
                         Button("View Titles") { filter = .worksTitles }
                         Button("View Authors") { filter = .authors }
                         Button("View Narrators") { filter = .narrators }
+                        Button("About This App") { filter = .aboutView }
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
