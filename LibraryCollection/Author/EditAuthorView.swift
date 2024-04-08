@@ -34,7 +34,7 @@ struct EditAuthorView: View {
                 VStack(alignment: .leading) {
                     Text("First Name: ")
                         .foregroundStyle(Color.accentColor)
-                        .font(.footnote)
+                        .font(.subheadline)
                     TextField("Author First Name", text: $authorFirstName)
                         .font(.subheadline)
                         .focused($focusedField, equals: .authorFirstName)
@@ -46,7 +46,7 @@ struct EditAuthorView: View {
                     
                     Text("Middle Name: ")
                         .foregroundStyle(Color.accentColor)
-                        .font(.footnote)
+                        .font(.subheadline)
                     TextField("Author Middle Name", text: $authorMiddleName)
                         .font(.subheadline)
                         .focused($focusedField, equals: .authorMiddleName)
@@ -58,7 +58,7 @@ struct EditAuthorView: View {
                     
                     Text("Last Name: ")
                         .foregroundStyle(Color.accentColor)
-                        .font(.footnote)
+                        .font(.subheadline)
                     TextField("Author Last Name", text: $authorLastName)
                         .font(.subheadline)
                         .focused($focusedField, equals: .authorLastName)
@@ -131,6 +131,7 @@ struct EditAuthorView: View {
         .safeAreaPadding(20)
         .onDisappear {
             UpdateAuthor()
+            hideKeyboard()
         }
         .toolbar {
             ToolbarItem(placement: .bottomBar) {

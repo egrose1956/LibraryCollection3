@@ -29,51 +29,58 @@ struct NarratorListView: View {
     
     var body: some View {
         NavigationStack {
-            Text("Narrators")
-                .font(.title3)
-                .fontWeight(.bold)
-            Form {
-                if !titleName.isEmpty {
-                    Text("Narrators For: \(titleName)")
-                        .accessibilityLabel("Narrators For: \(titleName)")
-                }
-                if !narrators.isEmpty {
-                    List(narrators, id: \.narratorId) { narrator in
-                        
-                        NavigationLink(destination: EditNarrator(narrator: narrator)) {
-                            Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
-                                                                     firstName: narrator.wrappedNarratorFirstName,
-                                                                     middleName: narrator.wrappedNarratorMiddleName))
-                            .accessibilityLabel("Proceeding to edit \(narrator.wrappedNarratorFirstName) \(narrator.narratorLastName)")
+            Group {
+                if narrators.isEmpty {
+                    ContentUnavailableView {
+                        Image(systemName: "person.slash")
+                            .font(.largeTitle)
+                    } description: {
+                        VStack(alignment: .center) {
+                            Text("No Narrators Created.")
+                            Text("Narrators are created from the Title details screen.")
                         }
                     }
-//                    .swipeActions(allowsFullSwipe: false) {
-//                        Button("Deleting") {
-//                            deleteWarning = true
-//                            narratorIdString = narrator!.narratorId.uuidString
-//                            
-//                            
-//                        }
-//                        .tint(.red)
-//                    }
+                } else {
+                    Text("Narrators")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Form {
+                        if !titleName.isEmpty {
+                            Text("Narrators For: \(titleName)")
+                                .accessibilityLabel("Narrators For: \(titleName)")
+                        }
+                        if !narrators.isEmpty {
+                            List(narrators, id: \.narratorId) { narrator in
+                                
+                                NavigationLink(destination: EditNarrator(narrator: narrator)) {
+                                    Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
+                                                                             firstName: narrator.wrappedNarratorFirstName,
+                                                                             middleName: narrator.wrappedNarratorMiddleName))
+                                    .font(.subheadline)
+                                    .accessibilityLabel("Proceeding to edit \(narrator.wrappedNarratorFirstName) \(narrator.narratorLastName)")
+                                }
+                            }
+                            .swipeActions(allowsFullSwipe: false) {
+                                Button() {
+                                    deleteWarning = true
+                                    narratorIdString = narrator!.narratorId.uuidString
+                                } label: {
+                                    Label("Delete", systemImage: "trash.fill")
+                                }
+                                .tint(.red)
+                            }
+                        }
+                    }
                 }
             }
-        }
-        .onAppear {
-            if !titleName.isEmpty {
-                GetAllNarratorsForTitle()
+            .onAppear {
+                if !titleName.isEmpty {
+                    GetAllNarratorsForTitle()
+                }
             }
+            .foregroundColor(Color.accentColor)
+            
+            // TODO: A link to all titles narrator has performed, authors they have read for?? Edit??
         }
-        .foregroundColor(Color.accentColor)
-        
-//        .toolbar {
-//            TODO: A link to all titles narrator has performed, authors they have read for?? Edit??
-//        }
     }
 }
-
-//struct NarratorListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NarratorListView()
-//    }
-//}

@@ -58,7 +58,7 @@ struct AuthorsView: View {
                                                                                          middleName: author.authorMiddleName)
                                 Text(fullNameString)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .font(.title3)
+                                    .font(.subheadline)
                                     .accessibilityValue("Author's name is \(fullNameString)")
                                 
                             }

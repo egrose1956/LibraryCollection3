@@ -125,7 +125,7 @@ struct AddNarratorView: View {
                     VStack(alignment: .leading) {
                         Text("First Name: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Narrator First Name", text: $newNarratorFirstName)
                             .focused($focusedField, equals: .newNarratorFirstName)
                             .font(.subheadline)
@@ -137,7 +137,7 @@ struct AddNarratorView: View {
                     VStack(alignment: .leading) {
                         Text("Middle Name: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Narrator Middle Name", text: $newNarratorMiddleName)
                             .focused($focusedField, equals: .newNarratorMiddleName)
                             .font(.subheadline)
@@ -220,6 +220,7 @@ struct AddNarratorView: View {
                     lastNameAlert = true
                 }
                 ValidateNarratorAndSave()
+                hideKeyboard()
             }
         } //Nav Stack
         .toolbar {

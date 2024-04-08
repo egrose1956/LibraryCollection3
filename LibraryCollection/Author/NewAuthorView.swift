@@ -43,7 +43,7 @@ struct NewAuthorView: View {
                     VStack(alignment: .leading) {
                         Text("First Name: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Author First Name", text: $authorFirstName)
                             .focused($focusedField, equals: .authorFirstName)
                             .font(.subheadline)
@@ -55,7 +55,7 @@ struct NewAuthorView: View {
                     VStack(alignment: .leading) {
                         Text("Middle Name: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Author Middle Name", text: $authorMiddleName)
                             .focused($focusedField, equals: .authorMiddleName)
                             .font(.subheadline)
@@ -67,7 +67,7 @@ struct NewAuthorView: View {
                     VStack(alignment: .leading) {
                         Text("Last Name: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Author Last Name", text: $authorLastName)
                             .font(.subheadline)
                             .focused($focusedField, equals: .authorLastName)
@@ -118,6 +118,7 @@ struct NewAuthorView: View {
                     Button("Save") {
                         PerformValidationAndSave()
                         saveIsComplete = true
+                        hideKeyboard()
                     }
                     .buttonStyle(CustomButtonStyle())
                 }

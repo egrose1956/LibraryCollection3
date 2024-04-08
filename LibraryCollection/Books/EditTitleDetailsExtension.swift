@@ -65,7 +65,9 @@ extension EditTitleDetails {
         do {
             let _titleDetails = try moc.fetch(_fetchRequestDetails)
             
-            titleDetails = _titleDetails
+            if _titleDetails.count > 0 {
+                titleDetails = _titleDetails
+            }
             
         } catch let error as NSError {
             let logger = appLogger()
@@ -127,6 +129,8 @@ extension EditTitleDetails {
     
     func SaveTitleChanges() {
   
+        guard !authorIdString.isEmpty else { return }
+        
         if titleIdString.isEmpty {
             let titleId = UUID()
             titleIdString = titleId.uuidString
@@ -157,41 +161,51 @@ extension EditTitleDetails {
     
     func SaveTitleDetails() {
         
-        guard !titleIdString.isEmpty && !titleDetailsId.isEmpty else { return }
-        
+        guard !authorIdString.isEmpty else { return }
+        guard !titleIdString.isEmpty else { return }
+
+        //we know there is a title because that's how we got here
+        SaveTitleChanges()
+
         do {
-
-            let _fetchRequest = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
-            _fetchRequest.predicate = NSPredicate(format: "titleDetailsId == %@ && titleId == %@", titleDetailsId, titleIdString)
-            _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
-            _fetchRequest.fetchLimit = 1
             
-            let saveDetails = try moc.fetch(_fetchRequest)
+            if titleDetailsId.isEmpty {
+                let detailsId = UUID()
+                titleDetailsId = detailsId.uuidString
+            }
             
-            if !saveDetails.isEmpty {
-                
-                saveDetails[0].bookType = selectedType
-                
-                if editionNumber.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    saveDetails[0].editionNumber = (editionNumber.trimmingCharacters(in: .whitespacesAndNewlines))
-                }
-                
-                if genre.trimmingCharacters(in:  .whitespacesAndNewlines) != "" {
-                    saveDetails[0].genre = genre.trimmingCharacters(in:  .whitespacesAndNewlines)
-                }
-                
-                if ISBN.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    saveDetails[0].isbn = ISBN.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
-                
-                if publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    saveDetails[0].publishingHouse = publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
-                
-                if publishingDate.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    saveDetails[0].publishingDate = publishingDate.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
-
+            let titleDetailsFetch = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
+            titleDetailsFetch.predicate = NSPredicate(format: "titleDetailsId == %@", titleDetailsId as CVarArg)
+            titleDetailsFetch.resultType = NSFetchRequestResultType.managedObjectResultType
+            titleDetailsFetch.fetchLimit = 1
+            
+            let updatedDetails = try moc.fetch(titleDetailsFetch)
+        
+            if !updatedDetails.isEmpty {
+                let titleId: UUID = UUID(uuidString: titleIdString)!
+                updatedDetails[0].titleId = titleId
+            }
+            
+            updatedDetails[0].bookType = selectedType
+            
+            if !editionNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                updatedDetails[0].editionNumber = (editionNumber.trimmingCharacters(in: .whitespacesAndNewlines))
+            }
+            
+            if !genre.trimmingCharacters(in:  .whitespacesAndNewlines).isEmpty {
+                updatedDetails[0].genre = genre.trimmingCharacters(in:  .whitespacesAndNewlines)
+            }
+            
+            if !ISBN.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                updatedDetails[0].isbn = ISBN.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            
+            if !publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                updatedDetails[0].publishingHouse = publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            
+            if !publishingDate.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                updatedDetails[0].publishingDate = publishingDate.trimmingCharacters(in: .whitespacesAndNewlines)
             }
 
             try moc.save()
@@ -199,7 +213,7 @@ extension EditTitleDetails {
                 
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:SaveTitleDetails. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "Save Error in AddTitleDetailsViewExtension:SaveTitleDetails. \(error), \(error.localizedDescription)")
         }
     }
 }

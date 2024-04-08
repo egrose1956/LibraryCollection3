@@ -48,7 +48,7 @@ struct CoAuthorsAndNarratorsView: View {
                 Button("Cancel") {dismiss()}
                     .buttonStyle(CustomButtonStyle())
             }
-            .font(.title2)
+            .font(.subheadline)
             .foregroundStyle(Color.accentColor)
             .safeAreaPadding(20)
         }

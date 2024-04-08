@@ -85,43 +85,58 @@ extension TitlesView {
     
     func DeleteSelectedTitle(titleId: String, authorId: String) {
         
+        //includes the join tables TitleAuthor and TitleNarrator
+        
         guard !authorId.isEmpty else {return}
         guard !titleId.isEmpty else {return}
         
         //get all the titles matching the search criteria
         let _fetchRequest = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
-        
         _fetchRequest.predicate = NSPredicate(format: "titleId = %@ AND authorId = %@", titleId, authorId)
         _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
-        _fetchRequest.fetchLimit = 1
 
-            do {
-                 let _titleAuthor = try moc.fetch(_fetchRequest)
-
-                if _titleAuthor.count > 0 {
-                    moc.delete(_titleAuthor[0])
-                    
-                    let _fetchTitle = NSFetchRequest<Title>(entityName: "Title")
-                    _fetchTitle.predicate = NSPredicate(format: "titleId = %@", titleId)
-                    _fetchTitle.resultType = NSFetchRequestResultType.managedObjectResultType
-                    _fetchTitle.fetchLimit = 1
-                    
-                    let _title = try moc.fetch(_fetchTitle)
-                    if _title.count > 0 {
-                        moc.delete(_title[0])
-                    }
-                }
-            } catch let error as NSError {
-                let logger = appLogger()
-                logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")
-            }
-        
         do {
+            //remove TitleAuthor records for this Title
+            //takes care of Author and Co-Author connections but
+            //leaves the author record intackt
+            let _titleAuthor = try moc.fetch(_fetchRequest)
+
+            if _titleAuthor.count > 0 {
+                for i in (0..<_titleAuthor.count) {
+                    moc.delete(_titleAuthor[i])
+                }
+            }
+            
+            //do the same thing for the TitleNarrator table
+            let _fetchNarrator = NSFetchRequest<TitleNarrator>(entityName: "TitleNarrator")
+            _fetchNarrator.predicate = NSPredicate(format: "titleId = %@", titleId)
+            _fetchNarrator.resultType = NSFetchRequestResultType.managedObjectResultType
+            
+            let _narrator = try moc.fetch(_fetchNarrator)
+            if _narrator.count > 0 {
+                for j in (0..<_narrator.count) {
+                    moc.delete(_narrator[j])
+                }
+            }
+             
+            //Finally, remove the title itself.
+            
+            let _fetchTitle = NSFetchRequest<Title>(entityName: "Title")
+            _fetchTitle.predicate = NSPredicate(format: "titleId = %@", titleId)
+            _fetchTitle.resultType = NSFetchRequestResultType.managedObjectResultType
+            _fetchTitle.fetchLimit = 1
+            
+            let _title = try moc.fetch(_fetchTitle)
+            if _title.count > 0 {
+                moc.delete(_title[0])
+            }
+                
             try moc.save()
             
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "Delete Error in TitleViewExtension. \(error), \(error.localizedDescription)")
         }
+
     }
 }

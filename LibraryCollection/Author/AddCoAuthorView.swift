@@ -65,7 +65,7 @@ struct AddCoAuthorView: View {
                             .accessibilityValue("\(selectedItem)")
                     }
                 }
-                .font(.title2)
+                .font(.subheadline)
                 .foregroundStyle(Color.accentColor)
                 
                 Text("Adding a Co-Author for \(titleName)")
@@ -79,7 +79,7 @@ struct AddCoAuthorView: View {
                         VStack(alignment: .leading) {
                             Text("First Name: ")
                                 .foregroundStyle(Color.accentColor)
-                                .font(.footnote)
+                                .font(.subheadline)
                             TextField("Author First Name", text: $authorFirstName)
                                 .focused($focusedField, equals: .authorFirstName)
                                 .font(.subheadline)
@@ -91,7 +91,7 @@ struct AddCoAuthorView: View {
                         VStack(alignment: .leading) {
                             Text("Middle Name: ")
                                 .foregroundStyle(Color.accentColor)
-                                .font(.footnote)
+                                .font(.subheadline)
                             TextField("Author Middle Name", text: $authorMiddleName)
                                 .focused($focusedField, equals: .authorMiddleName)
                                 .font(.subheadline)
@@ -103,6 +103,7 @@ struct AddCoAuthorView: View {
                         VStack(alignment: .leading) {
                             Text("Last Name: ")
                                 .foregroundStyle(Color.accentColor)
+                                .font(.subheadline)
                             TextField("Author Last Name", text: $authorLastName)
                                 .focused($focusedField, equals: .authorLastName)
                                 .font(.subheadline)
@@ -165,6 +166,7 @@ struct AddCoAuthorView: View {
             .safeAreaPadding(20)
             .onDisappear {
                 PerformValidationAndSave()
+                hideKeyboard()
             }
         } //NavStack
         .navigationBarTitleDisplayMode(.inline)

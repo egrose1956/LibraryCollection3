@@ -41,8 +41,6 @@ struct AddTitleDetailsView: View {
     @State var authorLastName: String = ""
 
     @State var detailsHaveBeenSaved: Bool = false
-    @State var showCoAuthorEntry: Bool = false
-    @State var showNarratorEntry: Bool = false
 
     enum Field {
             case selectedType
@@ -74,7 +72,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("Title")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField ("New Title: ", text: $title)
                             .focused($focusedField, equals: .editionNumber)
                             .font(.subheadline)
@@ -87,7 +85,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("Edition Number: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Edition Number: ", text: $editionNumber)
                             .focused($focusedField, equals: .editionNumber)
                             .font(.subheadline)
@@ -99,7 +97,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("Genre: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Genre: ", text: $genre)
                             .focused($focusedField, equals: .genre)
                             .font(.subheadline)
@@ -111,7 +109,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("ISBN: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("ISBN: ", text: $ISBN)
                             .focused($focusedField, equals: .ISBN)
                             .font(.subheadline)
@@ -123,7 +121,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("Published Date: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Published date: ", text: $publishingDate)
                             .focused($focusedField, equals: .publishingDate)
                             .font(.subheadline)
@@ -135,7 +133,7 @@ struct AddTitleDetailsView: View {
                     VStack(alignment: .leading) {
                         Text("Publishing House: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Publisher: ", text: $publishingHouse)
                             .focused($focusedField, equals: .publishingHouse)
                             .font(.subheadline)
@@ -173,44 +171,36 @@ struct AddTitleDetailsView: View {
                     Button("Cancel Without Saving") { dismiss() }
                 }
                 .buttonStyle(CustomButtonStyle())
-                
-                if showNarratorEntry {
-                    NavigationLink {
-                        AddNarratorView(titleIdString: titleIdString, titleName: title)
-                    } label: {
-                        Text("Narrator's entry")
-                            .accessibilityLabel("Moving to narrator entry screen.")
-                    }
+
+                if additionalAuthors.count > 0 {
+                    HStack(alignment: .top, content: {
+                        Text("All Authors: ")
+                            .accessibilityLabel("All authors.")
+                        VStack(alignment: .leading, content: {
+                            ForEach(additionalAuthors, id: \.self) { coAuthor in
+                                Text("\(coAuthor)")
+                                    .accessibilityValue("\(coAuthor)")
+                            }
+                        })
+                        .font(.caption)
+                    })
                 }
-                
-                if showCoAuthorEntry {
-                    NavigationLink {
-                        AddCoAuthorView(titleIdString: titleIdString, titleName: title)
-                    } label: {
-                        Text("Add additional Co-Authors here.")
-                        .accessibilityLabel("Moving to co-Author entry screen.")
-                    }
-                        if additionalAuthors.count > 0 {
-                            HStack(alignment: .top, content: {
-                                Text("All Authors: ")
-                                    .accessibilityLabel("All authors.")
-                                VStack(alignment: .leading, content: {
-                                    ForEach(additionalAuthors, id: \.self) { coAuthor in
-                                        Text("\(coAuthor)")
-                                            .accessibilityValue("\(coAuthor)")
-                                    }
-                                })
-                                .font(.caption)
-                            })
-                        }
-                    }
-                
+                                    
             } //Form
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)
             .safeAreaPadding(20)
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Menu("Additional Actions", systemImage: "text.justify") {
+                    NavigationLink("Add a Co-Author",
+                                   destination: AddCoAuthorView(titleIdString: titleIdString, titleName: title))
+                    NavigationLink("Add a Narrator",
+                                   destination: AddNarratorView(titleIdString: titleIdString, titleName: title))
+               
+                    }
+                }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView()
@@ -223,7 +213,7 @@ struct AddTitleDetailsView: View {
                         SaveTitleDetails() //includes the title and titleauthor entries
                         moc.refreshAllObjects()
                         detailsHaveBeenSaved = true
-                        dismiss()
+                        hideKeyboard()
                     }
                 }
                 .buttonStyle(CustomButtonStyle())

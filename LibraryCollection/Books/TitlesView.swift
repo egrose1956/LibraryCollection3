@@ -59,7 +59,7 @@ struct TitlesView: View {
                             }
                         }
                     }
-                    .font(.title2)
+                    .font(.subheadline)
                     .foregroundStyle(Color.accentColor)
                     .alert("Confirm action", isPresented: $safeToDelete) {
                         Button("Delete? This can't be undone.", role: .destructive) {

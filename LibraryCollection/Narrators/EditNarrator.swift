@@ -39,8 +39,10 @@ struct EditNarrator: View {
                     HStack {
                         Text("First Name: ")
                             .foregroundStyle(Color.accentColor)
+                            .font(.subheadline)
                         TextField("Narrator First Name", text: $narratorFirstName)
                             .focused($focusedField, equals: .narratorFirstName)
+                            .font(.subheadline)
                             .textContentType(.givenName)
                             .submitLabel(.next)
                             .accessibilityLabel("Narrator First Name")
@@ -48,16 +50,21 @@ struct EditNarrator: View {
                     HStack {
                         Text("Middle Name: ")
                             .foregroundColor(Color.accentColor)
+                            .font(.subheadline)
                         TextField("Narrator Middle Name", text: $narratorMiddleName)
                             .focused($focusedField, equals: .narratorMiddleName)
+                            .font(.subheadline)
                             .textContentType(.middleName)
                             .submitLabel(.next)
                             .accessibilityLabel("Narrator Middle Name")
                     }
                     HStack {
                         Text("Last Name: ")
+                            .foregroundColor(Color.accentColor)
+                            .font(.subheadline)
                         TextField("Narrator Last Name", text: $narratorLastName)
                             .focused($focusedField, equals: .narratorLastName)
+                            .font(.subheadline)
                             .textContentType(.familyName)
                             .submitLabel(.done)
                             .accessibilityLabel("Narrator Last Name")
@@ -92,6 +99,14 @@ struct EditNarrator: View {
                 .accessibilityLabel("This edit resulted in a possible duplication. Nothing saved.")
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                NavigationLink("Return to Main Screen") {
+                    ContentView()
+                }
+                .buttonStyle(CustomButtonStyle())
+            }
+        }
         .onAppear {
             titleIdString = titleIdString
             focusedField = .narratorFirstName
@@ -102,6 +117,7 @@ struct EditNarrator: View {
         .safeAreaPadding(20)
         .onDisappear {
             PerformEditValidationAndSave()
+            hideKeyboard()
         }
     }
         

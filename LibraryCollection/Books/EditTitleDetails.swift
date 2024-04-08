@@ -14,10 +14,9 @@ struct EditTitleDetails: View {
     @State var authorIdString: String = ""
     @State var titleIdString: String = ""
     @State var title: String = ""
-    @State private var titleHasChanged: Bool = false
+    @State var titleHasChanged: Bool = false
     @State var titleDetails: [TitleDetails] = []
     @State var titleDetailsId: String = ""
-    
     
     @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook", "Other"]
     @State var selectedType: String = ""
@@ -27,8 +26,6 @@ struct EditTitleDetails: View {
     @State var publishingDate: String = ""
     @State var publishingHouse: String = ""
     @State var additionalAuthors: [String] = []
-    
-    @State var displayCoAuthorsAndNarrators: Bool = false
     
     enum Field {
         case selectedType
@@ -47,7 +44,7 @@ struct EditTitleDetails: View {
                     VStack(alignment: .leading) {
                         Text("Title: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Title: \(title)", text: $title)
                             .font(.title3)
                             .fontWeight(.bold)
@@ -73,7 +70,7 @@ struct EditTitleDetails: View {
                     VStack(alignment: .leading) {
                         Text("Edition Number: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Edition Number: \(editionNumber)", text: $editionNumber)
                             .focused($focusedField, equals: .editionNumber)
                             .font(.subheadline)
@@ -85,7 +82,7 @@ struct EditTitleDetails: View {
                     
                         Text("Genre: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Genre: \(genre)", text: $genre)
                             .focused($focusedField, equals: .genre)
                             .font(.subheadline)
@@ -97,8 +94,10 @@ struct EditTitleDetails: View {
                         
                         Text("ISBN: ")
                             .foregroundStyle(Color.accentColor)
+                            .font(.subheadline)
                         TextField("ISBN: \(ISBN)", text: $ISBN)
                             .focused($focusedField, equals: .ISBN)
+                            .font(.subheadline)
                             .textContentType(.none)
                             .submitLabel(.next)
                             .accessibilityLabel("ISBN")
@@ -107,7 +106,7 @@ struct EditTitleDetails: View {
                         
                         Text("Published Date: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Published date: \(publishingDate)", text: $publishingDate)
                             .focused($focusedField, equals: .publishingDate)
                             .font(.subheadline)
@@ -119,7 +118,7 @@ struct EditTitleDetails: View {
                         
                         Text("Publisher: ")
                             .foregroundStyle(Color.accentColor)
-                            .font(.footnote)
+                            .font(.subheadline)
                         TextField("Publisher: \(publishingHouse)", text: $publishingHouse)
                             .focused($focusedField, equals: .publishingHouse)
                             .font(.subheadline)
@@ -163,20 +162,22 @@ struct EditTitleDetails: View {
         .keyboardType(.default)
         .autocorrectionDisabled(true)
         .safeAreaPadding(20)
-        .onDisappear {
-            if titleHasChanged {
-                SaveTitleChanges()
-            }
-            SaveTitleDetails()
-        }
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                NavigationLink("Add a Co-Author",
-                               destination: AddCoAuthorView(titleIdString: titleIdString, titleName: title))
-            
-                NavigationLink("Add a Narrator",
-                               destination: AddNarratorView(titleIdString: titleIdString, titleName: title))
-                
+            ToolbarItem(placement: .topBarLeading) {
+                Menu("Additional Actions", systemImage: "text.justify") {
+                    NavigationLink("Add a Co-Author",
+                                   destination: AddCoAuthorView(titleIdString: titleIdString, titleName: title))
+                    NavigationLink("Add a Narrator",
+                                   destination: AddNarratorView(titleIdString: titleIdString, titleName: title))
+               
+                    }
+                }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save") {
+                    SaveTitleDetails()
+                    hideKeyboard()
+                }
+                .buttonStyle(CustomButtonStyle())
             }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
