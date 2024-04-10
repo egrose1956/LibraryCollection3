@@ -44,7 +44,7 @@ struct TitlesView: View {
                     List {
                         ForEach (titles) { selectedItem in
                             NavigationLink {
-                                EditTitleDetails(titleIdString: selectedItem.titleId.uuidString)
+                                TitleDetailsView(titleIdString: selectedItem.titleId.uuidString)
                             } label: {
                                 Text(selectedItem.title.isEmpty ? "" : selectedItem.title)
                             }

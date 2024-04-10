@@ -61,11 +61,10 @@ struct Search: View {
                         
                         if selectedItem.components(separatedBy: "*").count > 2 {
                             
-                            NavigationLink(destination: AddTitleDetailsView(selectedTitle: selectedItem.components(separatedBy: "*")[0],
-                                                                            authorIdString: selectedItem.components(separatedBy: "*")[2],
-                                                                            titleIdString: selectedItem.components(separatedBy: "*")[1],
-                                                                            selectedItem: selectedItem,
-                                                                            comingFromSearch: true)) {
+                            NavigationLink(destination: TitleDetailsView(authorIdString: selectedItem.components(separatedBy: "*")[2],
+                                                                         titleIdString: selectedItem.components(separatedBy: "*")[1],
+                                                                         title: selectedItem.components(separatedBy: "*")[0],
+                                                                         selectedItem: selectedItem)) {
                                 
                                 
                                 Text("Title: \(selectedItem.components(separatedBy: "*")[0]) by author: \(selectedItem.components(separatedBy: "*")[3])")

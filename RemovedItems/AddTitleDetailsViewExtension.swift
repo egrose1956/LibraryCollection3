@@ -111,7 +111,7 @@ extension AddTitleDetailsView {
             
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:GetTitleDetailsByID. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:GetTitleDetailsByID. \(error), \(error.localizedDescription)")
         }
     }
     
@@ -250,7 +250,7 @@ extension AddTitleDetailsView {
                     
                 } catch let error as NSError {
                     let logger = appLogger()
-                    logger.log(level: .error, message: "Save Error in AddTitleDetailsViewExtension:SaveTitleDetails. \(error), \(error.localizedDescription)")
+                    logger.log(level: .error, message: "Save Error in TitleDetailsViewExtension:SaveTitleDetails. \(error), \(error.localizedDescription)")
                 }
             }
         }
@@ -273,7 +273,7 @@ extension AddTitleDetailsView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
         }
     }
     
@@ -298,7 +298,7 @@ extension AddTitleDetailsView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
         }
     }
     
@@ -308,7 +308,7 @@ extension AddTitleDetailsView {
         guard !selectedTitle.isEmpty else { return }
         
         //clear previously used variables
-        resultString = []
+        //resultString = []
         titleIdString = ""
         
         //declare new working variables
@@ -354,7 +354,7 @@ extension AddTitleDetailsView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:GetTitleByTitleAndAuthorName. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:GetTitleByTitleAndAuthorName. \(error), \(error.localizedDescription)")
         }
     }
     
@@ -393,7 +393,7 @@ extension AddTitleDetailsView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddTitleDetailsViewExtension:GetCoAuthors. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:GetCoAuthors. \(error), \(error.localizedDescription)")
         }
     }    
 }

@@ -22,14 +22,14 @@ struct NarratorListView: View {
     
     @State var titleIdString: String = ""
     @State var titleName: String = ""
-    @State var filteredNarrators: [String] = []
+    @State var narratorListForTitle: [String] = []
     @State var nameFormatter = NameFormatter()
     @State var deleteWarning: Bool = false
     @State var narratorIdString: String = ""
     
     var body: some View {
         NavigationStack {
-            Group {
+            VStack {
                 if narrators.isEmpty {
                     ContentUnavailableView {
                         Image(systemName: "person.slash")
@@ -44,42 +44,34 @@ struct NarratorListView: View {
                     Text("Narrators")
                         .font(.title3)
                         .fontWeight(.bold)
-                    Form {
-                        if !titleName.isEmpty {
-                            Text("Narrators For: \(titleName)")
-                                .accessibilityLabel("Narrators For: \(titleName)")
+    
+                    List(narrators, id: \.narratorId) { selectedNarrator in
+                        
+                        NavigationLink(destination: NarratorView(narrator: selectedNarrator)) {
+                            Text(nameFormatter.ConcatenateNameFields(lastName: selectedNarrator.narratorLastName,
+                                                                     firstName: selectedNarrator.wrappedNarratorFirstName,
+                                                                     middleName: selectedNarrator.wrappedNarratorMiddleName))
+                            .font(.subheadline)
+                            .foregroundColor(Color.accentColor)
+                            .accessibilityLabel("Proceeding to edit \(selectedNarrator.wrappedNarratorFirstName) \(selectedNarrator.narratorLastName)")
                         }
-                        if !narrators.isEmpty {
-                            List(narrators, id: \.narratorId) { narrator in
-                                
-                                NavigationLink(destination: EditNarrator(narrator: narrator)) {
-                                    Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
-                                                                             firstName: narrator.wrappedNarratorFirstName,
-                                                                             middleName: narrator.wrappedNarratorMiddleName))
-                                    .font(.subheadline)
-                                    .accessibilityLabel("Proceeding to edit \(narrator.wrappedNarratorFirstName) \(narrator.narratorLastName)")
-                                }
+                        .swipeActions(allowsFullSwipe: false) {
+                            Button() {
+                                deleteWarning = true
+                                narratorIdString = selectedNarrator.narratorId.uuidString
+                            } label: {
+                                Label("Delete", systemImage: "trash.fill")
                             }
-                            .swipeActions(allowsFullSwipe: false) {
-                                Button() {
-                                    deleteWarning = true
-                                    narratorIdString = narrator!.narratorId.uuidString
-                                } label: {
-                                    Label("Delete", systemImage: "trash.fill")
-                                }
-                                .tint(.red)
-                            }
+                            .tint(.red)
                         }
                     }
                 }
-            }
+            } //Group
             .onAppear {
                 if !titleName.isEmpty {
-                    GetAllNarratorsForTitle()
+                    GetAllNarratorsForTitle(narratorIdString: narratorIdString, titleIdString: titleIdString)
                 }
             }
-            .foregroundColor(Color.accentColor)
-            
             // TODO: A link to all titles narrator has performed, authors they have read for?? Edit??
         }
     }

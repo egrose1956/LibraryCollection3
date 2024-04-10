@@ -13,12 +13,13 @@ struct NewAuthorView: View {
     @Environment(\.dismiss) var dismiss
        
     @State var author: FetchedResults<Author>.Element?
-    @State var filteredTitles: [String] = []
         
     @State var authorLastName: String = ""
     @State var authorFirstName: String = ""
     @State var authorMiddleName:  String = ""
     @State var authorIdString: String = ""
+    
+    @State var filteredTitles: [String] = []
     
     @State var inputTitle = ""
     @State var titleIdString = ""
@@ -94,10 +95,10 @@ struct NewAuthorView: View {
                     }
                     if saveIsComplete {
                         NavigationLink {
-                            AddTitleDetailsView(authorIdString: authorIdString,
+                            TitleDetailsView(authorIdString: authorIdString,
+                                             authorLastName: authorLastName,
                                                 authorFirstName: authorFirstName,
-                                                authorMiddleName: authorMiddleName,
-                                                authorLastName: authorLastName)
+                                                authorMiddleName: authorMiddleName)
                         } label: {
                             Text("Add New Title")
                                 .font(.title2)

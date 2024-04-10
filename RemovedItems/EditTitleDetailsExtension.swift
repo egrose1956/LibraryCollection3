@@ -127,7 +127,7 @@ extension EditTitleDetails {
         return idString
     }
     
-    func SaveTitleChanges() {
+    func SaveTitle() {
   
         guard !authorIdString.isEmpty else { return }
         
@@ -165,7 +165,7 @@ extension EditTitleDetails {
         guard !titleIdString.isEmpty else { return }
 
         //we know there is a title because that's how we got here
-        SaveTitleChanges()
+        SaveTitle()
 
         do {
             

@@ -3,4 +3,181 @@
    uuid = "D0A0D528-9637-4F4D-B9FA-1EF1A52991EF"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99B7DA7D-CE03-4321-B83B-FE5EB74CD750"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LibraryCollection/Books/TitleDetailsViewExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "SaveTitleDetails()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "99B7DA7D-CE03-4321-B83B-FE5EB74CD750 - 12f4eb45275cf2d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.TitleDetailsView.SaveTitleDetails() -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "836">
+               </Location>
+               <Location
+                  uuid = "99B7DA7D-CE03-4321-B83B-FE5EB74CD750 - 12f4eb45275cf2f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.TitleDetailsView.SaveTitleDetails() -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "840">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7909CA8D-CFEF-4EC6-9876-7ABD88895C83"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LibraryCollection/Books/TitleDetailsViewExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "SaveTitleDetails()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7909CA8D-CFEF-4EC6-9876-7ABD88895C83 - 12f4eb45275cf252"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.TitleDetailsView.SaveTitleDetails() -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45"
+                  offsetFromSymbolStart = "872">
+               </Location>
+               <Location
+                  uuid = "7909CA8D-CFEF-4EC6-9876-7ABD88895C83 - 12f4eb45275cf38d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.TitleDetailsView.SaveTitleDetails() -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "876">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "272F4A71-93EF-40A6-BDE2-81DCE9723798"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LibraryCollection/Books/TitleDetailsViewExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "SaveTitleDetails()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AE950DEA-90A8-4F14-97B4-E093E12E1606"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LibraryCollection/Narrators/NarratorViewExtension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "CheckForExistingNarrator(narratorLastNameValue:narratorFirstNameValue:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AE950DEA-90A8-4F14-97B4-E093E12E1606 - e597857810728e5b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.NarratorView.CheckForExistingNarrator(narratorLastNameValue: Swift.String, narratorFirstNameValue: Swift.String) -&gt; Swift.String"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Narrators/NarratorViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "3556">
+               </Location>
+               <Location
+                  uuid = "AE950DEA-90A8-4F14-97B4-E093E12E1606 - e597857810728e5b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.NarratorView.CheckForExistingNarrator(narratorLastNameValue: Swift.String, narratorFirstNameValue: Swift.String) -&gt; Swift.String"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Narrators/NarratorViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "3560">
+               </Location>
+               <Location
+                  uuid = "AE950DEA-90A8-4F14-97B4-E093E12E1606 - adb07cb1037c5a8b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.NarratorView.CheckForExistingNarrator(narratorLastNameValue: Swift.String, narratorFirstNameValue: Swift.String) -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Narrators/NarratorViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "2712">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

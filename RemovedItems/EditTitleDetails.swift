@@ -14,7 +14,6 @@ struct EditTitleDetails: View {
     @State var authorIdString: String = ""
     @State var titleIdString: String = ""
     @State var title: String = ""
-    @State var titleHasChanged: Bool = false
     @State var titleDetails: [TitleDetails] = []
     @State var titleDetailsId: String = ""
     
@@ -36,6 +35,8 @@ struct EditTitleDetails: View {
         case publishingHouse
     }
     @FocusState private var focusedField: Field?
+    
+    @State var titleHasChanged: Bool = false
     
     var body: some View {
         NavigationStack {

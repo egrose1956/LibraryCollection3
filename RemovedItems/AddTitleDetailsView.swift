@@ -12,15 +12,11 @@ struct AddTitleDetailsView: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
     
-    @State var selectedTitle: String = ""
     @State var authorIdString: String = ""
-
     @State var titleIdString: String = ""
+    @State var title: String = ""
     @State var titleDetails: [TitleDetails] = []
     @State var titleDetailsId: String = ""
-    @State var resultString: [String] = []
-    @State var nameFormatter = NameFormatter()
-    @State var title: String = ""
     
     @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook", "Other"]
     @State var selectedType = ""
@@ -31,17 +27,6 @@ struct AddTitleDetailsView: View {
     @State var publishingHouse = ""
     @State var additionalAuthors: [String] = []
     
-    @State var authorName = ""
-    @State var selectedItem: String = ""
-    @State var displayString: String = ""
-    @State var comingFromSearch: Bool = false
-    @State var searchType: String = "" //author or title - to correctly parse the selectedItem string
-    @State var authorFirstName: String = ""
-    @State var authorMiddleName: String = ""
-    @State var authorLastName: String = ""
-
-    @State var detailsHaveBeenSaved: Bool = false
-
     enum Field {
             case selectedType
             case editionNumber
@@ -51,6 +36,23 @@ struct AddTitleDetailsView: View {
             case publishingHouse
         }
     @FocusState private var focusedField: Field?
+    
+    @State var authorName = ""
+    @State var selectedItem: String = ""
+    @State var displayString: String = ""
+    @State var comingFromSearch: Bool = false
+    @State var searchType: String = "" //author or title - to correctly parse the selectedItem string
+    @State var authorFirstName: String = ""
+    @State var authorMiddleName: String = ""
+    @State var authorLastName: String = ""
+
+/*
+     //add functionality
+    @State var selectedTitle: String = ""
+    @State var resultString: [String] = []
+    @State var nameFormatter = NameFormatter()
+    @State var detailsHaveBeenSaved: Bool = false
+*/
 
     var body: some View {
         NavigationStack {

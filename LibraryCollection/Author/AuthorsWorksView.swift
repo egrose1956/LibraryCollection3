@@ -28,7 +28,7 @@ struct AuthorsWorksView: View {
                 ScrollView {
                     ForEach (filteredTitles, id:\.self) { selectedItem in
                         NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",
-                                       destination: EditTitleDetails(authorIdString: authorIdString,
+                                       destination: TitleDetailsView(authorIdString: authorIdString,
                                                                      titleIdString: selectedItem.components(separatedBy: "*")[1]))
                     }
                 }

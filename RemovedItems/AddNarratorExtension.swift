@@ -1,5 +1,5 @@
 //
-//  AddNarratorExtension.swift
+//  NarratorExtension.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 2/7/23.
@@ -8,11 +8,11 @@ import Foundation
 import CoreData
 import os
 
-extension AddNarratorView {
+extension NarratorView {
     
-    func CheckForExistingNarrator(narratorLastNameValue: String, narratorFirstNameValue: String, narratorMiddleName: String) {
+    func CheckForExistingNarrator(narratorLastNameValue: String, narratorFirstNameValue: String) -> String {
         
-        guard !narratorLastNameValue.isEmpty else { return }
+        guard !narratorLastNameValue.isEmpty else { return "LastName is missing."}
         
         let _fetchNarrator = NSFetchRequest<Narrator>(entityName: "Narrator")
         if !narratorFirstNameValue.isEmpty {
@@ -30,13 +30,24 @@ extension AddNarratorView {
             let _narrator = try moc.fetch(_fetchNarrator)
             if _narrator.count > 0 {
                 
-                narratorIdString = _narrator[0].narratorId.uuidString
+                if addOrEdit == "add" {
+                    
+                    narratorIdString = _narrator[0].narratorId.uuidString
+                }
+                if addOrEdit == "editing" {
+                    
+                    foundNarratorLastName = "\(_narrator[0].narratorLastName)"
+                    foundNarratorFirstName = _narrator[0].wrappedNarratorFirstName
+                    
+                    return "\(foundNarratorLastName + ", " + foundNarratorFirstName)"
+                }
             }
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "No fetch from AddNarratorExtension:CheckForExistingNarrator. \(error), \(error.localizedDescription)")
-            return
+            return ""
         }
+        return ""
     }
     
     func CheckForExistingTitleNarratorRecord(narratorIdString: String, titleIdString: String) -> String {
@@ -70,7 +81,7 @@ extension AddNarratorView {
     
     func ValidateNarratorAndSave() {
 
-        CheckForExistingNarrator(narratorLastNameValue: newNarratorLastName, narratorFirstNameValue: newNarratorFirstName, narratorMiddleName: newNarratorMiddleName)
+        CheckForExistingNarrator(narratorLastNameValue: newNarratorLastName, narratorFirstNameValue: newNarratorFirstName)
         
         if narratorIdString.isEmpty {
             //no narrator by this name and no passed in title
@@ -143,31 +154,77 @@ extension AddNarratorView {
         }
     }
     
-    func SaveNarrator() {
+    func SaveNarrator() -> String {
         
-        do {
+        if addOrEdit == "editing" {
+            guard !narratorIdString.isEmpty else { return "No ID to process"}
             
-            let narrator = Narrator(context: moc)
-            
-            narrator.narratorId = UUID()
+            do {
                 
-            narrator.narratorLastName = newNarratorLastName
+                let narrator = Narrator(context: moc)
                 
-            if newNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                narrator.narratorFirstName = newNarratorFirstName
+                narrator.narratorId = UUID()
+                
+                narrator.narratorLastName = newNarratorLastName
+                
+                if newNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                    narrator.narratorFirstName = newNarratorFirstName
+                }
+                if newNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                    narrator.narratorMiddleName = newNarratorMiddleName
+                }
+                
+                narratorIdString = narrator.narratorId.uuidString
+                
+                try moc.save()
+                moc.refreshAllObjects()
+                
+                return ""
+                
+            } catch let error as NSError {
+                let logger = appLogger()
+                logger.log(level: .error, message: "Save Error from NarratorExtension:SaveNarrator. \(error), \(error.localizedDescription)")
             }
-            if newNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                narrator.narratorMiddleName = newNarratorMiddleName
+        } else {
+            do {
+                
+                let narratorId = UUID(uuidString: narratorIdString)!
+                var returnString: String = ""
+                
+                let narratorFetch = NSFetchRequest<Narrator>(entityName: "Narrator")
+                narratorFetch.predicate = NSPredicate(format: "narratorId == %@", narratorId as CVarArg)
+                narratorFetch.resultType = NSFetchRequestResultType.managedObjectResultType
+                narratorFetch.fetchLimit = 1
+                
+                let editNarrator = try moc.fetch(narratorFetch)
+                if !editNarrator.isEmpty {
+                    
+                    returnString = CheckForExistingNarrator(narratorLastNameValue: narratorLastName, narratorFirstNameValue: narratorFirstName)
+                    
+                    if returnString.count > 0 {
+                        editResultsInDuplicateRecord = true
+                        return "Duplicate Record Found"
+                    } else {
+                        
+                        editNarrator[0].narratorLastName = narratorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
+                        
+                        if !narratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            editNarrator[0].narratorFirstName = narratorFirstName
+                        }
+                        if !narratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            editNarrator[0].narratorMiddleName = narratorMiddleName
+                        }
+                        try moc.save()
+                        moc.refreshAllObjects()
+                    }
+                }
+
+            } catch let error as NSError {
+                let logger = appLogger()
+                logger.log(level: .error, message: "Save failed from EditNarratorExtension:SaveNarratorEdit. \(error), \(error.localizedDescription)")
+                return "Edit Process Failed"
             }
-           
-            narratorIdString = narrator.narratorId.uuidString
-            
-            try moc.save()
-            moc.refreshAllObjects()
-            
-        } catch let error as NSError {
-            let logger = appLogger()
-            logger.log(level: .error, message: "Save Error from AddNarratorExtension:SaveNarrator. \(error), \(error.localizedDescription)")
+            return "Edit Process Complete"
         }
     }
 

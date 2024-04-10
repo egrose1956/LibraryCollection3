@@ -69,7 +69,7 @@ struct EditAuthorView: View {
                 
                 NavigationLink {
 
-                    AddTitleDetailsView(authorIdString: authorIdString)
+                    TitleDetailsView(authorIdString: authorIdString)
                     
                 } label: {
                     Text("Add a new Title for this Author")
@@ -117,11 +117,11 @@ struct EditAuthorView: View {
             }
         } //Navigation Stack
         .sheet(isPresented: $showTitleDetails) {
-            AddTitleDetailsView(selectedTitle: selectedTitle,
-                                authorIdString: authorIdString,
+            TitleDetailsView(authorIdString: authorIdString,
+                                title: selectedTitle,
+                                authorLastName: authorLastName,
                                 authorFirstName: authorFirstName,
-                                authorMiddleName: authorMiddleName,
-                                authorLastName: authorLastName)
+                                authorMiddleName: authorMiddleName)
         }
         .onAppear {
             authorIdString = authorIdString
