@@ -44,6 +44,7 @@ struct NarratorListView: View {
                     Text("Narrators")
                         .font(.title3)
                         .fontWeight(.bold)
+                        .foregroundStyle(Color.accentColor)
     
                     List(narrators, id: \.narratorId) { selectedNarrator in
                         

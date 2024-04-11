@@ -12,7 +12,7 @@ struct TitleDetailsView: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
     
-    @State var authorIdString: String = ""
+    @State var authorIdString: String
     @State var titleIdString: String = ""
     @State var title: String = ""
     @State var titleDetails: [TitleDetails] = []
@@ -53,17 +53,19 @@ struct TitleDetailsView: View {
             Form {
                 VStack {
                     //TODO: any changes required between add and edit?
-                    VStack(alignment: .leading) {
-                        Text("Title: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("Title: \(title)", text: $title)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .accessibilityLabel("Title Details for \(title)")
-                            .onChange(of: title) {
-                                titleHasChanged = true
-                            }
+                    if !newRecord {
+                        VStack(alignment: .leading) {
+                            Text("Title: ")
+                                .foregroundStyle(Color.accentColor)
+                                .font(.subheadline)
+                            TextField("Title: \(title)", text: $title)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .accessibilityLabel("Title Details for \(title)")
+                                .onChange(of: title) {
+                                    titleHasChanged = true
+                                }
+                        }
                     }
                     Picker("Select book type", selection: $selectedType) {
                         ForEach(bookTypes, id: \.self) { type in
@@ -179,9 +181,7 @@ struct TitleDetailsView: View {
                 HStack {
                     Button("Cancel Without Saving") { dismiss() }
                 }
-                .buttonStyle(CustomButtonStyle())
                 
-//TODO: Handle This code-if necessary
                 if !newRecord {
                     if additionalAuthors.count > 0 {
                         HStack(alignment: .top, content: {
@@ -197,7 +197,6 @@ struct TitleDetailsView: View {
                         })
                     }
                 }
-//******************************************
                 
             } //Form
             .onAppear(perform: LoadValues)
@@ -216,7 +215,7 @@ struct TitleDetailsView: View {
                 }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
-                    ContentView()
+                    ContentView(returning: true)
                 }
                 .buttonStyle(CustomButtonStyle())
             }
@@ -225,7 +224,6 @@ struct TitleDetailsView: View {
                     SaveTitleDetails() //includes the title and titleauthor entries
                     hideKeyboard()
                 }
-                .buttonStyle(CustomButtonStyle())
             }
         }
     }

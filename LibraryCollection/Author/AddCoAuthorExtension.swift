@@ -22,11 +22,6 @@ extension AddCoAuthorView {
             lastNameAlert = true
             return
         }
-//        var duplicateTitle = CheckForExistingTitle()
-//        if duplicateTitle {
-//            duplicateTitle = true
-//            return
-//        }
         
         //check to see if we already have an author by this name
         var duplicate = CheckForExistingAuthor(authorLastName: authorLastName, authorFirstName: authorFirstName, authorMiddleName: authorMiddleName)

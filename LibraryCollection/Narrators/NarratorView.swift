@@ -194,29 +194,24 @@ struct NarratorView: View {
                 }
             } //form
             .onAppear {
-                if !titleIdString.isEmpty {
-                    if !titleName.isEmpty {
+                if !titleIdString.isEmpty && !titleName.isEmpty {
                         GetAllNarratorsForTitle()
-                    } else {
-#if DEBUG
-                        let logger = appLogger()
-                        logger.log(level: .error, message: "No titleId available.")
-#endif
-                    }
                 }
                 focusedField = .newNarratorFirstName
             }
             .keyboardType(.default)
             .autocorrectionDisabled(true)
             .safeAreaPadding(20)
-            .onDisappear {
-                if !newNarratorLastName.isEmpty {
-                    ValidateNarratorAndSave()
-                }
-                hideKeyboard()
-            }
         } //Nav Stack
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save") {
+                    if !newNarratorLastName.isEmpty {
+                        ValidateNarratorAndSave()
+                    }
+                    hideKeyboard()
+                }
+            }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView(returning: true)

@@ -11,7 +11,7 @@ struct AboutView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment: .center) {
 //                Text("LibraryCollection")
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)

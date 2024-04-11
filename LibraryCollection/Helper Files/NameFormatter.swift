@@ -19,10 +19,10 @@ public struct NameFormatter {
         
         fullNameString = (lastName.trimmingCharacters(in: .whitespacesAndNewlines))
         
-        if firstName != nil {
+        if firstName != nil && firstName != "" {
             fullNameString += (", ") + (firstName!.trimmingCharacters(in: .whitespacesAndNewlines))
         }
-        if middleName != nil {
+        if middleName != nil && middleName != "" {
             fullNameString += " " + (middleName!.trimmingCharacters(in: .whitespacesAndNewlines))
         }
         if fullNameString.trimmingCharacters(in: .whitespaces).count < 2 {

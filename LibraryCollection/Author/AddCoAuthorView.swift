@@ -76,7 +76,7 @@ struct AddCoAuthorView: View {
                     .disabled(true)
                 Form {
                     VStack(alignment: .leading) {
-                        VStack(alignment: .leading) {
+                        
                             Text("First Name: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
@@ -86,9 +86,9 @@ struct AddCoAuthorView: View {
                                 .textContentType(.givenName)
                                 .submitLabel(.next)
                                 .accessibilityLabel("Author First Name")
-                        }
+                        
                         Divider()
-                        VStack(alignment: .leading) {
+                        
                             Text("Middle Name: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
@@ -98,9 +98,9 @@ struct AddCoAuthorView: View {
                                 .textContentType(.middleName)
                                 .submitLabel(.next)
                                 .accessibilityLabel("Author Middle Name")
-                        }
+                        
                         Divider()
-                        VStack(alignment: .leading) {
+                        
                             Text("Last Name: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
@@ -110,7 +110,7 @@ struct AddCoAuthorView: View {
                                 .textContentType(.familyName)
                                 .submitLabel(.done)
                                 .accessibilityLabel("Author Last Name")
-                        }
+                        
                     }
                 }
                 .onSubmit {
@@ -146,28 +146,28 @@ struct AddCoAuthorView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink("Edit Author", destination: EditAuthorView(authorIdString: authorIdString,
-                                                                              authorLastName: authorLastName,
-                                                                              authorFirstName: authorFirstName,
-                                                                              authorMiddleName: authorMiddleName))
+                    Button("Save") {
+                        PerformValidationAndSave()
+                        hideKeyboard()
+                    }
+//                    NavigationLink("Edit Author", destination: EditAuthorView(authorIdString: authorIdString,
+//                                                                              authorLastName: authorLastName,
+//                                                                              authorFirstName: authorFirstName,
+//                                                                              authorMiddleName: authorMiddleName))
                 }
                 ToolbarItem(placement: .bottomBar) {
                     NavigationLink("Return to Main Screen") {
-                        ContentView()
+                        ContentView(returning: true)
                     }
                     .buttonStyle(CustomButtonStyle())
                 }
-            } //VStack
+            }
             .onAppear {
                 focusedField = .authorFirstName
                 GetAllAuthorsByTitleId()
                 moc.refreshAllObjects()
             }
             .safeAreaPadding(20)
-            .onDisappear {
-                PerformValidationAndSave()
-                hideKeyboard()
-            }
         } //NavStack
         .navigationBarTitleDisplayMode(.inline)
         .keyboardType(.default)

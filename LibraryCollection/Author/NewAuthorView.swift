@@ -96,6 +96,7 @@ struct NewAuthorView: View {
                     if saveIsComplete {
                         NavigationLink {
                             TitleDetailsView(authorIdString: authorIdString,
+                                             newRecord: true,
                                              authorLastName: authorLastName,
                                                 authorFirstName: authorFirstName,
                                                 authorMiddleName: authorMiddleName)
@@ -121,7 +122,7 @@ struct NewAuthorView: View {
                         saveIsComplete = true
                         hideKeyboard()
                     }
-                    .buttonStyle(CustomButtonStyle())
+                    //.buttonStyle(CustomButtonStyle())
                 }
             }
             .alert(isPresented: $lastNameWarning) {

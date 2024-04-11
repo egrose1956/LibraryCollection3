@@ -129,7 +129,7 @@ extension NarratorView {
         if narratorIdString.isEmpty {
             //no narrator by this name and no passed in title
             //so just save the narrator
-            SaveNarrator()
+            SaveNarrator(addOrEdit: "add")
         }
             
         if !titleIdString.isEmpty {
@@ -150,10 +150,10 @@ extension NarratorView {
         newNarratorLastName = ""
     }
     
-    func SaveNarrator() {
+    func SaveNarrator(addOrEdit: String) {
         
         if addOrEdit == "add" {
-            guard !narratorIdString.isEmpty else { return }
+            
             
             do {
                 
@@ -183,6 +183,8 @@ extension NarratorView {
             }
         } else {
             //editing
+            guard !narratorIdString.isEmpty else { return }
+            
             do {
                 
                 let narratorId = UUID(uuidString: narratorIdString)!

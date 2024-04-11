@@ -20,6 +20,7 @@ struct EditAuthorView: View {
     
     @State private var lastNameWarning: Bool = false
     @State var showTitleDetails: Bool = false
+    @State var newRecord: Bool = false
     
     enum Field {
         case authorFirstName
@@ -69,7 +70,11 @@ struct EditAuthorView: View {
                 
                 NavigationLink {
 
-                    TitleDetailsView(authorIdString: authorIdString)
+                    TitleDetailsView(authorIdString: authorIdString, 
+                                     newRecord: true,
+                                     authorLastName: authorLastName,
+                                     authorFirstName: authorFirstName,
+                                     authorMiddleName: authorMiddleName)
                     
                 } label: {
                     Text("Add a new Title for this Author")

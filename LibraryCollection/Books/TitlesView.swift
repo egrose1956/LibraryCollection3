@@ -33,8 +33,10 @@ struct TitlesView: View {
                     } description: {
                         Text("No Books Available. Add an Author or add a new title to a current author.")
                     } actions: {
-
-                    }
+                        NavigationLink("Return to Main Screen") {
+                            ContentView(returning: true)
+                        }
+                    }                    
                 } else {
                     Text("Titles")
                         .font(.title3)
@@ -44,12 +46,15 @@ struct TitlesView: View {
                     List {
                         ForEach (titles) { selectedItem in
                             NavigationLink {
-                                TitleDetailsView(titleIdString: selectedItem.titleId.uuidString)
+                                TitleDetailsView(authorIdString: authorIdString,
+                                                 titleIdString: selectedItem.titleId.uuidString,
+                                                 newRecord: false)
                             } label: {
                                 Text(selectedItem.title.isEmpty ? "" : selectedItem.title)
+                                    .font(.subheadline)
                             }
                             .swipeActions(allowsFullSwipe: false) {
-                                Button(role: .destructive) {
+                                Button() {
                                     titleIdString = selectedItem.titleId.uuidString
                                     safeToDelete = true
                                 } label: {
@@ -59,20 +64,19 @@ struct TitlesView: View {
                             }
                         }
                     }
-                    .font(.subheadline)
-                    .foregroundStyle(Color.accentColor)
-                    .alert("Confirm action", isPresented: $safeToDelete) {
-                        Button("Delete? This can't be undone.", role: .destructive) {
-                            if authorIdString.isEmpty {
-                                authorIdString = GetAuthorId(filter: titleIdString)
-                            }
-                            DeleteSelectedTitle(titleId: titleIdString, authorId: authorIdString)
-                            moc.refreshAllObjects()
-                        }
-                        Button("Cancel", role: .cancel) {}
-                    }
                 }
             }
+            .foregroundStyle(Color.accentColor)
+        }
+        .alert("Confirm action", isPresented: $safeToDelete) {
+            Button("Delete? This can't be undone.", role: .destructive) {
+                if authorIdString.isEmpty {
+                    authorIdString = GetAuthorId(filter: titleIdString)
+                }
+                DeleteSelectedTitle(titleId: titleIdString, authorId: authorIdString)
+                moc.refreshAllObjects()
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }

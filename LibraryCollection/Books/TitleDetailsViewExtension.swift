@@ -12,72 +12,100 @@ extension TitleDetailsView {
     
     func SaveTitleDetails() {
         
+        guard !authorIdString.isEmpty else { return }
+        
         let resultString = CheckForExistingTitleDetailsRecord()
         
         if resultString.contains("Error") {
             //error exists that needs to be handled by the data manager.
             return
-        } else {
+        } else if resultString == "" {
+            
+            //need to add a new detail record
+            
             //the resultString should be the titleDetaisId, either
             //retrieved or created in the function called above
+            guard !titleIdString.isEmpty else { return }
             
-            
-            //sets up an object to hold the values to assign to the moc
-            let saveDetails = TitleDetails(context: moc)
-            
-            guard !authorIdString.isEmpty else { return }
-            
-            //prep code for the add/edit functionality
-            
-            if !newRecord {
-                
-                //if this is an edit, why doesn't it have an id?
-                guard !titleIdString.isEmpty else { return }
-                
-            } //end of prep code/
             
             //this is to add new Title, TitleAuthor and TitleDetails records
-            //or to update anything changed on the titleDetails screen
             let returnValue = SaveTitle()
-            if !returnValue { return }
             
-            //THIS CODE IS COMMON TO BOTH ADD AND EDIT
-            
-            saveDetails.titleDetailsId = UUID(uuidString: titleDetailsId)!
-            
-            saveDetails.titleId = UUID(uuidString: titleIdString)!
-            
-            saveDetails.bookType = selectedType
-            
-            if !editionNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                saveDetails.editionNumber = (editionNumber.trimmingCharacters(in: .whitespacesAndNewlines))
+            if returnValue == false {
+                let detailsId = UUID()
+                titleDetailsId = detailsId.uuidString
+                
             }
-            
-            if !genre.trimmingCharacters(in:  .whitespacesAndNewlines).isEmpty {
-                saveDetails.genre = genre.trimmingCharacters(in:  .whitespacesAndNewlines)
-            }
-            
-            if !ISBN.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                saveDetails.isbn = ISBN.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-            
-            if !publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                saveDetails.publishingHouse = publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-            
-            if !publishingDate.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                saveDetails.publishingDate = publishingDate.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-            
-            if moc.hasChanges {
-                do {
-                    try moc.save()
-                    moc.refreshAllObjects()
-                    
-                } catch let error as NSError {
-                    let logger = appLogger()
-                    logger.log(level: .error, message: "Save Error in TitleDetailsViewExtension:SaveTitleDetails. \(error), \(error.localizedDescription)")
+                
+            //THIS CODE IS FOR ADDING NEW
+            do {
+                
+                let saveDetails = TitleDetails(context: moc)
+                
+                saveDetails.bookType = selectedType
+                
+                if !editionNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    saveDetails.editionNumber = (editionNumber.trimmingCharacters(in: .whitespacesAndNewlines))
                 }
+                
+                if !genre.trimmingCharacters(in:  .whitespacesAndNewlines).isEmpty {
+                    saveDetails.genre = genre.trimmingCharacters(in:  .whitespacesAndNewlines)
+                }
+                
+                if !ISBN.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    saveDetails.isbn = ISBN.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                if !publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    saveDetails.publishingHouse = publishingHouse.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                if !publishingDate.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    saveDetails.publishingDate = publishingDate.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                saveDetails.titleId = UUID(uuidString: titleIdString)!
+                
+                saveDetails.titleDetailsId = UUID(uuidString: titleDetailsId)!
+                
+                try moc.save()
+                moc.refreshAllObjects()
+            
+            } catch let error as NSError {
+                    let logger = appLogger()
+                    logger.log(level: .error, message: "Error in SaveTitleDetails. \(error), \(error.localizedDescription)")
+            }
+
+        } else if !newRecord {
+           // need to update record
+            
+            guard !titleIdString.isEmpty else { return }
+           
+            titleDetailsId = resultString
+  
+            let _fetchRequest = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
+            _fetchRequest.predicate = NSPredicate(format: "titleDetailsId == %@", titleDetailsId as CVarArg)
+            _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
+            _fetchRequest.fetchLimit = 1
+            
+            do {
+                let updateDetail = try moc.fetch(_fetchRequest)
+                updateDetail[0].titleDetailsId = UUID(uuidString: titleDetailsId)!
+                updateDetail[0].titleId = UUID(uuidString: titleIdString)!
+                updateDetail[0].bookType = selectedType
+                updateDetail[0].editionNumber = editionNumber
+                updateDetail[0].genre = genre
+                updateDetail[0].isbn = ISBN
+                updateDetail[0].publishingHouse = publishingHouse
+                updateDetail[0].publishingDate = publishingDate
+                
+                try moc.save()
+                moc.refreshAllObjects()
+                
+            } catch let error as NSError {
+                let logger = appLogger()
+                logger.log(level: .error, message: "Error updating titleDetails record in SaveTitleDetails. \(error), \(error.localizedDescription)")
+                return
             }
         }
     }
@@ -139,6 +167,8 @@ extension TitleDetailsView {
     
     func CheckForExistingTitleDetailsRecord() -> String {
         
+        guard !titleIdString.isEmpty else { return "" }
+        
         var resultString: String = ""
         
         let _fetchRequest = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
@@ -150,7 +180,7 @@ extension TitleDetailsView {
             
             if _ID.count > 1 {
                 resultString =  "Error in existing data-too many records."
-            } else if _ID.count > 0 {
+            } else if _ID.count == 1 {
                 resultString = _ID[0].titleDetailsId.uuidString
             } else if _ID.count < 1 {
                 let newTitleDetailsId = UUID()
