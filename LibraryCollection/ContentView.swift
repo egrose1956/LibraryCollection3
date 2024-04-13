@@ -30,7 +30,7 @@ struct ContentView: View {
             VStack {
                 switch filter {
                 case .authors:
-                    AuthorsView()
+                    AuthorsListView()
                 case .worksTitles:
                     TitlesView()
                 case .narrators:
@@ -38,7 +38,7 @@ struct ContentView: View {
                 case .aboutView:
                     AboutView()
                 default:
-                    AuthorsView()
+                    AuthorsListView()
                 }
                 Section {
                     Image("oldbigbookshelf")
@@ -60,7 +60,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu("Author Actions", systemImage: "pencil") {
-                        NavigationLink("Create New Author", destination: NewAuthorView())
+                        NavigationLink("Create New Author", destination: AuthorView())
                     }
                 }
                 ToolbarItem(placement: .bottomBar) {

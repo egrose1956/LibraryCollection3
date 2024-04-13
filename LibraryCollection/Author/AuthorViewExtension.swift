@@ -1,5 +1,5 @@
 //
-//  NewAuthorExtension.swift
+//  AuthorExtension.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 1/12/23.
@@ -8,21 +8,10 @@ import Foundation
 import CoreData
 import SwiftUI
 
-extension NewAuthorView {
-    
-    func FormatInput() {
-        
-        let myAuthor: FetchedResults<Author>.Element? = author
-        guard myAuthor != nil else { return }
-                
-        authorFirstName = author!.authorFirstName ?? ""
-        authorMiddleName = author!.authorMiddleName ?? ""
-        authorLastName = author!.authorLastName
-        authorIdString = author!.authorId.uuidString
-    }
+extension AuthorView {
 
-    func PerformValidationAndSave() {
-        
+    func PerformValidateAndSave() {
+                
         if authorFirstName.isEmpty && authorMiddleName.isEmpty && authorLastName.isEmpty {
             //go back if there isn't any author name entered
             lastNameWarning = true
@@ -46,21 +35,27 @@ extension NewAuthorView {
         //if this author doesn't exist, add them
         if authorIdString == "" {
             SaveAuthor()
+        } else {
+            SaveAuthorEdit()
         }
         
         //if a title is proferred - check to see if there is already an author
         //for this title
-        if !inputTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if !titleIdString.isEmpty || !inputTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             
             if !existingAuthorLastName.isEmpty {
                 //Check for an author name in the text field below
                 //and go get the titleId for this title by that author.
                 CheckForExistingAuthorOfThisTitle(title: inputTitle, existingAuthorLastName: existingAuthorLastName, existingAuthorFirstName: existingAuthorFirstName)
-                
-                //add a titleauthor record with this author and existing titleId
-                AddTitleAuthorOnly(title: existingTitleIdString, author: authorIdString)
-                
             }
+            
+            if addingCoAuthor {
+                existingTitleIdString = titleIdString
+            }
+                
+            //add a titleauthor record with this author and existing titleId
+            AddTitleAuthorOnly(title: existingTitleIdString, author: authorIdString)
+                
         }
     }
    
@@ -84,7 +79,7 @@ extension NewAuthorView {
             if authorIdString.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
                 try moc.save()
                 moc.refreshAllObjects()
-                GetAllTitlesByAuthor()
+                //GetAllTitlesByAuthor()
             }
         } catch let error as NSError {
             let logger = appLogger()
@@ -92,9 +87,51 @@ extension NewAuthorView {
         }
     }
     
+    func SaveAuthorEdit() {
+        
+        guard !authorIdString.isEmpty else { return }
+        
+        do {
+            
+            let authorId = UUID(uuidString: authorIdString)!
+            
+            let authorFetch = NSFetchRequest<Author>(entityName: "Author")
+            authorFetch.predicate = NSPredicate(format: "authorId == %@", authorId as CVarArg)
+            authorFetch.resultType = NSFetchRequestResultType.managedObjectResultType
+            authorFetch.fetchLimit = 1
+            
+            let editAuthor = try moc.fetch(authorFetch)
+            if !editAuthor.isEmpty {
+
+                let existingLastNameValue = editAuthor[0].authorLastName
+                let existingFirstNameValue = editAuthor[0].wrappedAuthorFirstName
+                CheckForExistingAuthor(lastNameValue: existingLastNameValue, firstNameValue: existingFirstNameValue)
+                
+                editAuthor[0].authorLastName = authorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                if !authorFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    editAuthor[0].authorFirstName = authorFirstName
+                }
+                
+                if !authorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    editAuthor[0].authorMiddleName = authorMiddleName
+                    
+                    try moc.save()
+                    moc.refreshAllObjects()
+                }
+            }
+
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "No fetch from EditAuthorExtension:SaveAuthorEdit. \(error), \(error.localizedDescription)")
+            return
+        }
+        return
+    }
+    
     func AddTitleAuthorOnly(title: String, author: String) {
         
-        guard !title.isEmpty else { return }
+        guard !title.isEmpty || !titleIdString.isEmpty else { return }
         guard !author.isEmpty else { return }
         
         do {
@@ -105,7 +142,7 @@ extension NewAuthorView {
             
             try moc.save()
             moc.refreshAllObjects()
-            GetAllTitlesByAuthor()
+            //GetAllTitlesByAuthor()
             
         } catch let error as NSError {
             let logger = appLogger()
@@ -163,7 +200,7 @@ extension NewAuthorView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No match found: AddAuthorAndTitleExtension:CheckForExistingAuthorOfThisTitle. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No match found: NewAuthorExtension:CheckForExistingAuthorOfThisTitle. \(error), \(error.localizedDescription)")
         }
     }
         
@@ -184,55 +221,76 @@ extension NewAuthorView {
             if _authors.count > 0 {
                 //author exists
                 authorIdString = _authors[0].authorId.uuidString
+                return
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddAuthorAndTitleExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from AuthorExtension:CheckForExistingAuthor. \(error), \(error.localizedDescription)")
+            return
         }
+        return 
     }
     
-    
-    
-    func GetAllTitlesByAuthor() {
+    func AddTitleAuthorOnly(titleIdString: String, authorIdString: String) {
         
-        filteredTitles = []
-        moc.refreshAllObjects()
-        var authorTitlesId: [UUID] = []
-        
-        let _fetchRequest = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
-        _fetchRequest.predicate = NSPredicate(format: "authorId == %@", authorIdString)
-        _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
+        guard !titleIdString.isEmpty else { return }
+        guard !authorIdString.isEmpty else { return }
         
         do {
-            let _ta = try moc.fetch(_fetchRequest)
-            //logger.log(level:.info, message: "There are \(_ta.count) titles for this author in TitleAuthor")
-            for i in (0..<_ta.count) {
-                authorTitlesId.append(_ta[i].titleId)
-            }
+            let tA = TitleAuthor(context: moc)
+            tA.titleAuthorId = UUID()
+            tA.titleId = UUID(uuidString: titleIdString)!
+            tA.authorId = UUID(uuidString: authorIdString)!
+            
+            try moc.save()
+            moc.refreshAllObjects()
+            
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddAuthorAndTitleExtension:GetAllTitlesByAuthor. \(error), \(error.localizedDescription)")
-        }
-           
-        for i in (0..<authorTitlesId.count) {
-            
-            let filter = authorTitlesId[i]
-            
-            let _fetchRequestTitle = NSFetchRequest<Title>(entityName: "Title")
-            _fetchRequestTitle.predicate = NSPredicate(format: "titleId == %@", filter as CVarArg)
-            _fetchRequestTitle.resultType = NSFetchRequestResultType.managedObjectResultType
-
-            do {
-                let _title = try moc.fetch(_fetchRequestTitle)
-                for i in (0..<_title.count) {
-                    //logger.log(level: .info, message: "Trying to append \(_title[i].title) and \(authorTitlesId[i].uuidString)")
-                    filteredTitles.append(_title[i].title + "*" + authorTitlesId[i].uuidString)
-                }
-            } catch let error as NSError {
-                let logger = appLogger()
-                logger.log(level: .error, message: "No fetch from AddAuthorAndTitleExtension:GetAllTitlesByAuthor. \(error), \(error.localizedDescription)")
-            }
+            logger.log(level: .error, message: "No save at: from AddCoAuthorExtension:AddTitleAuthorOnly. \(error), \(error.localizedDescription)")
         }
     }
+
+//    func GetAllTitlesByAuthor() {
+//        
+//        filteredTitles = []
+//        moc.refreshAllObjects()
+//        var authorTitlesId: [UUID] = []
+//        
+//        let _fetchRequest = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
+//        _fetchRequest.predicate = NSPredicate(format: "authorId == %@", authorIdString)
+//        _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
+//        
+//        do {
+//            let _ta = try moc.fetch(_fetchRequest)
+//            //logger.log(level:.info, message: "There are \(_ta.count) titles for this author in TitleAuthor")
+//            for i in (0..<_ta.count) {
+//                authorTitlesId.append(_ta[i].titleId)
+//            }
+//        } catch let error as NSError {
+//            let logger = appLogger()
+//            logger.log(level: .error, message: "No fetch from AddAuthorAndTitleExtension:GetAllTitlesByAuthor. \(error), \(error.localizedDescription)")
+//        }
+//           
+//        for i in (0..<authorTitlesId.count) {
+//            
+//            let filter = authorTitlesId[i]
+//            
+//            let _fetchRequestTitle = NSFetchRequest<Title>(entityName: "Title")
+//            _fetchRequestTitle.predicate = NSPredicate(format: "titleId == %@", filter as CVarArg)
+//            _fetchRequestTitle.resultType = NSFetchRequestResultType.managedObjectResultType
+//
+//            do {
+//                let _title = try moc.fetch(_fetchRequestTitle)
+//                for i in (0..<_title.count) {
+//                    //logger.log(level: .info, message: "Trying to append \(_title[i].title) and \(authorTitlesId[i].uuidString)")
+//                    filteredTitles.append(_title[i].title + "*" + authorTitlesId[i].uuidString)
+//                }
+//            } catch let error as NSError {
+//                let logger = appLogger()
+//                logger.log(level: .error, message: "No fetch from AddAuthorAndTitleExtension:GetAllTitlesByAuthor. \(error), \(error.localizedDescription)")
+//            }
+//        }
+//    }
 }
 

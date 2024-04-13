@@ -1,5 +1,5 @@
 //
-//  AuthorsView.swift
+//  AuthorsListView.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 1/29/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct AuthorsView: View {
+struct AuthorsListView: View {
     
     @Environment(\.managedObjectContext) var moc
     
@@ -18,10 +18,9 @@ struct AuthorsView: View {
         ]
     ) var authors: FetchedResults<Author>
     
-    @State var showNewAuthorSheet: Bool = false
     @State private var deleteWarning: Bool = false
     @State var authorIdString: String = ""
-    //For delete functionality:
+    
     @State var titleIdArray: [String] = []
     @State var narratorIdArray: [String] = []
     
@@ -35,8 +34,8 @@ struct AuthorsView: View {
                     } description: {
                         Text("Add New Author")
                     } actions: {
-                        Button("Create Author") {
-                            showNewAuthorSheet = true
+                        NavigationLink("Create Author") {
+                            AuthorView()
                         }
                         .buttonStyle(CustomButtonStyle())
                     }
@@ -48,8 +47,10 @@ struct AuthorsView: View {
                     List {
                         ForEach (authors) { author in
                             NavigationLink {
-                                EditAuthorView(authorIdString: author.authorId.uuidString, authorLastName: author.authorLastName, authorFirstName: author.wrappedAuthorFirstName,
-                                               authorMiddleName: author.wrappedAuthorMiddleName)
+                                AuthorView(authorLastName: author.authorLastName,
+                                           authorFirstName: author.wrappedAuthorFirstName,
+                                           authorMiddleName: author.wrappedAuthorMiddleName,
+                                           authorIdString: author.authorId.uuidString)
                             } label: {
                                 let nameFormatter = NameFormatter()
                                 
@@ -70,14 +71,14 @@ struct AuthorsView: View {
                                     Label("Delete", systemImage: "trash.fill")
                                 }
                                 .tint(.red)
-#if DEBUG
-                                    // if in debug mode and the function is uncommented...
-                                    // this functionality is included for the developer to clean data
-                                    // from the tables for testing purposes. It is unlikely to be
-                                    // accessible to the user
-                                    
-                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
-#endif
+//#if DEBUG
+//                                    // if in debug mode and the function is uncommented...
+//                                    // this functionality is included for the developer to clean data
+//                                    // from the tables for testing purposes. It is unlikely to be
+//                                    // accessible to the user
+//                                    
+//                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
+//#endif
                             }
                         }
                     }
@@ -99,9 +100,6 @@ struct AuthorsView: View {
                 }
             }
             .foregroundColor(Color.accentColor)
-            .sheet(isPresented: $showNewAuthorSheet) {
-                NewAuthorView()
-            }
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  NewAuthorView.swift
+//  AuthorView.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 2/1/24.
@@ -7,20 +7,15 @@
 
 import SwiftUI
 
-struct NewAuthorView: View {
+struct AuthorView: View {
     
     @Environment(\.managedObjectContext) var moc
-    @Environment(\.dismiss) var dismiss
-       
-    @State var author: FetchedResults<Author>.Element?
-        
+
     @State var authorLastName: String = ""
     @State var authorFirstName: String = ""
     @State var authorMiddleName:  String = ""
     @State var authorIdString: String = ""
-    
-    @State var filteredTitles: [String] = []
-    
+
     @State var inputTitle = ""
     @State var titleIdString = ""
     @State var existingTitleIdString = ""
@@ -37,6 +32,8 @@ struct NewAuthorView: View {
     }
     @FocusState private var focusedField: Field?
     
+    @State var addingCoAuthor: Bool = false
+        
     var body: some View {
         NavigationStack {
             Form {
@@ -51,9 +48,9 @@ struct NewAuthorView: View {
                             .textContentType(.givenName)
                             .submitLabel(.next)
                             .accessibilityLabel("Author First Name")
-                    }
+                    
                     Divider()
-                    VStack(alignment: .leading) {
+                    
                         Text("Middle Name: ")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
@@ -63,9 +60,9 @@ struct NewAuthorView: View {
                             .textContentType(.middleName)
                             .submitLabel(.next)
                             .accessibilityLabel("Author Middle Name")
-                    }
+                    
                     Divider()
-                    VStack(alignment: .leading) {
+                    
                         Text("Last Name: ")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
@@ -76,6 +73,25 @@ struct NewAuthorView: View {
                             .submitLabel(.next)
                             .accessibilityLabel("Author Last Name")
                     }
+                    
+                    NavigationLink {
+
+                        TitleDetailsView(authorIdString: authorIdString,
+                                         newRecord: true,
+                                         authorLastName: authorLastName,
+                                         authorFirstName: authorFirstName,
+                                         authorMiddleName: authorMiddleName)
+                        
+                    } label: {
+                        Text("Add a new Title for this Author")
+                            .font(.title2)
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .buttonStyle(CustomButtonStyle())
+                    .padding(.top)
+                    .padding(.bottom)
+                    
                     .onSubmit {
                         switch focusedField {
                         case .authorFirstName:
@@ -93,36 +109,31 @@ struct NewAuthorView: View {
 #endif
                         } // switch
                     }
-                    if saveIsComplete {
-                        NavigationLink {
-                            TitleDetailsView(authorIdString: authorIdString,
-                                             newRecord: true,
-                                             authorLastName: authorLastName,
-                                                authorFirstName: authorFirstName,
-                                                authorMiddleName: authorMiddleName)
-                        } label: {
-                            Text("Add New Title")
-                                .font(.title2)
-                                .foregroundStyle(Color.accentColor)
-                        }
-                        .padding(.top)
+                    VStack(alignment: .center) {
+                        AuthorsWorksView(authorIdString: authorIdString)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .font(.subheadline)
+                    .foregroundColor(Color.accentColor)
+                    
+                    
                     }
                 }
             } //Form
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        PerformValidateAndSave()
+                        saveIsComplete = true
+
+                        hideKeyboard()
+                    }
+                }
                 ToolbarItem(placement: .bottomBar) {
                     NavigationLink("Return to Main Screen") {
                         ContentView(returning: true)
                     }
                     .buttonStyle(CustomButtonStyle())
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
-                        PerformValidationAndSave()
-                        saveIsComplete = true
-                        hideKeyboard()
-                    }
-                    //.buttonStyle(CustomButtonStyle())
                 }
             }
             .alert(isPresented: $lastNameWarning) {
@@ -135,10 +146,23 @@ struct NewAuthorView: View {
                     secondaryButton: .cancel()
                 )
             } // Alert
+        if saveIsComplete && !addingCoAuthor {
+            NavigationLink {
+                TitleDetailsView(authorIdString: authorIdString,
+                                newRecord: true,
+                                authorLastName: authorLastName,
+                                authorFirstName: authorFirstName,
+                                authorMiddleName: authorMiddleName)
+            } label: {
+                Text("Add New Title")
+                    .font(.title2)
+                    .foregroundStyle(Color.accentColor)
+            }
+            .padding(.top)
             .onAppear {
                 focusedField = .authorFirstName
             }
+            .safeAreaPadding(20)
        } //navStack
-        .safeAreaPadding(20)
     } //body
 }

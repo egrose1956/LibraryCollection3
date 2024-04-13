@@ -204,15 +204,14 @@ struct TitleDetailsView: View {
             .safeAreaPadding(20)
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Menu("Additional Actions", systemImage: "text.justify") {
-                    NavigationLink("Add a Co-Author",
-                                   destination: AddCoAuthorView(titleIdString: titleIdString, titleName: title))
-                    NavigationLink("Add a Narrator",
-                                   destination: NarratorView(titleIdString: titleIdString, titleName: title))
-               
-                    }
-                }
+            ToolbarTitleMenu {
+                NavigationLink("Add a Co-Author") {
+                    AuthorView(inputTitle: title, titleIdString: titleIdString)}
+                NavigationLink("Add a Narrator") {
+                    NarratorView(titleIdString: titleIdString)}
+//            } label: {
+//                Label ("Additional Actions", systemImage: "text.justify")
+            }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView(returning: true)
@@ -221,9 +220,10 @@ struct TitleDetailsView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
-                    SaveTitleDetails() //includes the title and titleauthor entries
+                    try? SaveTitleDetails() //includes the title and titleauthor entries
                     hideKeyboard()
                 }
+                
             }
         }
     }

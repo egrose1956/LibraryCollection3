@@ -10,34 +10,30 @@ import Foundation
 
 extension TitleDetailsView {
     
-    func SaveTitleDetails() {
-        
+    func SaveTitleDetails() throws {
+
         guard !authorIdString.isEmpty else { return }
         
         let resultString = CheckForExistingTitleDetailsRecord()
         
         if resultString.contains("Error") {
-            //error exists that needs to be handled by the data manager.
-            return
+                //error exists that needs to be handled by the data manager.
+                
+            throw "Error resulting from duplicate entry in TitleDetails table."
+            
         } else if resultString == "" {
             
             //need to add a new detail record
             
-            //the resultString should be the titleDetaisId, either
-            //retrieved or created in the function called above
-            guard !titleIdString.isEmpty else { return }
-            
-            
             //this is to add new Title, TitleAuthor and TitleDetails records
             let returnValue = SaveTitle()
             
-            if returnValue == false {
+            if returnValue == true {
                 let detailsId = UUID()
                 titleDetailsId = detailsId.uuidString
                 
             }
                 
-            //THIS CODE IS FOR ADDING NEW
             do {
                 
                 let saveDetails = TitleDetails(context: moc)
@@ -77,12 +73,12 @@ extension TitleDetailsView {
             }
 
         } else if !newRecord {
-           // need to update record
+            // need to update record
             
             guard !titleIdString.isEmpty else { return }
-           
+            
             titleDetailsId = resultString
-  
+            
             let _fetchRequest = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
             _fetchRequest.predicate = NSPredicate(format: "titleDetailsId == %@", titleDetailsId as CVarArg)
             _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType

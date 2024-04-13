@@ -12,3 +12,7 @@ extension String {
         return rangeOfCharacter(from: .whitespacesAndNewlines) != nil
     }
 }
+
+extension String: LocalizedError {
+    public var errorDescription: String? { return self} 
+}

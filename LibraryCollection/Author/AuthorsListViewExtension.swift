@@ -1,5 +1,5 @@
 //
-//  AuthorsViewExtension.swift
+//  AuthorsListViewExtension.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 3/18/24.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-extension AuthorsView {
+extension AuthorsListView {
     
     //TODO: probably should be in a transaction--is sqlite sophisticated enough for this?
     //Not likely to be used for a user.  In place to clear data while testing.

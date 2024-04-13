@@ -92,7 +92,7 @@ struct EditAuthorView: View {
                 .frame(maxWidth: .infinity)
                 .font(.subheadline)
                 .foregroundColor(Color.accentColor)
-                
+        
             }
             .onSubmit {
                 switch focusedField {
@@ -123,10 +123,10 @@ struct EditAuthorView: View {
         } //Navigation Stack
         .sheet(isPresented: $showTitleDetails) {
             TitleDetailsView(authorIdString: authorIdString,
-                                title: selectedTitle,
-                                authorLastName: authorLastName,
-                                authorFirstName: authorFirstName,
-                                authorMiddleName: authorMiddleName)
+                            title: selectedTitle,
+                            authorLastName: authorLastName,
+                            authorFirstName: authorFirstName,
+                            authorMiddleName: authorMiddleName)
         }
         .onAppear {
             authorIdString = authorIdString
@@ -134,11 +134,17 @@ struct EditAuthorView: View {
             //moc.refreshAllObjects()
         }
         .safeAreaPadding(20)
-        .onDisappear {
-            UpdateAuthor()
-            hideKeyboard()
-        }
+//        .onDisappear {
+//            UpdateAuthor()
+//            hideKeyboard()
+//        }
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save") {
+                    UpdateAuthor()
+                    hideKeyboard()
+                }
+            }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView(returning: true)

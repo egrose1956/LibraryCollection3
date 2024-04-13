@@ -1,5 +1,5 @@
 //
-//  AddCoAuthorExtension.swift
+//  CoAuthorListViewExtension.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 4/16/23.
@@ -8,38 +8,8 @@
 import Foundation
 import CoreData
 
-extension AddCoAuthorView {
-        
-    func PerformValidationAndSave() {
-        
-        if authorFirstName.isEmpty && authorMiddleName.isEmpty && authorLastName.isEmpty {
-            //go back if there isn't any author name entered
-            lastNameAlert = true
-            return
-        }
-        
-        if authorLastName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || authorLastName.count < 2 {
-            lastNameAlert = true
-            return
-        }
-        
-        //check to see if we already have an author by this name
-        var duplicate = CheckForExistingAuthor(authorLastName: authorLastName, authorFirstName: authorFirstName, authorMiddleName: authorMiddleName)
-        
-        if !duplicate {
-            SaveCoAuthor()
-        }
-        
-        duplicate = false
-        duplicate = CheckForExistingCoAuthorOfThisTitle(authorIdString: authorIdString)
-            
-        if !duplicate {
-            AddTitleAuthorOnly(titleIdString: titleIdString, authorIdString: authorIdString)
-        }
-        
-        coAuthorisShowingConfirmation = true
-    }
-    
+extension CoAuthorListView {
+           
     func CheckForExistingTitle() -> Bool {
         do {
 
@@ -153,7 +123,7 @@ extension AddCoAuthorView {
         guard !titleIdString.isEmpty else { return }
         
         resultString = []
-
+        
         let _fetchTAuthor = NSFetchRequest<TitleAuthor>(entityName: "TitleAuthor")
         _fetchTAuthor.predicate = NSPredicate(format: "titleId == %@", titleIdString)
         _fetchTAuthor.resultType = NSFetchRequestResultType.managedObjectResultType
@@ -183,31 +153,10 @@ extension AddCoAuthorView {
                     }
                 }
             }
-
+            
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "No fetch from AddCoAuthorExtension:GetAllAuthorssByTitleId. \(error), \(error.localizedDescription)")
         }
-    }
-    
-    func AddTitleAuthorOnly(titleIdString: String, authorIdString: String) {
-        
-        guard !titleIdString.isEmpty else { return }
-        guard !authorIdString.isEmpty else { return }
-        
-        do {
-            let tA = TitleAuthor(context: moc)
-            tA.titleAuthorId = UUID()
-            tA.titleId = UUID(uuidString: titleIdString)!
-            tA.authorId = UUID(uuidString: authorIdString)!
-            
-            try moc.save()
-            moc.refreshAllObjects()
-            
-        } catch let error as NSError {
-            let logger = appLogger()
-            logger.log(level: .error, message: "No save at: from AddCoAuthorExtension:AddTitleAuthorOnly. \(error), \(error.localizedDescription)")
-        }
-    }
-    
+    }    
 }

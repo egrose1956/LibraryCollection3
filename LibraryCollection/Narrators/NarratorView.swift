@@ -40,7 +40,6 @@ struct NarratorView: View {
     @State var addOrEdit: String = ""
     @State var foundNarratorLastName: String = "" //for edit search for duplicates
     @State var foundNarratorFirstName: String = "" //for edit search for duplicates
-    //@State var editResultsInDuplicateRecord: Bool = false //for edit search for duplicates
     @State var lastNameAlert: Bool = false
     @State var alreadyExists: Bool = false
     
