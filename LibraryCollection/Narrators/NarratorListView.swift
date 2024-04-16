@@ -42,19 +42,23 @@ struct NarratorListView: View {
                     }
                 } else {
                     Text("Narrators")
-                        .font(.title3)
+                        .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundStyle(Color.accentColor)
     
                     List(narrators, id: \.narratorId) { selectedNarrator in
-                        
-                        NavigationLink(destination: NarratorView(narrator: selectedNarrator)) {
+
+                        NavigationLink { 
+                            NarratorView(narrator: selectedNarrator)
+                        } label: {
                             Text(nameFormatter.ConcatenateNameFields(lastName: selectedNarrator.narratorLastName,
                                                                      firstName: selectedNarrator.wrappedNarratorFirstName,
                                                                      middleName: selectedNarrator.wrappedNarratorMiddleName))
                             .font(.subheadline)
-                            .foregroundColor(Color.accentColor)
                             .accessibilityLabel("Proceeding to edit \(selectedNarrator.wrappedNarratorFirstName) \(selectedNarrator.narratorLastName)")
+                        }
+                        .onTapGesture {
+                            narratorIdString = selectedNarrator.narratorId.uuidString
                         }
                         .swipeActions(allowsFullSwipe: false) {
                             Button() {

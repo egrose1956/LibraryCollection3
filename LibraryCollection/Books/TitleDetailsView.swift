@@ -18,7 +18,7 @@ struct TitleDetailsView: View {
     @State var titleDetails: [TitleDetails] = []
     @State var titleDetailsId: String = ""
     
-    @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook", "Other"]
+    @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook"]
     @State var selectedType: String = ""
     @State var editionNumber: String = ""
     @State var genre: String = ""
@@ -48,10 +48,13 @@ struct TitleDetailsView: View {
     @State var authorFirstName: String = ""
     @State var authorMiddleName:  String = ""
     
+    //coming from NarratorsWorksView
+    @State var narratorIdString: String = ""
+    
     var body: some View {
         NavigationStack {
             Form {
-                VStack {
+                VStack(alignment: .leading) {
                     //TODO: any changes required between add and edit?
                     if !newRecord {
                         VStack(alignment: .leading) {
@@ -66,21 +69,7 @@ struct TitleDetailsView: View {
                                     titleHasChanged = true
                                 }
                         }
-                    }
-                    Picker("Select book type", selection: $selectedType) {
-                        ForEach(bookTypes, id: \.self) { type in
-                            Text(type)
-                                .accessibilityLabel("\(type)")
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .focused($focusedField, equals: .selectedType)
-                    .padding()
-                    .textContentType(.none)
-                    .submitLabel(.next)
-                    .accessibilityLabel("Book Type Picker")
-                    
-                    VStack(alignment: .leading) {
+                    } else {
                         Text("Title")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
@@ -91,67 +80,80 @@ struct TitleDetailsView: View {
                             .submitLabel(.next)
                             .lineLimit(2)
                             .accessibilityLabel("New Title")
-                        
-                        Divider()
-                        
-                        Text("Edition Number: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("Edition Number: ", text: $editionNumber)
-                            .focused($focusedField, equals: .editionNumber)
-                            .font(.subheadline)
-                            .textContentType(.none)
-                            .submitLabel(.next)
-                            .accessibilityLabel("Edition Number")
-                        
-                        Divider()
-                        
-                        Text("Genre: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("Genre: ", text: $genre)
-                            .focused($focusedField, equals: .genre)
-                            .font(.subheadline)
-                            .textContentType(.none)
-                            .submitLabel(.next)
-                            .accessibilityLabel("Genre")
-                        
-                        Divider()
-                        
-                        Text("ISBN: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("ISBN: ", text: $ISBN)
-                            .focused($focusedField, equals: .ISBN)
-                            .font(.subheadline)
-                            .textContentType(.none)
-                            .submitLabel(.next)
-                            .accessibilityLabel("ISBN")
-                        
-                        Divider()
-                        
-                        Text("Published Date: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("Published date: ", text: $publishingDate)
-                            .focused($focusedField, equals: .publishingDate)
-                            .font(.subheadline)
-                            .textContentType(.none)
-                            .submitLabel(.next)
-                            .accessibilityLabel("Published Date")
-                        
-                        Divider()
-                        
-                        Text("Publishing House: ")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField("Publisher: ", text: $publishingHouse)
-                            .focused($focusedField, equals: .publishingHouse)
-                            .font(.subheadline)
-                            .textContentType(.none)
-                            .submitLabel(.done)
-                            .accessibilityLabel("Publishing House")
                     }
+                    Divider()
+                    
+                    Picker("Select book type", selection: $selectedType) {
+                        ForEach(bookTypes, id: \.self) { type in
+                            Text(type)
+                                .accessibilityLabel("\(type)")
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .focused($focusedField, equals: .selectedType)
+                    .textContentType(.none)
+                    .submitLabel(.next)
+                    .accessibilityLabel("Book Type Picker")
+                    
+                    Divider()
+                    
+                    Text("Edition Number: ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.subheadline)
+                    TextField("Edition Number: ", text: $editionNumber)
+                        .focused($focusedField, equals: .editionNumber)
+                        .font(.subheadline)
+                        .textContentType(.none)
+                        .submitLabel(.next)
+                        .accessibilityLabel("Edition Number")
+                    
+                    Divider()
+                    
+                    Text("Genre: ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.subheadline)
+                    TextField("Genre: ", text: $genre)
+                        .focused($focusedField, equals: .genre)
+                        .font(.subheadline)
+                        .textContentType(.none)
+                        .submitLabel(.next)
+                        .accessibilityLabel("Genre")
+                    
+                    Divider()
+                    
+                    Text("ISBN: ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.subheadline)
+                    TextField("ISBN: ", text: $ISBN)
+                        .focused($focusedField, equals: .ISBN)
+                        .font(.subheadline)
+                        .textContentType(.none)
+                        .submitLabel(.next)
+                        .accessibilityLabel("ISBN")
+                    
+                    Divider()
+                    
+                    Text("Published Date: ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.subheadline)
+                    TextField("Published date: ", text: $publishingDate)
+                        .focused($focusedField, equals: .publishingDate)
+                        .font(.subheadline)
+                        .textContentType(.none)
+                        .submitLabel(.next)
+                        .accessibilityLabel("Published Date")
+                    
+                    Divider()
+                    
+                    Text("Publishing House: ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.subheadline)
+                    TextField("Publisher: ", text: $publishingHouse)
+                        .focused($focusedField, equals: .publishingHouse)
+                        .font(.subheadline)
+                        .textContentType(.none)
+                        .submitLabel(.done)
+                        .accessibilityLabel("Publishing House")
                 }
                 .onSubmit {
                     switch focusedField {
@@ -198,24 +200,20 @@ struct TitleDetailsView: View {
                     }
                 }
                 
-            } //Form
+                if selectedType == "Audio" {
+                    NarratorListView(titleIdString: titleIdString)
+                }
+                
+            }
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)
             .safeAreaPadding(20)
         }
         .toolbar {
-            ToolbarTitleMenu {
-                NavigationLink("Add a Co-Author") {
-                    AuthorView(inputTitle: title, titleIdString: titleIdString)}
-                NavigationLink("Add a Narrator") {
-                    NarratorView(titleIdString: titleIdString)}
-//            } label: {
-//                Label ("Additional Actions", systemImage: "text.justify")
-            }
             ToolbarItem(placement: .bottomBar) {
                 NavigationLink("Return to Main Screen") {
                     ContentView(returning: true)
-                }
+                }       
                 .buttonStyle(CustomButtonStyle())
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -223,7 +221,14 @@ struct TitleDetailsView: View {
                     try? SaveTitleDetails() //includes the title and titleauthor entries
                     hideKeyboard()
                 }
-                
+            }
+            ToolbarItem(placement: .automatic) {
+                Menu("Additional Actions", systemImage: "text.justify") {
+                    NavigationLink("Add a Co-Author") {
+                        AuthorView(inputTitle: title, titleIdString: titleIdString)}
+                    NavigationLink("Add a Narrator") {
+                        NarratorView(titleIdString: titleIdString)}
+                }
             }
         }
     }

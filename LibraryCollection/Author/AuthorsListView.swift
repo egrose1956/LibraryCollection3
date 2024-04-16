@@ -71,14 +71,6 @@ struct AuthorsListView: View {
                                     Label("Delete", systemImage: "trash.fill")
                                 }
                                 .tint(.red)
-//#if DEBUG
-//                                    // if in debug mode and the function is uncommented...
-//                                    // this functionality is included for the developer to clean data
-//                                    // from the tables for testing purposes. It is unlikely to be
-//                                    // accessible to the user
-//                                    
-//                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
-//#endif
                             }
                         }
                     }
@@ -103,3 +95,14 @@ struct AuthorsListView: View {
         }
     }
 }
+
+/*
+#if DEBUG
+                                    // if in debug mode and the function is uncommented...
+                                    // this functionality is included for the developer to clean data
+                                    // from the tables for testing purposes. It is unlikely to ever be
+                                    // accessible to the user - maybe move to "admin" module?
+
+                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
+#endif
+*/

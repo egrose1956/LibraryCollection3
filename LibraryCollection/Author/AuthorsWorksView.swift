@@ -40,8 +40,8 @@ struct AuthorsWorksView: View {
         }
     }
     
-    func GetComponentValues(componentString: String) {
-        titleIdString = componentString.components(separatedBy: "*")[1]
-    }
+//    func GetComponentValues(componentString: String) {
+//        titleIdString = componentString.components(separatedBy: "*")[1]
+//    }
 }
 

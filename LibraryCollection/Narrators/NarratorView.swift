@@ -37,7 +37,6 @@ struct NarratorView: View {
     @State var newNarratorLastName: String = ""
     
     @State var nameFormatter = NameFormatter()
-    @State var addOrEdit: String = ""
     @State var foundNarratorLastName: String = "" //for edit search for duplicates
     @State var foundNarratorFirstName: String = "" //for edit search for duplicates
     @State var lastNameAlert: Bool = false
@@ -66,11 +65,13 @@ struct NarratorView: View {
                     List {
                         
                         ForEach(narrators, id: \.narratorId) { narrator in
+                            
                             Text(nameFormatter.ConcatenateNameFields(lastName: narrator.narratorLastName,
                                                                      firstName: narrator.wrappedNarratorFirstName,
                                                                      middleName: narrator.wrappedNarratorMiddleName))
                             .accessibilityLabel("\(narrator.narratorLastName), \(narrator.wrappedNarratorFirstName)")
-                            .onTapGesture {
+                            .onSubmit {
+                                narratorIdString = narrator.narratorId.uuidString
                                 newNarratorLastName = narrator.narratorLastName
                                 newNarratorFirstName = narrator.wrappedNarratorFirstName
                                 newNarratorMiddleName = narrator.wrappedNarratorMiddleName
@@ -177,6 +178,9 @@ struct NarratorView: View {
 #endif
                     }
                 }
+                
+                NarratorsWorksView(narratorIdString: narratorIdString)
+                
                 .alert("Last name is missing or is too short. Must be more than one character.", isPresented: $lastNameAlert) {
                     Button("Ok") {}
 //                        .dismiss
@@ -191,8 +195,9 @@ struct NarratorView: View {
                     }
                     .accessibilityLabel("Ok")
                 }
-            } //form
+            }
             .onAppear {
+                narratorIdString = narrator!.narratorId.uuidString
                 if !titleIdString.isEmpty && !titleName.isEmpty {
                         GetAllNarratorsForTitle()
                 }
@@ -201,7 +206,7 @@ struct NarratorView: View {
             .keyboardType(.default)
             .autocorrectionDisabled(true)
             .safeAreaPadding(20)
-        } //Nav Stack
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {

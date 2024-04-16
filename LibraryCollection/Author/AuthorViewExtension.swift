@@ -22,6 +22,10 @@ extension AuthorView {
             lastNameWarning = true
             return
         }
+        
+        if titleIdString.isEmpty {
+            return
+        }
    
         //check to see if we already have an author by this name
         guard !authorLastName.isEmpty else { return }
@@ -38,25 +42,22 @@ extension AuthorView {
         } else {
             SaveAuthorEdit()
         }
-        
-        //if a title is proferred - check to see if there is already an author
-        //for this title
-        if !titleIdString.isEmpty || !inputTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             
+        //add a titleauthor record with this author and existing titleId
+        AddTitleAuthorOnly(title: existingTitleIdString.isEmpty ? titleIdString : "", author: authorIdString)
+            
+        if addingCoAuthor {
+            existingTitleIdString = titleIdString
+        }
+        if !inputTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                
             if !existingAuthorLastName.isEmpty {
                 //Check for an author name in the text field below
                 //and go get the titleId for this title by that author.
                 CheckForExistingAuthorOfThisTitle(title: inputTitle, existingAuthorLastName: existingAuthorLastName, existingAuthorFirstName: existingAuthorFirstName)
             }
-            
-            if addingCoAuthor {
-                existingTitleIdString = titleIdString
-            }
-                
-            //add a titleauthor record with this author and existing titleId
-            AddTitleAuthorOnly(title: existingTitleIdString, author: authorIdString)
-                
         }
+        
     }
    
     func SaveAuthor() {
@@ -131,7 +132,7 @@ extension AuthorView {
     
     func AddTitleAuthorOnly(title: String, author: String) {
         
-        guard !title.isEmpty || !titleIdString.isEmpty else { return }
+        guard !title.isEmpty && !titleIdString.isEmpty else { return }
         guard !author.isEmpty else { return }
         
         do {

@@ -1,5 +1,5 @@
 //
-//  NarratorExtension.swift
+//  NarratorViewExtension.swift
 //  LibraryCollection
 //
 //  Created by Elizabeth Rose on 4/8/23.
@@ -9,14 +9,14 @@ import Foundation
 import CoreData
 
 extension NarratorView {
-  
+    
     func GetAllNarratorsForTitle() {
         
         guard !titleIdString.isEmpty else { return }
         
         let nameFormatter = NameFormatter()
         filteredNarrators.removeAll()
-                
+        
         let _fetchTN = NSFetchRequest<TitleNarrator>(entityName: "TitleNarrator")
         _fetchTN.predicate = NSPredicate(format: "titleId = %@", UUID(uuidString: titleIdString)! as CVarArg)
         _fetchTN.resultType = NSFetchRequestResultType.managedObjectResultType
@@ -49,7 +49,7 @@ extension NarratorView {
             
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from NarratorListViewExtension:GetAllNarratorsForTitle. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from NarratorViewExtension:GetAllNarratorsForTitle. \(error), \(error.localizedDescription)")
         }
     }
     
@@ -73,21 +73,15 @@ extension NarratorView {
             let _narrator = try moc.fetch(_fetchNarrator)
             if _narrator.count > 0 {
                 
-                if addOrEdit == "add" {
-                    
-                    narratorIdString = _narrator[0].narratorId.uuidString
-                }
-                if addOrEdit == "editing" {
-                    
-                    foundNarratorLastName = "\(_narrator[0].narratorLastName)"
-                    foundNarratorFirstName = _narrator[0].wrappedNarratorFirstName
-                    
-                    return //"\(foundNarratorLastName + ", " + foundNarratorFirstName)"
-                }
+                foundNarratorLastName = "\(_narrator[0].narratorLastName)"
+                foundNarratorFirstName = _narrator[0].wrappedNarratorFirstName
+                narratorIdString = _narrator[0].narratorId.uuidString
+                
             }
+            
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddNarratorExtension:CheckForExistingNarrator. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from NarratorViewExtension:CheckForExistingNarrator. \(error), \(error.localizedDescription)")
             return
         }
         return
@@ -101,124 +95,118 @@ extension NarratorView {
         let _fetchRecord = NSFetchRequest<TitleNarrator>(entityName: "TitleNarrator")
         
         _fetchRecord.predicate =
-            NSPredicate(format: "narratorId == %@ AND titleId == %@",
-                        narratorIdString, titleIdString)
-
+        NSPredicate(format: "narratorId == %@ AND titleId == %@",
+                    narratorIdString, titleIdString)
+        
         _fetchRecord.resultType = NSFetchRequestResultType.managedObjectResultType
         _fetchRecord.fetchLimit = 1
         
         do {
+        
             let _narrator = try moc.fetch(_fetchRecord)
             if _narrator.count < 1 {
                 
                 //need to add a titleNarrator
                 AddTitleNarratorRecord(titleIdString: titleIdString)
             }
+            
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "Error in fetch from CheckForExistingTitleNarratorRecord. \(error), \(error.localizedDescription)")
-            return
+            logger.log(level: .error, message: "Error in fetch from NarratorViewExtension:CheckForExistingTitleNarratorRecord. \(error), \(error.localizedDescription)")
         }
-        return
     }
     
     func ValidateNarratorAndSave() {
-
+        
         CheckForExistingNarrator(narratorLastNameValue: newNarratorLastName, narratorFirstNameValue: newNarratorFirstName)
         
         if narratorIdString.isEmpty {
+            
             //no narrator by this name and no passed in title
             //so just save the narrator
-            SaveNarrator(addOrEdit: "add")
-        }
+            AddNarrator()
             
-        if !titleIdString.isEmpty {
+        } else {
             
-            if !narratorIdString.isEmpty && !titleIdString.isEmpty  {
-                
-                //check for existing title/narrator record so as not to duplicate.
-                CheckForExistingTitleNarratorRecord(narratorIdString: narratorIdString, titleIdString: titleIdString)
-   
-            }
+            //check for existing title/narrator record so as not to duplicate.
+            CheckForExistingTitleNarratorRecord(narratorIdString: narratorIdString, titleIdString: titleIdString)
+            
+            EditNarrator()
+            AddTitleNarratorRecord(titleIdString: titleIdString)
+            
+            
+            narratorFirstName = newNarratorFirstName
+            narratorMiddleName = newNarratorMiddleName
+            narratorLastName = newNarratorLastName
+            
+            newNarratorFirstName = ""
+            newNarratorMiddleName = ""
+            newNarratorLastName = ""
         }
-        narratorFirstName = newNarratorFirstName
-        narratorMiddleName = newNarratorMiddleName
-        narratorLastName = newNarratorLastName
+    }
         
-        newNarratorFirstName = ""
-        newNarratorMiddleName = ""
-        newNarratorLastName = ""
+    func AddNarrator() {
+   
+        let narrator = Narrator(context: moc)
+        
+        narrator.narratorId = UUID()
+        
+        narrator.narratorLastName = newNarratorLastName
+        
+        if newNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            narrator.narratorFirstName = newNarratorFirstName
+        }
+        if newNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            narrator.narratorMiddleName = newNarratorMiddleName
+        }
+        
+        narratorIdString = narrator.narratorId.uuidString
+        
+        do {
+            
+            try moc.save()
+            moc.refreshAllObjects()
+            
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "Save Error from NarratorViewExtension:AddNarrator. \(error), \(error.localizedDescription)")
+        }
     }
     
-    func SaveNarrator(addOrEdit: String) {
+    func EditNarrator() {
         
-        if addOrEdit == "add" {
+        guard !narratorIdString.isEmpty else { return }
+   
+        let narratorId = UUID(uuidString: narratorIdString)!
+        
+        let narratorFetch = NSFetchRequest<Narrator>(entityName: "Narrator")
+        narratorFetch.predicate = NSPredicate(format: "narratorId == %@", narratorId as CVarArg)
+        narratorFetch.resultType = NSFetchRequestResultType.managedObjectResultType
+        narratorFetch.fetchLimit = 1
+        
+        do {
             
-            
-            do {
+            let editNarrator = try moc.fetch(narratorFetch)
+            if !editNarrator.isEmpty {
                 
-                let narrator = Narrator(context: moc)
+                editNarrator[0].narratorLastName = narratorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
                 
-                narrator.narratorId = UUID()
-                
-                narrator.narratorLastName = newNarratorLastName
-                
-                if newNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    narrator.narratorFirstName = newNarratorFirstName
+                if !narratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    editNarrator[0].narratorFirstName = narratorFirstName
                 }
-                if newNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                    narrator.narratorMiddleName = newNarratorMiddleName
+                if !narratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    editNarrator[0].narratorMiddleName = narratorMiddleName
                 }
-                
-                narratorIdString = narrator.narratorId.uuidString
-                
-                try moc.save()
-                moc.refreshAllObjects()
-                
-                return
-                
-            } catch let error as NSError {
-                let logger = appLogger()
-                logger.log(level: .error, message: "Save Error from NarratorExtension:SaveNarrator. \(error), \(error.localizedDescription)")
             }
-        } else {
-            //editing
-            guard !narratorIdString.isEmpty else { return }
+        
             
-            do {
-                
-                let narratorId = UUID(uuidString: narratorIdString)!
-                
-                let narratorFetch = NSFetchRequest<Narrator>(entityName: "Narrator")
-                narratorFetch.predicate = NSPredicate(format: "narratorId == %@", narratorId as CVarArg)
-                narratorFetch.resultType = NSFetchRequestResultType.managedObjectResultType
-                narratorFetch.fetchLimit = 1
-                
-                let editNarrator = try moc.fetch(narratorFetch)
-                if !editNarrator.isEmpty {
-                    
-                    CheckForExistingNarrator(narratorLastNameValue: narratorLastName, narratorFirstNameValue: narratorFirstName)
-
-                    editNarrator[0].narratorLastName = narratorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    
-                    if !narratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        editNarrator[0].narratorFirstName = narratorFirstName
-                    }
-                    if !narratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        editNarrator[0].narratorMiddleName = narratorMiddleName
-                    }
-                    try moc.save()
-                    moc.refreshAllObjects()
-                }
-                
-            } catch let error as NSError {
-                let logger = appLogger()
-                logger.log(level: .error, message: "Save failed from EditNarratorExtension:SaveNarratorEdit. \(error), \(error.localizedDescription)")
-                return
-            }
-            return
+            try moc.save()
+            moc.refreshAllObjects()
+            
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "Save failed from NarratorViewExtension:EditNarrator. \(error), \(error.localizedDescription)")
         }
-        return
     }
     
     func AddTitleNarratorRecord(titleIdString: String) {
@@ -234,15 +222,15 @@ extension NarratorView {
         titleNarrator.titleNarratorId = UUID()
         titleNarrator.titleId = titleID
         titleNarrator.narratorId = narratorID
-            
+        
         do {
             try moc.save()
             moc.refreshAllObjects()
+
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from AddNarratorExtension:AddTitleNarratorRecord. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from NarratorViewExtension:AddTitleNarratorRecord. \(error), \(error.localizedDescription)")
         }
     }
 }
-
 
