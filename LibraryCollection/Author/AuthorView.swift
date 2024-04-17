@@ -91,9 +91,9 @@ struct AuthorView: View {
 #endif
                     }
                 }
-/*  We only want the user to add title details at one point
- in the process, so only allow a connectionn to it from one place */
-                if saveIsComplete && !addingCoAuthor {
+                /*  We only want the user to add title details at one point
+                 in the process, so only allow a connectionn to it from one place */
+                if !addingCoAuthor {
                     NavigationLink {
                         TitleDetailsView(authorIdString: authorIdString,
                                          titleIdString: titleIdString,
@@ -111,19 +111,14 @@ struct AuthorView: View {
                     .buttonStyle(CustomButtonStyle())
                     .padding(.top)
                     .padding(.bottom)
-                    
-                    AuthorsWorksView(authorIdString: authorIdString)
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline)
-                        .foregroundColor(Color.accentColor)
-                    
-                } else {
-                    AuthorsWorksView(authorIdString: authorIdString)
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline)
-                        .foregroundColor(Color.accentColor)
                 }
+                
+                AuthorsWorksView(authorIdString: authorIdString)
+                    .frame(maxWidth: .infinity)
+                    .font(.subheadline)
+                    .foregroundColor(Color.accentColor)
             }
+            
             .onAppear {
                 focusedField = .authorFirstName
             }
@@ -134,6 +129,7 @@ struct AuthorView: View {
                     PerformValidateAndSave()
                     saveIsComplete = true
                     hideKeyboard()
+                    dismiss()
                 }
             }
             ToolbarItem(placement: .bottomBar) {
