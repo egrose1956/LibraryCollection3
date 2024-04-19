@@ -225,9 +225,11 @@ struct TitleDetailsView: View {
             ToolbarItem(placement: .automatic) {
                 Menu("Additional Actions", systemImage: "text.justify") {
                     NavigationLink("Add a Co-Author") {
-                        AuthorView(inputTitle: title, titleIdString: titleIdString)}
-                    NavigationLink("Add a Narrator") {
+                        AuthorView(inputTitle: title, titleIdString: titleIdString, addingCoAuthor: true)}
+                    if selectedType == "Audio" {
+                        NavigationLink("Add a Narrator") {
                         NarratorView(titleIdString: titleIdString)}
+                    }
                 }
             }
         }

@@ -14,7 +14,7 @@ struct NarratorsWorksView: View {
     
     @State var narratorIdString: String
     @State var titleIdString: String = ""
-    @State var filteredTitles: [String] = []
+    @State var narratorTitles: [String] = []
     
     var body: some View {
         
@@ -26,7 +26,7 @@ struct NarratorsWorksView: View {
             
             NavigationStack {
                 ScrollView {
-                    ForEach (filteredTitles, id:\.self) { selectedItem in
+                    ForEach (narratorTitles, id:\.self) { selectedItem in
                         
                         Text("\(selectedItem.components(separatedBy: "*")[0])")
 //                        NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",

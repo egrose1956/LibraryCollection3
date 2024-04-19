@@ -34,6 +34,7 @@ struct AuthorView: View {
     @FocusState private var focusedField: Field?
     
     @State var addingCoAuthor: Bool = false
+    @State var authorTitles: [String] = []
         
     var body: some View {
         NavigationStack {
@@ -111,15 +112,19 @@ struct AuthorView: View {
                     .buttonStyle(CustomButtonStyle())
                     .padding(.top)
                     .padding(.bottom)
+                    
                 }
                 
-                AuthorsWorksView(authorIdString: authorIdString)
-                    .frame(maxWidth: .infinity)
-                    .font(.subheadline)
-                    .foregroundColor(Color.accentColor)
+                if authorTitles.count > 0 {
+                    AuthorsWorksView(authorTitles: authorTitles, authorIdString: authorIdString)
+                        .frame(maxWidth: .infinity)
+                        .font(.subheadline)
+                        .foregroundColor(Color.accentColor)
+                }
             }
             
             .onAppear {
+                GetAllTitlesByAuthor(authorIdString: authorIdString)
                 focusedField = .authorFirstName
             }
         }

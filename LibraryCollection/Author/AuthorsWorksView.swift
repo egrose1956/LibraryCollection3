@@ -9,12 +9,10 @@ import SwiftUI
 import CoreData
 
 struct AuthorsWorksView: View {
-    
-    @Environment(\.managedObjectContext) var moc
-    
+        
+    @State var authorTitles: [String] = []
     @State var authorIdString: String
     @State var titleIdString: String = ""
-    @State var filteredTitles: [String] = []
     
     var body: some View {
         
@@ -26,22 +24,14 @@ struct AuthorsWorksView: View {
             
             NavigationStack {
                 ScrollView {
-                    ForEach (filteredTitles, id:\.self) { selectedItem in
+                    ForEach (authorTitles, id:\.self) { selectedItem in
                         NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",
                                        destination: TitleDetailsView(authorIdString: authorIdString,
                                                                      titleIdString: selectedItem.components(separatedBy: "*")[1]))
                     }
                 }
-                .onAppear {
-                    moc.refreshAllObjects()
-                    GetAllTitlesByAuthor(authorIdString: authorIdString)
-                }
             }
         }
     }
-    
-//    func GetComponentValues(componentString: String) {
-//        titleIdString = componentString.components(separatedBy: "*")[1]
-//    }
 }
 

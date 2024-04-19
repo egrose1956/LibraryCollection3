@@ -197,7 +197,7 @@ struct NarratorView: View {
                 }
             }
             .onAppear {
-                narratorIdString = narrator!.narratorId.uuidString
+                //narratorIdString = narrator!.narratorId.uuidString
                 if !titleIdString.isEmpty && !titleName.isEmpty {
                         GetAllNarratorsForTitle()
                 }

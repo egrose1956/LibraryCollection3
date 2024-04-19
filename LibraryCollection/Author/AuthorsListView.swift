@@ -23,7 +23,8 @@ struct AuthorsListView: View {
     
     @State var titleIdArray: [String] = []
     @State var narratorIdArray: [String] = []
-    
+    @State var authorTitles: [String] = []
+            
     var body: some View {
         NavigationStack {
             Group {
@@ -45,13 +46,18 @@ struct AuthorsListView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(Color.accentColor)
                     List {
-                        ForEach (authors) { author in
+                        ForEach (authors, id: \.authorId) { author in
+                            
                             NavigationLink {
                                 AuthorView(authorLastName: author.authorLastName,
                                            authorFirstName: author.wrappedAuthorFirstName,
                                            authorMiddleName: author.wrappedAuthorMiddleName,
-                                           authorIdString: author.authorId.uuidString)
+                                           authorIdString: author.authorId.uuidString, authorTitles: authorTitles)
+                                .onTapGesture {
+                                    authorIdString = author.authorId.uuidString
+                                }
                             } label: {
+                                                     
                                 let nameFormatter = NameFormatter()
                                 
                                 let fullNameString = nameFormatter.ConcatenateNameFields(lastName: author.authorLastName,
@@ -61,8 +67,10 @@ struct AuthorsListView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .font(.subheadline)
                                     .accessibilityValue("Author's name is \(fullNameString)")
-                                
                             }
+//                            .onTapGesture {
+//                                authorIdString = author.authorId.uuidString
+//                            }
                             .swipeActions(allowsFullSwipe: false) {
                                 Button() {
                                     deleteWarning = true
@@ -95,7 +103,6 @@ struct AuthorsListView: View {
         }
     }
 }
-
 /*
 #if DEBUG
                                     // if in debug mode and the function is uncommented...

@@ -15,7 +15,7 @@ extension NarratorsWorksView {
         guard !narratorIdString.isEmpty else { return }
         
         moc.refreshAllObjects()
-        filteredTitles.removeAll()
+        narratorTitles.removeAll()
         
         let _fetchRequest = NSFetchRequest<TitleNarrator>(entityName: "TitleNarrator")
         _fetchRequest.predicate = NSPredicate(format: "narratorId == %@", narratorIdString)
@@ -34,7 +34,7 @@ extension NarratorsWorksView {
                 let result = try moc.fetch(_fetchRequestTitle)
                 for _ in (0..<result.count) {
                     let resultString = result[0].title + "*" + titleId
-                    filteredTitles.append(resultString)
+                    narratorTitles.append(resultString)
                 }
             }
         } catch let error as NSError {
