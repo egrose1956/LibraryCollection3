@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TitleDetailsView: View {
     
@@ -207,7 +208,6 @@ struct TitleDetailsView: View {
             }
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)
-            .safeAreaPadding(20)
         }
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
@@ -233,12 +233,12 @@ struct TitleDetailsView: View {
                 }
             }
         }
+        .safeAreaPadding()
     }
     
     func LoadValues() {
         
         if !newRecord {
-            
             //this brings back title
             GetTitleById()
             authorIdString = GetAuthorId(filter: titleIdString)

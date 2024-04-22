@@ -40,9 +40,7 @@ struct TitlesView: View {
                 } else {
                     Text("Titles")
                         .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundStyle(Color.accentColor)
-                    
+                        .fontWeight(.bold)                    
                     List {
                         ForEach (titles) { selectedItem in
                             NavigationLink {

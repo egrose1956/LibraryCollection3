@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AuthorView: View {
     
@@ -92,69 +93,64 @@ struct AuthorView: View {
 #endif
                     }
                 }
-                /*  We only want the user to add title details at one point
-                 in the process, so only allow a connectionn to it from one place */
-                if !addingCoAuthor {
-                    NavigationLink {
-                        TitleDetailsView(authorIdString: authorIdString,
-                                         titleIdString: titleIdString,
-                                         newRecord: true,
-                                         authorLastName: authorLastName,
-                                         authorFirstName: authorFirstName,
-                                         authorMiddleName: authorMiddleName)
-                        
-                    } label: {
-                        Text("Add a new Title for this Author")
-                            .font(.subheadline)
-                            .foregroundStyle(Color.accentColor)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .buttonStyle(CustomButtonStyle())
-                    .padding(.top)
-                    .padding(.bottom)
+                NavigationLink {
+                    TitleDetailsView(authorIdString: authorIdString,
+                                     titleIdString: titleIdString,
+                                     newRecord: true,
+                                     authorLastName: authorLastName,
+                                     authorFirstName: authorFirstName,
+                                     authorMiddleName: authorMiddleName)
                     
+                } label: {
+                    Text("Add a new Title for this Author")
+                        .font(.title3)
+                        .foregroundStyle(Color.accentColor)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top)
+                        .padding(.bottom)
                 }
                 
                 if authorTitles.count > 0 {
-                    AuthorsWorksView(authorTitles: authorTitles, authorIdString: authorIdString)
-                        .frame(maxWidth: .infinity)
-                        .font(.subheadline)
-                        .foregroundColor(Color.accentColor)
+                    AuthorsWorksView(filteredTitles: authorTitles, authorIdString: authorIdString)
                 }
-            }
-            
+                
+            } //should be form
             .onAppear {
-                GetAllTitlesByAuthor(authorIdString: authorIdString)
                 focusedField = .authorFirstName
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Save") {
-                    PerformValidateAndSave()
-                    saveIsComplete = true
-                    hideKeyboard()
-                    dismiss()
+                if !addingCoAuthor {
+                    GetAllTitlesByAuthor(authorIdString: authorIdString)
                 }
             }
-            ToolbarItem(placement: .bottomBar) {
-                NavigationLink("Return to Main Screen") {
-                    ContentView(returning: true)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        PerformValidateAndSave()
+                        if addingCoAuthor {
+                            if !titleIdString.isEmpty {
+                                AddTitleAuthorOnly(title: titleIdString, author: authorIdString)
+                            }
+                        }
+                    }
                 }
-                .buttonStyle(CustomButtonStyle())
+                ToolbarItem(placement: .bottomBar) {
+                    NavigationLink("Return to Main Screen") {
+                        ContentView(returning: true)
+                    }
+                    .buttonStyle(CustomButtonStyle())
+                }
+            }
+            .alert(isPresented: $lastNameWarning) {
+                Alert(
+                    title: Text("Last Name Validation"),
+                    message: Text("Last Name is required and must be longer than one character."),
+                    primaryButton: .default(Text("OK")) {
+                        lastNameWarning = false
+                        dismiss()
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
-        .alert(isPresented: $lastNameWarning) {
-            Alert(
-                title: Text("Last Name Validation"),
-                message: Text("Last Name is required and must be longer than one character."),
-                primaryButton: .default(Text("OK")) {
-                    lastNameWarning = false
-                    dismiss()
-                },
-                secondaryButton: .cancel()
-            )
-        }
-        .safeAreaPadding(20)
+        .safeAreaPadding()
     }
 }

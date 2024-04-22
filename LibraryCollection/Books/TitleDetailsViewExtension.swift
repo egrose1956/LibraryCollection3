@@ -236,6 +236,26 @@ extension TitleDetailsView {
         return true
     }
     
+    /*
+     
+     Taken from Author save from first version - any need for this here?
+     //add a titleauthor record with this author and existing titleId
+     AddTitleAuthorOnly(title: existingTitleIdString.isEmpty ? titleIdString : "", author: authorIdString)
+     
+     if addingCoAuthor {
+         existingTitleIdString = titleIdString
+     }
+     if !inputTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+         
+         if !existingAuthorLastName.isEmpty {
+             //Check for an author name in the text field below
+             //and go get the titleId for this title by that author.
+             CheckForExistingAuthorOfThisTitle(title: inputTitle, existingAuthorLastName: existingAuthorLastName, existingAuthorFirstName: existingAuthorFirstName)
+         }
+     }
+     
+     */
+    
     func SaveTitle() -> Bool {
         
         guard !authorIdString.isEmpty else { return false }

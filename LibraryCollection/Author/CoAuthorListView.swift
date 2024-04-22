@@ -79,14 +79,13 @@ struct CoAuthorListView: View {
                 GetAllAuthorsByTitleId()
                 moc.refreshAllObjects()
             }
-            .safeAreaPadding(20)
                 
             AuthorView(titleIdString: titleIdString, addingCoAuthor: true)
                             
         } //NavStack
         .navigationBarTitleDisplayMode(.inline)
         .autocorrectionDisabled(true)
-        .safeAreaPadding(20)
+        .safeAreaPadding()
     }
 }
 

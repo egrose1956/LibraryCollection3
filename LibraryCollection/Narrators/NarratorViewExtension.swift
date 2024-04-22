@@ -134,7 +134,6 @@ extension NarratorView {
             EditNarrator()
             AddTitleNarratorRecord(titleIdString: titleIdString)
             
-            
             narratorFirstName = newNarratorFirstName
             narratorMiddleName = newNarratorMiddleName
             narratorLastName = newNarratorLastName
@@ -198,7 +197,6 @@ extension NarratorView {
                     editNarrator[0].narratorMiddleName = narratorMiddleName
                 }
             }
-        
             
             try moc.save()
             moc.refreshAllObjects()

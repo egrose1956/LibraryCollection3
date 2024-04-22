@@ -44,7 +44,6 @@ struct AuthorsListView: View {
                     Text("Authors")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .foregroundStyle(Color.accentColor)
                     List {
                         ForEach (authors, id: \.authorId) { author in
                             
@@ -53,9 +52,6 @@ struct AuthorsListView: View {
                                            authorFirstName: author.wrappedAuthorFirstName,
                                            authorMiddleName: author.wrappedAuthorMiddleName,
                                            authorIdString: author.authorId.uuidString, authorTitles: authorTitles)
-                                .onTapGesture {
-                                    authorIdString = author.authorId.uuidString
-                                }
                             } label: {
                                                      
                                 let nameFormatter = NameFormatter()
@@ -68,9 +64,6 @@ struct AuthorsListView: View {
                                     .font(.subheadline)
                                     .accessibilityValue("Author's name is \(fullNameString)")
                             }
-//                            .onTapGesture {
-//                                authorIdString = author.authorId.uuidString
-//                            }
                             .swipeActions(allowsFullSwipe: false) {
                                 Button() {
                                     deleteWarning = true
@@ -103,13 +96,13 @@ struct AuthorsListView: View {
         }
     }
 }
-/*
-#if DEBUG
-                                    // if in debug mode and the function is uncommented...
-                                    // this functionality is included for the developer to clean data
-                                    // from the tables for testing purposes. It is unlikely to ever be
-                                    // accessible to the user - maybe move to "admin" module?
 
-                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
-#endif
-*/
+//#if DEBUG
+//                                    // if in debug mode and the function is uncommented...
+//                                    // this functionality is included for the developer to clean data
+//                                    // from the tables for testing purposes. It is unlikely to ever be
+//                                    // accessible to the user - maybe move to "admin" module?
+//
+//                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
+//#endif
+

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06038A3B2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06038A3A2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift */; };
 		060F93872B5B463400CAACDD /* LibraryCollectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060F93862B5B463400CAACDD /* LibraryCollectionApp.swift */; };
 		060F93892B5B463400CAACDD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060F93882B5B463400CAACDD /* ContentView.swift */; };
 		060F938D2B5B463500CAACDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 060F938C2B5B463500CAACDD /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06038A3A2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorsWorksViewExtension.swift; sourceTree = "<group>"; };
 		060F93832B5B463400CAACDD /* LibraryCollection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibraryCollection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		060F93862B5B463400CAACDD /* LibraryCollectionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCollectionApp.swift; sourceTree = "<group>"; };
 		060F93882B5B463400CAACDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				065C6ECF2B90F5CA00208BB4 /* CoAuthorListView.swift */,
 				06EBEB882B9007C600CEFC63 /* CoAuthorListViewExtension.swift */,
 				065C6ED32B90F66000208BB4 /* AuthorsWorksView.swift */,
+				06038A3A2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift */,
 			);
 			path = Author;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				06F8D2D82BA8BC9500F04945 /* AuthorsListViewExtension.swift in Sources */,
 				06C4ED5C2B6C2DC400F866B3 /* AuthorView.swift in Sources */,
 				06EBEB8D2B9007C600CEFC63 /* AuthorViewExtension.swift in Sources */,
+				06038A3B2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift in Sources */,
 				065C6ED52B90F66000208BB4 /* AuthorsWorksView.swift in Sources */,
 				065C6ED12B90F5CA00208BB4 /* CoAuthorListView.swift in Sources */,
 				06EBEB8C2B9007C600CEFC63 /* CoAuthorListViewExtension.swift in Sources */,

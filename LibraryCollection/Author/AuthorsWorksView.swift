@@ -10,7 +10,9 @@ import CoreData
 
 struct AuthorsWorksView: View {
         
-    @State var authorTitles: [String] = []
+    @Environment(\.managedObjectContext) var moc
+    
+    @State var filteredTitles: [String] = []
     @State var authorIdString: String
     @State var titleIdString: String = ""
     
@@ -20,18 +22,22 @@ struct AuthorsWorksView: View {
             Text("Author's Current Works: ")
                 .font(.title3)
                 .fontWeight(.bold)
-                .foregroundStyle(Color.accentColor)
             
             NavigationStack {
                 ScrollView {
-                    ForEach (authorTitles, id:\.self) { selectedItem in
+                    ForEach (filteredTitles, id:\.self) { selectedItem in
                         NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",
                                        destination: TitleDetailsView(authorIdString: authorIdString,
                                                                      titleIdString: selectedItem.components(separatedBy: "*")[1]))
                     }
                 }
+                .frame(maxWidth: .infinity)
+                .font(.title2)
             }
+        }
+        .foregroundStyle(Color.accentColor)
+        .onAppear {
+            GetAllTitlesByAuthor(authorIdString: authorIdString)
         }
     }
 }
-

@@ -205,7 +205,7 @@ struct NarratorView: View {
             }
             .keyboardType(.default)
             .autocorrectionDisabled(true)
-            .safeAreaPadding(20)
+            .safeAreaPadding()
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

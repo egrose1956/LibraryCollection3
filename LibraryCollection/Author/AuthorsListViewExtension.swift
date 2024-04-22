@@ -39,7 +39,9 @@ extension AuthorsListView {
     func deleteTitleAuthorandAuthorRecord() {
         
         //This begins the process and needs to have a clear array
-        titleIdArray.removeAll()
+        if !titleIdArray.isEmpty {
+            titleIdArray.removeAll()
+        }
         
         //to cascade the author's deletion, the TitleAuthor table should have it's
         //corresponding records removed
@@ -79,7 +81,6 @@ extension AuthorsListView {
             let logger = appLogger()
             logger.log(level: .error, message: "TitleAuthorAndAuthorDelete error in AuthorsViewExtension. \(error), \(error.localizedDescription)")
         }
-        
     }
     
     func deleteTitleRecord() {

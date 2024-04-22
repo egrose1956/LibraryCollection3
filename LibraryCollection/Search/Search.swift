@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct Search: View {
     
@@ -72,7 +73,7 @@ struct Search: View {
                             }
                         } else {
                             
-                            NavigationLink(destination: AuthorsWorksView(authorIdString: selectedItem.components(separatedBy: "*")[0])) {
+                            NavigationLink(destination: AuthorsWorksView(filteredTitles: filteredTitles, authorIdString: selectedItem.components(separatedBy: "*")[0])) {
                                 Text("Author: \(selectedItem.components(separatedBy: "*")[1])")
                                     .accessibilityLabel("Author: \(selectedItem.components(separatedBy: "*")[1])")
                             }
@@ -88,7 +89,7 @@ struct Search: View {
         .navigationTitle("Search For:  ")
         .keyboardType(.default)
         .autocorrectionDisabled(true)
-        .safeAreaPadding(20)
+        .safeAreaPadding()
     }
 }
 
