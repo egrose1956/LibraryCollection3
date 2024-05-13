@@ -18,26 +18,29 @@ extension AuthorView {
             return
         }
         
-        if authorLastName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || authorLastName.count < 2 {
+        //check to see if we already have an author by this name
+        guard !authorLastName.isEmpty else { return }
+        
+        authorLastName =  authorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if authorLastName.isEmpty || authorLastName.count < 2 {
             lastNameWarning = true
             return
         }
         
-        //check to see if we already have an author by this name
-        guard !authorLastName.isEmpty else { return }
-        
-        if !authorFirstName.isEmpty {
-            CheckForExistingAuthor(lastNameValue: authorLastName, firstNameValue: authorFirstName)
-        } else {
-            CheckForExistingAuthor(lastNameValue: authorLastName, firstNameValue: "")
-        }
-        
-        //if this author doesn't exist, add them
-        if authorIdString == "" {
-            SaveAuthor()
-        } else {
+        if !authorIdString.isEmpty {
             SaveAuthorEdit()
-        }        
+        } else {
+            
+            if !authorFirstName.isEmpty {
+                CheckForExistingAuthor(lastNameValue: authorLastName, firstNameValue: authorFirstName)
+            } else {
+                CheckForExistingAuthor(lastNameValue: authorLastName, firstNameValue: "")
+            }
+            if authorIdString == "" {
+                SaveAuthor()
+            }
+        }
     }
     
     func SaveAuthor() {
@@ -50,10 +53,10 @@ extension AuthorView {
             authors.authorLastName = authorLastName
             
             if authorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                authors.authorFirstName = authorFirstName
+                authors.authorFirstName = authorFirstName.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             if authorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                authors.authorMiddleName = authorMiddleName
+                authors.authorMiddleName = authorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             
             authorIdString = authors.authorId.uuidString
@@ -85,22 +88,26 @@ extension AuthorView {
             let editAuthor = try moc.fetch(authorFetch)
             if !editAuthor.isEmpty {
                 
-                let existingLastNameValue = editAuthor[0].authorLastName
-                let existingFirstNameValue = editAuthor[0].wrappedAuthorFirstName
-                CheckForExistingAuthor(lastNameValue: existingLastNameValue, firstNameValue: existingFirstNameValue)
+                if authorLastName != editAuthor[0].authorLastName {
+                    editAuthor[0].authorLastName = authorLastName
+                }
                 
+                if authorFirstName != editAuthor[0].authorFirstName {
+                    editAuthor[0].authorFirstName = authorFirstName
+                }
+                                
                 editAuthor[0].authorLastName = authorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
                 
                 if !authorFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    editAuthor[0].authorFirstName = authorFirstName
+                    editAuthor[0].authorFirstName = authorFirstName.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
                 
                 if !authorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    editAuthor[0].authorMiddleName = authorMiddleName
-                    
-                    try moc.save()
-                    moc.refreshAllObjects()
+                    editAuthor[0].authorMiddleName = authorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
+                
+                try moc.save()
+                moc.refreshAllObjects()
             }
             
         } catch let error as NSError {
@@ -139,7 +146,7 @@ extension AuthorView {
         
         let _fetchRequest = NSFetchRequest<Author>(entityName: "Author")
         if !existingAuthorFirstName.isEmpty {
-            _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@ AND authorFirstName CONTAINS[c] %@", existingAuthorLastName, existingAuthorFirstName)
+            _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@ AND authorFirstName LIKE[c] %@", existingAuthorLastName, existingAuthorFirstName)
         } else {
             _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@", existingAuthorLastName)
         }
@@ -191,7 +198,7 @@ extension AuthorView {
         let _fetchRequest = NSFetchRequest<Author>(entityName: "Author")
         
         if !firstNameValue.isEmpty {
-            _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@ AND authorFirstName CONTAINS[c] %@", lastNameValue, firstNameValue)
+            _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@ AND authorFirstName LIKE[c] %@", lastNameValue, firstNameValue)
         } else {
             _fetchRequest.predicate = NSPredicate(format: "authorLastName CONTAINS[c] %@", lastNameValue)
         }

@@ -12,7 +12,11 @@ struct AuthorView: View {
     
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
-
+    
+    @State var beginningAuthorLastName: String = ""
+    @State var beginningAuthorFirstName: String = ""
+    @State var beginningAuthorMiddleName: String = ""
+    
     @State var authorLastName: String = ""
     @State var authorFirstName: String = ""
     @State var authorMiddleName:  String = ""
@@ -26,6 +30,8 @@ struct AuthorView: View {
     
     @State var lastNameWarning: Bool = false
     @State var saveIsComplete: Bool = false
+    @State var unSavedWarning: Bool = false
+    @State var recordHasChanges: Bool = false
     
     enum Field {
         case authorFirstName
@@ -117,19 +123,36 @@ struct AuthorView: View {
             } //should be form
             .onAppear {
                 focusedField = .authorFirstName
+                LoadValues()
                 if !addingCoAuthor {
                     GetAllTitlesByAuthor(authorIdString: authorIdString)
+                }
+            }
+            .onDisappear {
+                CheckFormForChanges()   //to see if we must save
+                if recordHasChanges && !saveIsComplete {
+                        unSavedWarning = true
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
-                        PerformValidateAndSave()
-                        if addingCoAuthor {
-                            if !titleIdString.isEmpty {
-                                AddTitleAuthorOnly(title: titleIdString, author: authorIdString)
+                        CheckFormForChanges()
+                        if recordHasChanges {
+                            PerformValidateAndSave()
+                            if addingCoAuthor {
+                                if !titleIdString.isEmpty {
+                                    AddTitleAuthorOnly(title: titleIdString, author: authorIdString)
+                                }
                             }
+                            //then reset the beginning values to what has
+                            //just been saved
+                            beginningAuthorLastName = authorLastName
+                            beginningAuthorFirstName = authorFirstName
+                            beginningAuthorMiddleName = authorMiddleName
                         }
+                        saveIsComplete = true
+                        recordHasChanges = false
                     }
                 }
                 ToolbarItem(placement: .bottomBar) {
@@ -150,7 +173,49 @@ struct AuthorView: View {
                     secondaryButton: .cancel()
                 )
             }
+            .alert(isPresented: $unSavedWarning) {
+                Alert(
+                    title: Text("Save Warning"),
+                    message: Text("Any changes made to the author's name have not been saved. Save now?"),
+                    primaryButton: .default(Text("OK")) {
+                        
+                        if recordHasChanges {
+                            PerformValidateAndSave()
+                            saveIsComplete = true
+                            unSavedWarning = false
+                            //then reset the beginning values to what has
+                            //just been saved
+                            beginningAuthorLastName = authorLastName
+                            beginningAuthorFirstName = authorFirstName
+                            beginningAuthorMiddleName = authorMiddleName
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
         .safeAreaPadding()
+    }
+    
+    func CheckFormForChanges() {
+        
+        //if we compare what is in the field at the time
+        //of a save request or the form disappearance, we can determine
+        //if there have been any changes.
+        if ((authorLastName != beginningAuthorLastName)
+            || (authorFirstName != beginningAuthorFirstName)
+            || (authorMiddleName != beginningAuthorMiddleName)) {
+            
+            recordHasChanges = true
+        }
+    }
+    
+    func LoadValues() {
+        
+        //for established records, this would be the database
+        //values currently
+        authorLastName = beginningAuthorLastName
+        authorFirstName = beginningAuthorFirstName
+        authorMiddleName = beginningAuthorMiddleName
     }
 }

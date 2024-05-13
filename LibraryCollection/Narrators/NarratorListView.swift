@@ -23,6 +23,7 @@ struct NarratorListView: View {
     @State var titleIdString: String = ""
     @State var titleName: String = ""
     @State var narratorListForTitle: [String] = []
+    @State var narratorTitles: [String] = []
     @State var nameFormatter = NameFormatter()
     @State var deleteWarning: Bool = false
     @State var narratorIdString: String = ""
@@ -71,10 +72,10 @@ struct NarratorListView: View {
                         }
                     }
                 }
-            } //Group
+            }
             .onAppear {
-                if !titleName.isEmpty {
-                    GetAllNarratorsForTitle(narratorIdString: narratorIdString, titleIdString: titleIdString)
+                if !titleIdString.isEmpty {
+                    NarratorFilteredForTitle()
                 }
             }
             // TODO: A link to all titles narrator has performed, authors they have read for?? Edit??

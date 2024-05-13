@@ -24,7 +24,7 @@ struct AuthorsListView: View {
     @State var titleIdArray: [String] = []
     @State var narratorIdArray: [String] = []
     @State var authorTitles: [String] = []
-            
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -48,9 +48,9 @@ struct AuthorsListView: View {
                         ForEach (authors, id: \.authorId) { author in
                             
                             NavigationLink {
-                                AuthorView(authorLastName: author.authorLastName,
-                                           authorFirstName: author.wrappedAuthorFirstName,
-                                           authorMiddleName: author.wrappedAuthorMiddleName,
+                                AuthorView(beginningAuthorLastName: author.authorLastName,
+                                           beginningAuthorFirstName: author.wrappedAuthorFirstName,
+                                           beginningAuthorMiddleName: author.wrappedAuthorMiddleName,
                                            authorIdString: author.authorId.uuidString, authorTitles: authorTitles)
                             } label: {
                                                      
@@ -96,13 +96,4 @@ struct AuthorsListView: View {
         }
     }
 }
-
-//#if DEBUG
-//                                    // if in debug mode and the function is uncommented...
-//                                    // this functionality is included for the developer to clean data
-//                                    // from the tables for testing purposes. It is unlikely to ever be
-//                                    // accessible to the user - maybe move to "admin" module?
-//
-//                                     //deleteRelatedAuthorFiles(authorIdString: authorIdString)
-//#endif
 

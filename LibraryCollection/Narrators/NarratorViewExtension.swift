@@ -41,7 +41,6 @@ extension NarratorView {
                                                                                  middleName: _narr[i].wrappedNarratorMiddleName)
                                 filteredNarrators.append(returnName)
                             }
-                            
                         }
                     }
                 }
@@ -78,13 +77,13 @@ extension NarratorView {
                 narratorIdString = _narrator[0].narratorId.uuidString
                 
             }
+            return
             
         } catch let error as NSError {
             let logger = appLogger()
             logger.log(level: .error, message: "No fetch from NarratorViewExtension:CheckForExistingNarrator. \(error), \(error.localizedDescription)")
             return
         }
-        return
     }
     
     func CheckForExistingTitleNarratorRecord(narratorIdString: String, titleIdString: String) {
@@ -118,7 +117,7 @@ extension NarratorView {
     
     func ValidateNarratorAndSave() {
         
-        CheckForExistingNarrator(narratorLastNameValue: newNarratorLastName, narratorFirstNameValue: newNarratorFirstName)
+        CheckForExistingNarrator(narratorLastNameValue: narratorLastName, narratorFirstNameValue: narratorFirstName)
         
         if narratorIdString.isEmpty {
             
@@ -133,14 +132,6 @@ extension NarratorView {
             
             EditNarrator()
             AddTitleNarratorRecord(titleIdString: titleIdString)
-            
-            narratorFirstName = newNarratorFirstName
-            narratorMiddleName = newNarratorMiddleName
-            narratorLastName = newNarratorLastName
-            
-            newNarratorFirstName = ""
-            newNarratorMiddleName = ""
-            newNarratorLastName = ""
         }
     }
         
@@ -150,13 +141,13 @@ extension NarratorView {
         
         narrator.narratorId = UUID()
         
-        narrator.narratorLastName = newNarratorLastName
+        narrator.narratorLastName = narratorLastName
         
-        if newNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-            narrator.narratorFirstName = newNarratorFirstName
+        if narratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            narrator.narratorFirstName = narratorFirstName
         }
-        if newNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-            narrator.narratorMiddleName = newNarratorMiddleName
+        if narratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            narrator.narratorMiddleName = narratorMiddleName
         }
         
         narratorIdString = narrator.narratorId.uuidString

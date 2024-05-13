@@ -24,39 +24,40 @@ struct NarratorView: View {
     @State var titleName: String = ""
     
     @State var filteredNarrators: [String] = []
-    @State var narratorListForTitle: [String] = []
     
+    //for holding the bound values
     @State var narratorIdString: String = ""
     @State var narratorFirstName: String = ""
     @State var narratorMiddleName: String = ""
     @State var narratorLastName: String = ""
 
-    @State var newNarratorId: String = ""
-    @State var newNarratorFirstName: String = ""
-    @State var newNarratorMiddleName: String = ""
-    @State var newNarratorLastName: String = ""
+    //holding the beginningValues to check for changes at save
+    @State var beginningNarratorFirstName: String = ""
+    @State var beginningNarratorMiddleName: String = ""
+    @State var beginningNarratorLastName: String = ""
     
     @State var nameFormatter = NameFormatter()
     @State var foundNarratorLastName: String = "" //for edit search for duplicates
     @State var foundNarratorFirstName: String = "" //for edit search for duplicates
     @State var lastNameAlert: Bool = false
     @State var alreadyExists: Bool = false
+    @State var formHasChanges: Bool = false
     
     enum FocusedField {
-        case newNarratorFirstName
-        case newNarratorMiddleName
-        case newNarratorLastName
+        case narratorFirstName
+        case narratorMiddleName
+        case narratorLastName
     }
     @FocusState private var focusedField: FocusedField?
     
     var body: some View {
         NavigationStack {
-            Form {
+            if !narrators.isEmpty {
                 VStack(alignment: .leading) {
                     Text("All Existing Narrators")
                         .bold()
                         .accessibilityLabel("All Existing Narrators")
-                    Text("You may select from these existing narrator(s) or \nadd a new one below.\nLast name must not be empty.")
+                    Text("You may select from these existing narrator(s) or \nadd a new one below. Last name must not be empty.")
                         .foregroundStyle(Color.accentColor)
                         .multilineTextAlignment(.leading)
                         .lineLimit(3)
@@ -70,88 +71,95 @@ struct NarratorView: View {
                                                                      firstName: narrator.wrappedNarratorFirstName,
                                                                      middleName: narrator.wrappedNarratorMiddleName))
                             .accessibilityLabel("\(narrator.narratorLastName), \(narrator.wrappedNarratorFirstName)")
-                            .onSubmit {
+                            .onTapGesture {
                                 narratorIdString = narrator.narratorId.uuidString
-                                newNarratorLastName = narrator.narratorLastName
-                                newNarratorFirstName = narrator.wrappedNarratorFirstName
-                                newNarratorMiddleName = narrator.wrappedNarratorMiddleName
+                                narratorLastName = narrator.narratorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                narratorFirstName = narrator.wrappedNarratorFirstName.trimmingCharacters(in: .whitespacesAndNewlines)
+                                narratorMiddleName = narrator.wrappedNarratorMiddleName.trimmingCharacters(in: .whitespacesAndNewlines)
                             }
                         }
                     }
                 }
+                .padding(20)
                 .font(.subheadline)
+            }
+                            
+            if !filteredNarrators.isEmpty {
+            
+                if !titleName.isEmpty {
+                    Text("Narrator(s) for: \(titleName)")
+                        .padding(5)
+                        .foregroundStyle(Color.accentColor)
+                        .accessibilityLabel("Narrators for \(titleName)")
                 
-                VStack(alignment: .leading) {
-                    
-                    if !titleName.isEmpty {
-                        Text("Narrator(s) for: \(titleName)")
-                            .padding(5)
-                            .foregroundStyle(Color.accentColor)
-                            .accessibilityLabel("Narrators for \(titleName)")
-                    }
-                    
-                    List {
-                        ForEach(narratorListForTitle, id: \.self) { selectedItem in
-                            Text("\(selectedItem)")
-                                .onTapGesture {
-                                    if !selectedItem.isEmpty {
-                                        narratorLastName = ""
-                                        narratorFirstName = ""
-                                        narratorMiddleName = ""
-                                        if selectedItem.contains(", ") {
-                                            narratorLastName = selectedItem.components(separatedBy: ", ")[0]
-                                            let firstAndMiddle = selectedItem.components(separatedBy: ", ")[1]
-                                            if firstAndMiddle.components(separatedBy: " ").count > 1 {
-                                                narratorFirstName = firstAndMiddle.components(separatedBy: " ")[0]
-                                                narratorMiddleName = firstAndMiddle.components(separatedBy: " ")[1]
+                        List {
+                            ForEach(filteredNarrators, id: \.self) { selectedItem in
+                                Text("\(selectedItem)")
+                                    .onTapGesture {
+                                        if !selectedItem.isEmpty {
+                                            narratorLastName = ""
+                                            narratorFirstName = ""
+                                            narratorMiddleName = ""
+                                            if selectedItem.contains(", ") {
+                                                narratorLastName = selectedItem.components(separatedBy: ", ")[0]
+                                                let firstAndMiddle = selectedItem.components(separatedBy: ", ")[1]
+                                                if firstAndMiddle.components(separatedBy: " ").count > 1 {
+                                                    narratorFirstName = firstAndMiddle.components(separatedBy: " ")[0]
+                                                    narratorMiddleName = firstAndMiddle.components(separatedBy: " ")[1]
+                                                } else {
+                                                    narratorFirstName = firstAndMiddle
+                                                }
                                             } else {
-                                                narratorFirstName = firstAndMiddle
+                                                narratorLastName = selectedItem
                                             }
-                                        } else {
-                                            narratorLastName = selectedItem
                                         }
                                     }
-                                }
-                            
+                                
+                            }
                         }
                     }
-                }
+                
+            }
+            
+            
+            Form {
                 VStack(alignment: .leading) {
                     if !titleName.isEmpty {
                         Text("Narrator for: \(titleName)")
                             .foregroundStyle(Color.accentColor)
                             .accessibilityLabel("Ready to add new narrator.")
-                    }
-                    VStack(alignment: .leading) {
+                
+                        Divider()
+                        
                         Text("First Name: ")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
-                        TextField("Narrator First Name", text: $newNarratorFirstName)
-                            .focused($focusedField, equals: .newNarratorFirstName)
+                        TextField("Narrator First Name", text: $narratorFirstName)
+                            .focused($focusedField, equals: .narratorFirstName)
                             .font(.subheadline)
                             .textContentType(.givenName)
                             .submitLabel(.next)
                             .accessibilityLabel("Enter Narrator First Name")
-                    }
+                    
                     Divider()
-                    VStack(alignment: .leading) {
+                    
                         Text("Middle Name: ")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
-                        TextField("Narrator Middle Name", text: $newNarratorMiddleName)
-                            .focused($focusedField, equals: .newNarratorMiddleName)
+                        TextField("Narrator Middle Name", text: $narratorMiddleName)
+                            .focused($focusedField, equals: .narratorMiddleName)
                             .font(.subheadline)
                             .textContentType(.middleName)
                             .submitLabel(.next)
                             .accessibilityLabel("Enter Narrator Middle Name")
-                    }
+                
                     Divider()
-                    VStack(alignment: .leading) {
+                    
                         Text("Last Name: ")
                             .foregroundStyle(Color.accentColor)
                             .font(.footnote)
-                        TextField("Narrator Last Name", text: $newNarratorLastName)
-                            .focused($focusedField, equals: .newNarratorLastName)
+                        TextField("Narrator Last Name", text: $narratorLastName)
+                            .focused($focusedField, equals: .narratorLastName)
                             .font(.subheadline)
                             .textContentType(.familyName)
                             .submitLabel(.done)
@@ -160,12 +168,12 @@ struct NarratorView: View {
                 }
                 .onSubmit {
                     switch focusedField {
-                    case .newNarratorFirstName:
-                        focusedField = .newNarratorMiddleName
-                    case .newNarratorMiddleName:
-                        focusedField = .newNarratorLastName
-                    case .newNarratorLastName:
-                        guard !newNarratorLastName.isEmpty else {
+                    case .narratorFirstName:
+                        focusedField = .narratorMiddleName
+                    case .narratorMiddleName:
+                        focusedField = .narratorLastName
+                    case .narratorLastName:
+                        guard !narratorLastName.isEmpty else {
                             lastNameAlert = true
                             let logger = appLogger()
                             logger.log(level: .info, message: "Narrator Last Name must not be empty.")
@@ -179,7 +187,7 @@ struct NarratorView: View {
                     }
                 }
                 
-                NarratorsWorksView(narratorIdString: narratorIdString)
+                //NarratorsWorksView(narratorIdString: narratorIdString)
                 
                 .alert("Last name is missing or is too short. Must be more than one character.", isPresented: $lastNameAlert) {
                     Button("Ok") {}
@@ -195,22 +203,29 @@ struct NarratorView: View {
                     }
                     .accessibilityLabel("Ok")
                 }
-            }
+            } //Form
             .onAppear {
-                //narratorIdString = narrator!.narratorId.uuidString
+                
+                guard !titleIdString.isEmpty else { return }
+
                 if !titleIdString.isEmpty && !titleName.isEmpty {
-                        GetAllNarratorsForTitle()
+                    GetAllNarratorsForTitle()
                 }
-                focusedField = .newNarratorFirstName
+                if !narratorIdString.isEmpty {
+                    narratorIdString = narrator!.narratorId.uuidString
+                    focusedField = .narratorFirstName
+                }
             }
             .keyboardType(.default)
             .autocorrectionDisabled(true)
+            .padding(20)
             .safeAreaPadding()
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
-                    if !newNarratorLastName.isEmpty {
+                    CheckForFormChanges()
+                    if formHasChanges {
                         ValidateNarratorAndSave()
                     }
                     hideKeyboard()
@@ -225,5 +240,13 @@ struct NarratorView: View {
         }
     }
     
+    func CheckForFormChanges() {
+        if beginningNarratorLastName != narratorLastName
+            || beginningNarratorFirstName != narratorFirstName
+            || beginningNarratorMiddleName != narratorMiddleName {
+            
+            formHasChanges = true
+        }
+    }
 }
 

@@ -420,14 +420,10 @@ extension TitleDetailsView {
         
         title.removeAll()
         
-        if titleIdString.isEmpty {
-            titleIdString = UUID().uuidString
-        }
-        
         let _fetchRequestTitle = NSFetchRequest<Title>(entityName: "Title")
         _fetchRequestTitle.predicate = NSPredicate(format: "titleId == %@", titleIdString)
         _fetchRequestTitle.resultType = NSFetchRequestResultType.managedObjectResultType
-        
+        _fetchRequestTitle.fetchLimit = 1
         
         do {
             let _title = try moc.fetch(_fetchRequestTitle)
@@ -440,6 +436,46 @@ extension TitleDetailsView {
             let logger = appLogger()
             logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:GetTitleByID. \(error), \(error.localizedDescription)")
             
+        }
+    }
+    
+    func GetAllNarratorsForTitle() {
+        
+        guard !titleIdString.isEmpty else { return }
+        
+        narratorListForTitle.removeAll()
+        
+        let _fetchTNarrator = NSFetchRequest<TitleNarrator>(entityName: "TitleNarrator")
+        _fetchTNarrator.predicate = NSPredicate(format: "titleId == %@", titleIdString)
+        _fetchTNarrator.resultType = NSFetchRequestResultType.managedObjectResultType
+        
+        do {
+            let _Tnarrators = try moc.fetch(_fetchTNarrator)
+             if _Tnarrators.count > 0 {
+                for i in 0..<_Tnarrators.count {
+                    
+                    //get the narratorId(s) - then go to the narrator table for the names
+                    let idString = _Tnarrators[i].narratorId.uuidString
+                    
+                    let _fetchNarrator = NSFetchRequest<Narrator>(entityName: "Narrator")
+                    _fetchNarrator.predicate = NSPredicate(format: "narratorId == %@", idString)
+                    _fetchNarrator.resultType = NSFetchRequestResultType.managedObjectResultType
+                    
+                    let _narrators = try moc.fetch(_fetchNarrator)
+                    if _narrators.count > 0 {
+                        
+                        let nameFormatter = NameFormatter()
+                        for i in 0..<_narrators.count {
+                            narratorListForTitle.append(nameFormatter.ConcatenateNameFields(lastName: _narrators[i].narratorLastName,
+                                                                                       firstName: _narrators[i].wrappedNarratorFirstName,
+                                                                                       middleName: _narrators[i].wrappedNarratorMiddleName))
+                        }
+                    }
+                }
+            }
+        } catch let error as NSError {
+            let logger = appLogger()
+            logger.log(level: .error, message: "No fetch from AddNarratorExtension:GetNarratorsForTitle. \(error), \(error.localizedDescription)")
         }
     }
 }

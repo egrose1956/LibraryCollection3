@@ -32,7 +32,7 @@ struct AuthorsWorksView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .font(.title2)
+                .font(.title3)
             }
         }
         .foregroundStyle(Color.accentColor)

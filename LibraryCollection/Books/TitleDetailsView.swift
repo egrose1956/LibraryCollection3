@@ -18,8 +18,22 @@ struct TitleDetailsView: View {
     @State var title: String = ""
     @State var titleDetails: [TitleDetails] = []
     @State var titleDetailsId: String = ""
+    @State var narratorListForTitle: [String] = []
     
+    //holds the loaded data to compare to the current
+    //data at save time to identify any changes
+    @State var beginningSelectedType: String = ""
+    @State var beginningEditionNumber: String = ""
+    @State var beginningGenre: String = ""
+    @State var beginningISBN: String = ""
+    @State var beginningPublishingDate: String = ""
+    @State var beginningPublishingHouse: String = ""
+    @State var formHasChanges: Bool = false
+    
+    //to populate the picker
     @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook"]
+    
+    //to hold bound data
     @State var selectedType: String = ""
     @State var editionNumber: String = ""
     @State var genre: String = ""
@@ -51,6 +65,9 @@ struct TitleDetailsView: View {
     
     //coming from NarratorsWorksView
     @State var narratorIdString: String = ""
+    
+    @State var saveComplete: Bool = false
+    @State var unsavedWarning: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -208,32 +225,73 @@ struct TitleDetailsView: View {
             }
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)
+            .onDisappear {
+                if formHasChanges && !saveComplete {
+                    unsavedWarning = true
+                }
+            }
         }
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                NavigationLink("Return to Main Screen") {
-                    ContentView(returning: true)
-                }       
-                .buttonStyle(CustomButtonStyle())
+                        ToolbarItem(placement: .bottomBar) {
+                            NavigationLink("Return to Main Screen") {
+                                ContentView(returning: true)
+                            }
+                            .buttonStyle(CustomButtonStyle())
+                        }
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Save") {
+                                CheckForFormChanges ()
+                                if formHasChanges {
+                                    try? SaveTitleDetails() //includes the title and titleauthor entries
+                                    saveComplete = true
+                                    formHasChanges = false
+                                }
+                                hideKeyboard()
+                            }
+                        }
+                        ToolbarItem(placement: .automatic) {
+                            Menu("Additional Actions", systemImage: "text.justify") {
+                                NavigationLink("Add a Co-Author") {
+                                    AuthorView(inputTitle: title, titleIdString: titleIdString, addingCoAuthor: true)
+                                }
+                                if selectedType == "Audio" {
+                                    if !titleIdString.isEmpty {
+                                        NavigationLink("Add a Narrator") {
+                                            NarratorView(titleIdString: titleIdString, titleName: title)
+                                        }
+                                    }
+                                }
+                            }
+                        }
             }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Save") {
-                    try? SaveTitleDetails() //includes the title and titleauthor entries
-                    hideKeyboard()
-                }
-            }
-            ToolbarItem(placement: .automatic) {
-                Menu("Additional Actions", systemImage: "text.justify") {
-                    NavigationLink("Add a Co-Author") {
-                        AuthorView(inputTitle: title, titleIdString: titleIdString, addingCoAuthor: true)}
-                    if selectedType == "Audio" {
-                        NavigationLink("Add a Narrator") {
-                        NarratorView(titleIdString: titleIdString)}
-                    }
-                }
-            }
+        
+            .alert(isPresented: $unsavedWarning) {
+                Alert(
+                    title: Text("Save Warning"),
+                    message: Text("Any changes made to this title's details have not been saved. Save now?"),
+                    primaryButton: .default(Text("OK")) {
+                        try? SaveTitleDetails()
+                        saveComplete = true
+                        unsavedWarning = false
+                    },
+                    secondaryButton: .cancel()
+                )
+            
         }
         .safeAreaPadding()
+        
+    }
+    
+    func CheckForFormChanges() {
+        if selectedType != beginningSelectedType
+            || editionNumber != beginningEditionNumber
+            || genre != beginningGenre
+            || ISBN != beginningISBN
+            || publishingDate != beginningPublishingDate
+            || publishingHouse != beginningPublishingHouse {
+            
+            formHasChanges = true
+        }
     }
     
     func LoadValues() {
@@ -244,7 +302,7 @@ struct TitleDetailsView: View {
             authorIdString = GetAuthorId(filter: titleIdString)
             GetTitleDetailsById()
             GetCoAuthors()
-            
+                        
             if titleDetails.count > 0 {
                 
                 titleDetailsId = titleDetails[0].titleDetailsId.uuidString
@@ -255,7 +313,18 @@ struct TitleDetailsView: View {
                 ISBN = titleDetails[0].wrappedISBN
                 publishingDate = titleDetails[0].wrappedPublishingDate
                 publishingHouse = titleDetails[0].wrappedPublishingHouse
+                if selectedType == "Audio" {
+                    GetAllNarratorsForTitle()
+                }
             }
+        } else {
+            
+            beginningSelectedType = ""
+            beginningEditionNumber = ""
+            beginningGenre = ""
+            beginningISBN = ""
+            beginningPublishingDate = ""
+            beginningPublishingHouse = ""
         }
     }
 }

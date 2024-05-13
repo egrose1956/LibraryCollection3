@@ -28,7 +28,7 @@ extension TitlesView {
             }
         } catch let error as NSError {
             let logger = appLogger()
-            logger.log(level: .error, message: "No fetch from TitleListViewExtension:GetAuthorId. \(error), \(error.localizedDescription)")
+            logger.log(level: .error, message: "No fetch from TitleViewExtension:GetAuthorId. \(error), \(error.localizedDescription)")
         }
         
         return idString
