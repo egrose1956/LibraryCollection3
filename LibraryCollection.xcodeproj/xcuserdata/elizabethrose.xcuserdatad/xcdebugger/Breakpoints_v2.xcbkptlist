@@ -49,53 +49,68 @@
                   endingLineNumber = "19"
                   offsetFromSymbolStart = "792">
                </Location>
+               <Location
+                  uuid = "474734C7-11E0-4F82-BD4F-1D11E653D098 - 51f8e75552a82165"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LibraryCollection.NarratorListView.NarratorFilteredForTitle() -&gt; ()"
+                  moduleName = "LibraryCollection"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Narrators/NarratorListViewExtension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "952">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2E1F4DC7-2B2F-4081-911A-4CE15571FEB5"
-            shouldBeEnabled = "No"
+            uuid = "0D5F2AAC-8731-416D-B06A-DCCEC2827A6F"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LibraryCollection/Books/TitleDetailsView.swift"
+            filePath = "LibraryCollection/Author/AuthorView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "2E1F4DC7-2B2F-4081-911A-4CE15571FEB5 - 248feb5e5551a5ad"
+                  uuid = "0D5F2AAC-8731-416D-B06A-DCCEC2827A6F - c9c8b4b6410c6234"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.AuthorView&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.NarratorView&gt;&gt;&gt;)&gt; in closure #3 () -&gt; SwiftUI.Menu&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, SwiftUI.TupleView&lt;(SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.AuthorView&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.NarratorView&gt;&gt;&gt;)&gt;&gt; in closure #2 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1, &#x3c4;_0_2 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent, &#x3c4;_0_2: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1, &#x3c4;_0_2) -&gt; some&gt;&gt;.0 in LibraryCollection.TitleDetailsView.body.getter : some"
+                  symbolName = "closure #6 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onSubmit(of: SwiftUI.SubmitTriggers, _: () -&gt; ()) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.alert(isPresented: SwiftUI.Binding&lt;Swift.Bool&gt;, content: () -&gt; SwiftUI.Alert) -&gt; some&gt;&gt;.0 in LibraryCollection.AuthorView.body.getter : some"
                   moduleName = "LibraryCollection"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsView.swift"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Author/AuthorView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "259"
-                  endingLineNumber = "259"
-                  offsetFromSymbolStart = "1160">
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "216">
                </Location>
                <Location
-                  uuid = "2E1F4DC7-2B2F-4081-911A-4CE15571FEB5 - 7a17562a2fbb8ab5"
+                  uuid = "0D5F2AAC-8731-416D-B06A-DCCEC2827A6F - c9c8b4b6410c6234"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; LibraryCollection.NarratorView in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.AuthorView&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.NarratorView&gt;&gt;&gt;)&gt; in closure #3 () -&gt; SwiftUI.Menu&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;, SwiftUI.TupleView&lt;(SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.AuthorView&gt;, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.NavigationLink&lt;SwiftUI.Text, LibraryCollection.NarratorView&gt;&gt;&gt;)&gt;&gt; in closure #2 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1, &#x3c4;_0_2 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent, &#x3c4;_0_2: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1, &#x3c4;_0_2) -&gt; some&gt;&gt;.0 in LibraryCollection.TitleDetailsView.body.getter : some"
+                  symbolName = "closure #6 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onSubmit(of: SwiftUI.SubmitTriggers, _: () -&gt; ()) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0, Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.onTapGesture(count: Swift.Int, perform: () -&gt; ()) -&gt; some&gt;&gt;.0&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.alert(isPresented: SwiftUI.Binding&lt;Swift.Bool&gt;, content: () -&gt; SwiftUI.Alert) -&gt; some&gt;&gt;.0 in LibraryCollection.AuthorView.body.getter : some"
                   moduleName = "LibraryCollection"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Books/TitleDetailsView.swift"
+                  urlString = "file:///Users/elizabethrose/Development/LibraryCollection/LibraryCollection/Author/AuthorView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "260"
-                  endingLineNumber = "260"
-                  offsetFromSymbolStart = "336">
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "156">
                </Location>
             </Locations>
          </BreakpointContent>

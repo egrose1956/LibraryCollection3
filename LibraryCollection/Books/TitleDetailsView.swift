@@ -22,6 +22,7 @@ struct TitleDetailsView: View {
     
     //holds the loaded data to compare to the current
     //data at save time to identify any changes
+    @State var beginningTitle: String = ""
     @State var beginningSelectedType: String = ""
     @State var beginningEditionNumber: String = ""
     @State var beginningGenre: String = ""
@@ -236,65 +237,74 @@ struct TitleDetailsView: View {
             }
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)
-            .onDisappear {
-                if formHasChanges && !saveComplete {
-                    unsavedWarning = true
+            .toolbar(id: "return") {
+                ToolbarItem(id: "home", placement: .bottomBar) {
+                    NavigationLink("Return to Main Screen") {
+                        ContentView(returning: true)
+                    }
+                    .buttonStyle(CustomButtonStyle())
                 }
             }
-        }
-        .toolbar {
-                        ToolbarItem(placement: .bottomBar) {
-                            NavigationLink("Return to Main Screen") {
-                                ContentView(returning: true)
-                            }
-                            .buttonStyle(CustomButtonStyle())
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button("Save") {
-                                CheckForFormChanges ()
-                                if formHasChanges {
-                                    try? SaveTitleDetails() //includes the title and titleauthor entries
-                                    saveComplete = true
-                                    formHasChanges = false
-                                }
-                                hideKeyboard()
-                            }
-                        }
-                        ToolbarItem(placement: .automatic) {
-                            Menu("Additional Actions", systemImage: "text.justify") {
-                                NavigationLink("Add a Co-Author") {
-                                    AuthorView(inputTitle: title, titleIdString: titleIdString, addingCoAuthor: true)
-                                }
-                                if selectedType == "Audio" {
-                                    if !titleIdString.isEmpty {
-                                        NavigationLink("Add a Narrator") {
-                                            NarratorView(titleIdString: titleIdString, titleName: title)
-                                        }
-                                    }
-                                }
-                            }
-                        }
+            .toolbar(id: "mainSave") {
+                ToolbarItem(id: "save", placement: .topBarTrailing) {
+                    Button("Save") {
+                        SaveProcess()
+                        hideKeyboard()
+                    }
+                }
             }
-        
-            .alert(isPresented: $unsavedWarning) {
-                Alert(
-                    title: Text("Save Warning"),
-                    message: Text("Any changes made to this title's details have not been saved. Save now?"),
-                    primaryButton: .default(Text("OK")) {
-                        try? SaveTitleDetails()
-                        saveComplete = true
-                        unsavedWarning = false
-                    },
-                    secondaryButton: .cancel()
-                )
+            .toolbar(id: "more") {
+                ToolbarItem(id: "additional", placement: .secondaryAction) {
+                    Menu("Additional Actions", systemImage: "text.justify") {
+                        NavigationLink("Add a Co-Author") {
+                            AuthorView(inputTitle: title, titleIdString: titleIdString, addingCoAuthor: true)
+                        }
+                        if selectedType == "Audio" {
+                            if !titleIdString.isEmpty {
+                                NavigationLink("Add a Narrator") {
+                                    NarratorView(titleIdString: titleIdString, titleName: title)
+                                }
+                                .onTapGesture {
+                                    SaveProcess()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .toolbarRole(.automatic)
+        } //nav stack
+        .alert(isPresented: $unsavedWarning) {
+            Alert(
+                title: Text("Save Warning"),
+                message: Text("Any changes made to this title's details have not been saved. Save now?"),
+                primaryButton: .default(Text("OK")) {
+                    SaveProcess()
+                    hideKeyboard()
+                },
+                secondaryButton: .cancel()
+            )
             
         }
         .safeAreaPadding()
-        
+    }
+    
+    func SaveProcess() {
+        CheckForFormChanges ()
+        if formHasChanges {
+            let returnValue = SaveTitle()
+            if returnValue == true {
+                try? SaveTitleDetails()
+                saveComplete = true
+                formHasChanges = false
+                ResetValues()
+            }
+        }
     }
     
     func CheckForFormChanges() {
-        if selectedType != beginningSelectedType
+        if title != beginningTitle
+            || selectedType != beginningSelectedType
             || editionNumber != beginningEditionNumber
             || genre != beginningGenre
             || ISBN != beginningISBN
@@ -310,6 +320,7 @@ struct TitleDetailsView: View {
         if !newRecord {
             //this brings back title
             GetTitleById()
+            beginningTitle = title
             authorIdString = GetAuthorId(filter: titleIdString)
             GetTitleDetailsById()
             GetCoAuthors()
@@ -329,7 +340,7 @@ struct TitleDetailsView: View {
                 }
             }
         } else {
-            
+            beginningTitle = ""
             beginningSelectedType = ""
             beginningEditionNumber = ""
             beginningGenre = ""
@@ -337,6 +348,16 @@ struct TitleDetailsView: View {
             beginningPublishingDate = ""
             beginningPublishingHouse = ""
         }
+    }
+            
+    func ResetValues() {
+        beginningTitle = title
+        beginningSelectedType = selectedType
+        beginningEditionNumber = editionNumber
+        beginningGenre = genre
+        beginningISBN = ISBN
+        beginningPublishingDate = publishingDate
+        beginningPublishingHouse = publishingHouse
     }
 }
 

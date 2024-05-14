@@ -20,7 +20,7 @@ struct AuthorsWorksView: View {
         
         VStack(alignment: .center) {
             Text("Author's Current Works: ")
-                .font(.title3)
+                .font(.subheadline)
                 .fontWeight(.bold)
             
             NavigationStack {
@@ -32,7 +32,7 @@ struct AuthorsWorksView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .font(.title3)
+                .font(.subheadline)
             }
         }
         .foregroundStyle(Color.accentColor)

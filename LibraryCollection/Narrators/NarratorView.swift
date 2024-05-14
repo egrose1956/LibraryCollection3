@@ -190,7 +190,6 @@ struct NarratorView: View {
                 
                 .alert("Last name is missing or is too short. Must be more than one character.", isPresented: $lastNameAlert) {
                     Button("Ok") {}
-//                        .dismiss
                 }
                 .accessibilityLabel("Last name is missing or is too short.")
                 .alert("This narrator is already in our database.", isPresented: $alreadyExists) {
@@ -226,6 +225,7 @@ struct NarratorView: View {
                     CheckForFormChanges()
                     if formHasChanges {
                         ValidateNarratorAndSave()
+                        ResetValues()
                     }
                     hideKeyboard()
                 }
@@ -246,6 +246,12 @@ struct NarratorView: View {
             
             formHasChanges = true
         }
+    }
+    
+    func ResetValues() {
+        beginningNarratorLastName = narratorLastName
+        beginningNarratorFirstName = narratorFirstName
+        beginningNarratorMiddleName = narratorMiddleName
     }
 }
 

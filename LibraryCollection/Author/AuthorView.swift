@@ -109,15 +109,27 @@ struct AuthorView: View {
                     
                 } label: {
                     Text("Add a new Title for this Author")
-                        .font(.title3)
+                        .font(.subheadline)
                         .foregroundStyle(Color.accentColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top)
                         .padding(.bottom)
                 }
+                .onTapGesture{
+                    CheckFormForChanges()   //to see if we must save
+                    if recordHasChanges && !saveIsComplete {
+                            unSavedWarning = true
+                    }
+                }
                 
                 if authorTitles.count > 0 {
                     AuthorsWorksView(filteredTitles: authorTitles, authorIdString: authorIdString)
+                        .onTapGesture {
+                            CheckFormForChanges()   //to see if we must save
+                            if recordHasChanges && !saveIsComplete {
+                                    unSavedWarning = true
+                            }
+                        }
                 }
                 
             } //should be form
@@ -129,10 +141,7 @@ struct AuthorView: View {
                 }
             }
             .onDisappear {
-                CheckFormForChanges()   //to see if we must save
-                if recordHasChanges && !saveIsComplete {
-                        unSavedWarning = true
-                }
+                
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -147,9 +156,7 @@ struct AuthorView: View {
                             }
                             //then reset the beginning values to what has
                             //just been saved
-                            beginningAuthorLastName = authorLastName
-                            beginningAuthorFirstName = authorFirstName
-                            beginningAuthorMiddleName = authorMiddleName
+                            ResetValues()
                         }
                         saveIsComplete = true
                         recordHasChanges = false
@@ -185,9 +192,7 @@ struct AuthorView: View {
                             unSavedWarning = false
                             //then reset the beginning values to what has
                             //just been saved
-                            beginningAuthorLastName = authorLastName
-                            beginningAuthorFirstName = authorFirstName
-                            beginningAuthorMiddleName = authorMiddleName
+                            ResetValues()
                         }
                     },
                     secondaryButton: .cancel()
@@ -217,5 +222,11 @@ struct AuthorView: View {
         authorLastName = beginningAuthorLastName
         authorFirstName = beginningAuthorFirstName
         authorMiddleName = beginningAuthorMiddleName
+    }
+    
+    func ResetValues() {
+        beginningAuthorLastName = authorLastName
+        beginningAuthorFirstName = authorFirstName
+        beginningAuthorMiddleName = authorMiddleName
     }
 }
