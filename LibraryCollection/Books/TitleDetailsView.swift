@@ -219,9 +219,20 @@ struct TitleDetailsView: View {
                 }
                 
                 if selectedType == "Audio" {
-                    NarratorListView(titleIdString: titleIdString)
+                    if narratorListForTitle.count > 0 {
+                        HStack(alignment: .top, content: {
+                            Text("All Narrators: ")
+                                .accessibilityLabel("All narrators.")
+                            VStack(alignment: .leading, content: {
+                                ForEach(narratorListForTitle, id: \.self) { narrator in
+                                    Text("\(narrator)")
+                                        .accessibilityValue("\(narrator)")
+                                }
+                            })
+                            .font(.caption)
+                        })
+                    }
                 }
-                
             }
             .onAppear(perform: LoadValues)
             .autocorrectionDisabled(true)

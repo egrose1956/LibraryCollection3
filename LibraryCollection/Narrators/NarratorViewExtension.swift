@@ -124,6 +124,7 @@ extension NarratorView {
             //no narrator by this name and no passed in title
             //so just save the narrator
             AddNarrator()
+            AddTitleNarratorRecord(titleIdString: titleIdString)
             
         } else {
             
@@ -131,7 +132,7 @@ extension NarratorView {
             CheckForExistingTitleNarratorRecord(narratorIdString: narratorIdString, titleIdString: titleIdString)
             
             EditNarrator()
-            AddTitleNarratorRecord(titleIdString: titleIdString)
+            
         }
     }
         

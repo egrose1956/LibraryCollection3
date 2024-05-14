@@ -120,8 +120,7 @@ struct NarratorView: View {
                     }
                 
             }
-            
-            
+        
             Form {
                 VStack(alignment: .leading) {
                     if !titleName.isEmpty {
