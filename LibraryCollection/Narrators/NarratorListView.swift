@@ -50,7 +50,7 @@ struct NarratorListView: View {
                     List(narrators, id: \.narratorId) { selectedNarrator in
 
                         NavigationLink { 
-                            NarratorView(narrator: selectedNarrator)
+                            NarratorsWorksView(narratorIdString: selectedNarrator.narratorId.uuidString)
                         } label: {
                             Text(nameFormatter.ConcatenateNameFields(lastName: selectedNarrator.narratorLastName,
                                                                      firstName: selectedNarrator.wrappedNarratorFirstName,

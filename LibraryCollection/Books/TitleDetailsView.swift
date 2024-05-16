@@ -292,8 +292,8 @@ struct TitleDetailsView: View {
     func SaveProcess() {
         CheckForFormChanges ()
         if formHasChanges {
-            let returnValue = SaveTitle()
-            if returnValue == true {
+            let resultString = SaveTitle()
+            if resultString == true {
                 try? SaveTitleDetails()
                 saveComplete = true
                 formHasChanges = false

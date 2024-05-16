@@ -99,26 +99,28 @@ struct AuthorView: View {
 #endif
                     }
                 }
-                NavigationLink {
-                    TitleDetailsView(authorIdString: authorIdString,
-                                     titleIdString: titleIdString,
-                                     newRecord: true,
-                                     authorLastName: authorLastName,
-                                     authorFirstName: authorFirstName,
-                                     authorMiddleName: authorMiddleName)
-                    
-                } label: {
-                    Text("Add a new Title for this Author")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.accentColor)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top)
-                        .padding(.bottom)
-                }
-                .onTapGesture{
-                    CheckFormForChanges()   //to see if we must save
-                    if recordHasChanges && !saveIsComplete {
+                if !addingCoAuthor {
+                    NavigationLink {
+                        TitleDetailsView(authorIdString: authorIdString,
+                                         titleIdString: titleIdString,
+                                         newRecord: true,
+                                         authorLastName: authorLastName,
+                                         authorFirstName: authorFirstName,
+                                         authorMiddleName: authorMiddleName)
+                        
+                    } label: {
+                        Text("Add a new Title for this Author")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.accentColor)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top)
+                            .padding(.bottom)
+                    }
+                    .onTapGesture{
+                        CheckFormForChanges()   //to see if we must save
+                        if recordHasChanges && !saveIsComplete {
                             unSavedWarning = true
+                        }
                     }
                 }
                 
@@ -139,9 +141,6 @@ struct AuthorView: View {
                 if !addingCoAuthor {
                     GetAllTitlesByAuthor(authorIdString: authorIdString)
                 }
-            }
-            .onDisappear {
-                
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

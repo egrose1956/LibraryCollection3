@@ -10,6 +10,76 @@ import Foundation
 
 extension TitleDetailsView {
     
+    func SaveTitle() -> Bool {
+        
+        guard !authorIdString.isEmpty else { return false }
+        guard !title.isEmpty else { return false }
+        
+        var returnValue: Bool = true //happy path
+        if titleIdString.isEmpty {
+            returnValue = CheckForExistingTitle(titleNameFilter: title, authorIdString: authorIdString)
+        }
+        
+        //add a new title and titleAuthor record
+        if returnValue == false {
+            do {
+                //get the object contexts
+                let titleRecord = Title(context: moc)
+                
+                //assign values to the objecs for the title table
+                titleRecord.titleId = UUID()
+                titleRecord.title = title
+                
+                titleIdString = titleRecord.titleId.uuidString
+                
+                let titleAuthor = TitleAuthor(context: moc)
+                
+                //assign values to the objects for the titleauthor table
+                titleAuthor.titleAuthorId = UUID()
+                titleAuthor.authorId = UUID(uuidString: authorIdString)!
+                titleAuthor.titleId = titleRecord.titleId
+                
+                //save the title
+                try moc.save()
+                moc.refreshAllObjects()
+                
+                //may need this later
+                //GetAllTitlesByAuthor()
+                
+            } catch {
+                let logger = appLogger()
+                logger.log(level: .error, message: "No save at: AddAuthorAndTitleExtension:SaveTitle. \(error), \(error.localizedDescription)")
+                return false
+            }
+            return true
+        } else {
+            
+            //so update the title in the title table
+            let _fetchRequest = NSFetchRequest<Title>(entityName: "Title")
+            _fetchRequest.predicate = NSPredicate(format: "titleId == %@", titleIdString)
+            _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
+            _fetchRequest.fetchLimit = 1
+            
+            do {
+                
+                let editTitle = try moc.fetch(_fetchRequest)
+                if !editTitle.isEmpty {
+                    editTitle[0].titleId = UUID(uuidString: titleIdString)!
+                    editTitle[0].title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                try moc.save()
+                moc.refreshAllObjects()
+                
+            } catch let error as NSError {
+                let logger = appLogger()
+                logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:SaveTitle. \(error), \(error.localizedDescription)")
+                return false
+            }
+            return true
+        }
+    }
+    
     func SaveTitleDetails() throws {
 
         guard !authorIdString.isEmpty else { return }
@@ -22,17 +92,10 @@ extension TitleDetailsView {
             throw "Error resulting from duplicate entry in TitleDetails table."
             
         } else if resultString == "" {
+                        
+            let detailsId = UUID()
+            titleDetailsId = detailsId.uuidString
             
-            //need to add a new detail record
-            
-            //this is to add new Title, TitleAuthor and TitleDetails records
-            let returnValue = SaveTitle()
-            
-            if returnValue == true {
-                let detailsId = UUID()
-                titleDetailsId = detailsId.uuidString
-                
-            }
                 
             do {
                 
@@ -72,12 +135,9 @@ extension TitleDetailsView {
                     logger.log(level: .error, message: "Error in SaveTitleDetails. \(error), \(error.localizedDescription)")
             }
 
-        } else if !newRecord {
-            // need to update record
+        } else {
             
-            guard !titleIdString.isEmpty else { return }
-            
-            titleDetailsId = resultString
+            //titleDetailsId should exist and should be updated
             
             let _fetchRequest = NSFetchRequest<TitleDetails>(entityName: "TitleDetails")
             _fetchRequest.predicate = NSPredicate(format: "titleDetailsId == %@", titleDetailsId as CVarArg)
@@ -179,11 +239,9 @@ extension TitleDetailsView {
             } else if _ID.count == 1 {
                 resultString = _ID[0].titleDetailsId.uuidString
             } else if _ID.count < 1 {
-                let newTitleDetailsId = UUID()
-                resultString = newTitleDetailsId.uuidString
+                
+                resultString = ""
             }
-            
-            titleDetailsId = resultString
             
             return resultString
             
@@ -255,76 +313,6 @@ extension TitleDetailsView {
      }
      
      */
-    
-    func SaveTitle() -> Bool {
-        
-        guard !authorIdString.isEmpty else { return false }
-        guard !title.isEmpty else { return false }
-        
-        var returnValue: Bool = true //happy path
-        if titleIdString.isEmpty {
-            returnValue = CheckForExistingTitle(titleNameFilter: title, authorIdString: authorIdString)
-        }
-            
-        //add a new title and titleAuthor record
-        if returnValue == false {
-            do {
-                //get the object contexts
-                let titleRecord = Title(context: moc)
-                
-                //assign values to the objecs for the title table
-                titleRecord.titleId = UUID()
-                titleRecord.title = title
-                
-                titleIdString = titleRecord.titleId.uuidString
-                
-                let titleAuthor = TitleAuthor(context: moc)
-                
-                //assign values to the objects for the titleauthor table
-                titleAuthor.titleAuthorId = UUID()
-                titleAuthor.authorId = UUID(uuidString: authorIdString)!
-                titleAuthor.titleId = titleRecord.titleId
-                
-                //save the title
-                try moc.save()
-                moc.refreshAllObjects()
-                
-                //may need this later
-                //GetAllTitlesByAuthor()
-                
-            } catch {
-                let logger = appLogger()
-                logger.log(level: .error, message: "No save at: AddAuthorAndTitleExtension:SaveTitle. \(error), \(error.localizedDescription)")
-                return false
-            }
-            return true
-        } else {
-            
-            //so update the title in the title table
-            let _fetchRequest = NSFetchRequest<Title>(entityName: "Title")
-            _fetchRequest.predicate = NSPredicate(format: "titleId == %@", titleIdString)
-            _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
-            _fetchRequest.fetchLimit = 1
-            
-            do {
-                
-                let editTitle = try moc.fetch(_fetchRequest)
-                if !editTitle.isEmpty {
-                    editTitle[0].titleId = UUID(uuidString: titleIdString)!
-                    editTitle[0].title = title.trimmingCharacters(in: .whitespacesAndNewlines)
-                }
-                
-                try moc.save()
-                moc.refreshAllObjects()
-                
-            } catch let error as NSError {
-                let logger = appLogger()
-                logger.log(level: .error, message: "No fetch from TitleDetailsViewExtension:SaveTitleChanges. \(error), \(error.localizedDescription)")
-                return false
-            }
-            return true
-        }
-    }
     
     func GetTitleDetailsById()  {
         

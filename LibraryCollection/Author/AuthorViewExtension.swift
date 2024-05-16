@@ -21,7 +21,7 @@ extension AuthorView {
         //check to see if we already have an author by this name
         guard !authorLastName.isEmpty else { return }
         
-        authorLastName =  authorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
+        authorLastName = authorLastName.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if authorLastName.isEmpty || authorLastName.count < 2 {
             lastNameWarning = true

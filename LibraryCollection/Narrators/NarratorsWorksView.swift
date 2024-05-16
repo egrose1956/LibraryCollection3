@@ -19,7 +19,7 @@ struct NarratorsWorksView: View {
     var body: some View {
         
         VStack(alignment: .center) {
-            Text("Narrators's Current Works: ")
+            Text("Narrators's Works previously entered: ")
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundStyle(Color.accentColor)
