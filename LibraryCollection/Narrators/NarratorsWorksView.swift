@@ -19,9 +19,9 @@ struct NarratorsWorksView: View {
     var body: some View {
         
         VStack(alignment: .center) {
-            Text("Narrators's Works previously entered: ")
+            Text("Narrators's Works Previously Entered:")
+                .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
                 .font(.title3)
-                .fontWeight(.bold)
                 .foregroundStyle(Color.accentColor)
             
             NavigationStack {
