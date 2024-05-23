@@ -42,7 +42,7 @@ struct NarratorListView: View {
                     }
                 } else {
                     Text("Narrators")
-                        .font(.subheadline)
+                        .font(.title3)
                         .fontWeight(.bold)
                         .foregroundStyle(Color.accentColor)
     
@@ -68,6 +68,7 @@ struct NarratorListView: View {
                     NarratorFilteredForTitle()
                 }
             }
+            .foregroundColor(Color.accentColor)
         }
     }
 }

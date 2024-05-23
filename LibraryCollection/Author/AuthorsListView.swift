@@ -53,6 +53,7 @@ struct AuthorsListView: View {
                                            beginningAuthorFirstName: author.wrappedAuthorFirstName,
                                            beginningAuthorMiddleName: author.wrappedAuthorMiddleName,
                                            authorIdString: author.authorId.uuidString, authorTitles: authorTitles)
+                                .font(.subheadline)
                             } label: {
                                 
                                 let nameFormatter = NameFormatter()
