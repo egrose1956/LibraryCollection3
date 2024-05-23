@@ -18,12 +18,13 @@ struct AuthorsListView: View {
         ]
     ) var authors: FetchedResults<Author>
     
-    @State private var deleteWarning: Bool = false
     @State var authorIdString: String = ""
     
-    @State var titleIdArray: [String] = []
+    @State var authorsTitleIdArray: [String] = []
     @State var narratorIdArray: [String] = []
     @State var authorTitles: [String] = []
+    
+    @State private var authorDeleteWarning: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -46,49 +47,26 @@ struct AuthorsListView: View {
                         .fontWeight(.bold)
                     List {
                         ForEach (authors, id: \.authorId) { author in
-                            
                             NavigationLink {
+                                
                                 AuthorView(beginningAuthorLastName: author.authorLastName,
                                            beginningAuthorFirstName: author.wrappedAuthorFirstName,
                                            beginningAuthorMiddleName: author.wrappedAuthorMiddleName,
                                            authorIdString: author.authorId.uuidString, authorTitles: authorTitles)
                             } label: {
-                                                     
-                                let nameFormatter = NameFormatter()
                                 
+                                let nameFormatter = NameFormatter()
                                 let fullNameString = nameFormatter.ConcatenateNameFields(lastName: author.authorLastName,
                                                                                          firstName: author.authorFirstName,
                                                                                          middleName: author.authorMiddleName)
+                                
                                 Text(fullNameString)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .font(.subheadline)
                                     .accessibilityValue("Author's name is \(fullNameString)")
-                            }
-                            .swipeActions(allowsFullSwipe: false) {
-                                Button() {
-                                    deleteWarning = true
-                                    authorIdString = author.authorId.uuidString
-                                } label: {
-                                    Label("Delete", systemImage: "trash.fill")
-                                }
-                                .tint(.red)
-                            }
-                        }
-                    }
-                    .alert(isPresented: $deleteWarning) {
-                        Alert(
-                            title: Text ("Warning: Continuing will delete the author and all titles they have written."),
-                            message: Text("This cannot be undone. Do you still wish to proceed?"),
-                            primaryButton: .destructive(Text("Yes, Delete.")) {
-                                //TODO: Decide how far we delete down the stack.
-                                //for now, just the Author and TitleAuthor records
-                                //see swipe action button for the full stack delete
-                                //AND MAKE SURE TO COMMENT IT OUT AFTER TESTING
                                 
-                                deleteTitleAuthorandAuthorRecord()
-                            },
-                            secondaryButton: .cancel()
-                        )
+                            }
+                        }  
                     }
                 }
             }
@@ -96,4 +74,3 @@ struct AuthorsListView: View {
         }
     }
 }
-

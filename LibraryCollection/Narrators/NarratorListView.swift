@@ -25,7 +25,6 @@ struct NarratorListView: View {
     @State var narratorListForTitle: [String] = []
     @State var narratorTitles: [String] = []
     @State var nameFormatter = NameFormatter()
-    @State var deleteWarning: Bool = false
     @State var narratorIdString: String = ""
     
     var body: some View {
@@ -61,15 +60,6 @@ struct NarratorListView: View {
                         .onTapGesture {
                             narratorIdString = selectedNarrator.narratorId.uuidString
                         }
-                        .swipeActions(allowsFullSwipe: false) {
-                            Button() {
-                                deleteWarning = true
-                                narratorIdString = selectedNarrator.narratorId.uuidString
-                            } label: {
-                                Label("Delete", systemImage: "trash.fill")
-                            }
-                            .tint(.red)
-                        }
                     }
                 }
             }
@@ -78,7 +68,6 @@ struct NarratorListView: View {
                     NarratorFilteredForTitle()
                 }
             }
-            // TODO: A link to all titles narrator has performed, authors they have read for?? Edit??
         }
     }
 }

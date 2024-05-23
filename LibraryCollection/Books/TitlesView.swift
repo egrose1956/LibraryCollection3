@@ -21,7 +21,6 @@ struct TitlesView: View {
     @State var resultString: String = ""
     @State var titleIdString: String = ""
     @State var title: String = ""
-    @State private var safeToDelete: Bool = false
        
     var body: some View {
         NavigationStack {
@@ -51,30 +50,11 @@ struct TitlesView: View {
                                 Text(selectedItem.title.isEmpty ? "" : selectedItem.title)
                                     .font(.subheadline)
                             }
-                            .swipeActions(allowsFullSwipe: false) {
-                                Button() {
-                                    titleIdString = selectedItem.titleId.uuidString
-                                    safeToDelete = true
-                                } label: {
-                                    Label("Delete", systemImage: "trash.fill")
-                                }
-                                .tint(.red)
-                            }
                         }
                     }
                 }
             }
             .foregroundStyle(Color.accentColor)
-        }
-        .alert("Confirm action", isPresented: $safeToDelete) {
-            Button("Delete? This can't be undone.", role: .destructive) {
-                if authorIdString.isEmpty {
-                    authorIdString = GetAuthorId(filter: titleIdString)
-                }
-                DeleteSelectedTitle(titleId: titleIdString, authorId: authorIdString)
-                moc.refreshAllObjects()
-            }
-            Button("Cancel", role: .cancel) {}
         }
     }
 }
