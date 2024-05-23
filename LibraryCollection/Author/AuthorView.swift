@@ -107,6 +107,12 @@ struct AuthorView: View {
                                          authorLastName: authorLastName,
                                          authorFirstName: authorFirstName,
                                          authorMiddleName: authorMiddleName)
+                        .onTapGesture {
+                            CheckFormForChanges()   //to see if we must save
+                            if recordHasChanges && !saveIsComplete {
+                                unSavedWarning = true
+                            }
+                        }
                         
                     } label: {
                         Text("Add a new Title for this Author")
@@ -115,13 +121,9 @@ struct AuthorView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top)
                             .padding(.bottom)
+                            
                     }
-                    .onTapGesture{
-                        CheckFormForChanges()   //to see if we must save
-                        if recordHasChanges && !saveIsComplete {
-                            unSavedWarning = true
-                        }
-                    }
+                    
                 }
                 
                 if authorTitles.count > 0 {
