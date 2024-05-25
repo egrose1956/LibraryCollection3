@@ -32,7 +32,7 @@ struct TitleDetailsView: View {
     @State var formHasChanges: Bool = false
     
     //to populate the picker
-    @State var bookTypes = ["Hardback", "Paperback", "Audio", "Ebook"]
+    @State var bookTypes: [String] = ["Hardback", "Paperback", "Audio", "eBook"]
     
     //to hold bound data
     @State var selectedType: String = ""
@@ -43,13 +43,9 @@ struct TitleDetailsView: View {
     @State var publishingHouse: String = ""
     @State var additionalAuthors: [String] = []
     
-    enum Field {
-            case selectedType
-            case editionNumber
-            case genre
-            case ISBN
-            case publishingDate
-            case publishingHouse
+    enum Field: String, CaseIterable, Identifiable, Hashable {
+            case title, selectedType, editionNumber, genre, ISBN, publishingDate, publishingHouse
+            var id: Self { self }
         }
     @FocusState private var focusedField: Field?
     
@@ -72,11 +68,10 @@ struct TitleDetailsView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                VStack(alignment: .leading) {
-                    //TODO: any changes required between add and edit?
+            VStack(alignment: .leading) {
+                Form {
                     if !newRecord {
-                        VStack(alignment: .leading) {
+                        HStack {
                             Text("Title: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
@@ -89,154 +84,161 @@ struct TitleDetailsView: View {
                                 }
                         }
                     } else {
-                        Text("Title")
+                        HStack {
+                            Text("Title")
+                                .foregroundStyle(Color.accentColor)
+                                .font(.subheadline)
+                            TextField ("New Title: ", text: $title)
+                                .focusable(interactions: .edit)
+                                .focused($focusedField, equals: .title)
+                                .font(.subheadline)
+                                .submitLabel(.next)
+                                .lineLimit(2)
+                                .accessibilityLabel("New Title")
+                        }
+                    }
+                    VStack {
+                        Text("Book Type")
                             .foregroundStyle(Color.accentColor)
-                            .font(.subheadline)
-                        TextField ("New Title: ", text: $title)
+                            .font(.caption)
+                        Picker("Book Type", selection: $selectedType) {
+                            ForEach (bookTypes, id:\.self) { bookType in
+                                Text(bookType)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .accessibilityLabel("Book Type Picker")
+                    }
+                    HStack {
+                        Text("Edition Number: ")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.caption)
+                        TextField("Edition Number: ", text: $editionNumber)
                             .focused($focusedField, equals: .editionNumber)
                             .font(.subheadline)
                             .textContentType(.none)
                             .submitLabel(.next)
-                            .lineLimit(2)
-                            .accessibilityLabel("New Title")
+                            .accessibilityLabel("Edition Number")
                     }
-                    Divider()
+                    HStack{
+                        Text("Genre: ")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.caption)
+                        TextField("Genre: ", text: $genre)
+                            .focused($focusedField, equals: .genre)
+                            .font(.subheadline)
+                            .textContentType(.none)
+                            .submitLabel(.next)
+                            .accessibilityLabel("Genre")
+                    }
+                    HStack {
+                        Text("ISBN: ")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.caption)
+                        TextField("ISBN: ", text: $ISBN)
+                            .focused($focusedField, equals: .ISBN)
+                            .font(.subheadline)
+                            .textContentType(.none)
+                            .submitLabel(.next)
+                            .accessibilityLabel("ISBN")
+                    }
+                    HStack {
+                        Text("Published Date: ")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.caption)
+                        TextField("Published date: ", text: $publishingDate)
+                            .focused($focusedField, equals: .publishingDate)
+                            .font(.subheadline)
+                            .textContentType(.none)
+                            .submitLabel(.next)
+                            .accessibilityLabel("Published Date")
+
+                    }
+                    HStack {
+                        Text("Publishing House: ")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.caption2)
+                        TextField("Publisher: ", text: $publishingHouse)
+                            .focused($focusedField, equals: .publishingHouse)
+                            .font(.subheadline)
+                            .textContentType(.none)
+                            .submitLabel(.done)
+                            .accessibilityLabel("Publishing House")
+
+                    }
                     
-                    Picker("Select book type", selection: $selectedType) {
-                        ForEach(bookTypes, id: \.self) { type in
-                            Text(type)
-                                .accessibilityLabel("\(type)")
+                    Button("Cancel Without Saving") { dismiss() }
+                        .buttonStyle(.borderedProminent)
+                    
+                    if !newRecord {
+                        if additionalAuthors.count > 0 {
+                            HStack(alignment: .top, content: {
+                                Text("All Authors: ")
+                                    .accessibilityLabel("All authors.")
+                                VStack(alignment: .leading, content: {
+                                    ForEach(additionalAuthors, id: \.self) { coAuthor in
+                                        Text("\(coAuthor)")
+                                            .accessibilityValue("\(coAuthor)")
+                                    }
+                                })
+                                .font(.caption)
+                            })
                         }
                     }
-                    .pickerStyle(.segmented)
-                    .focused($focusedField, equals: .selectedType)
-                    .textContentType(.none)
-                    .submitLabel(.next)
-                    .accessibilityLabel("Book Type Picker")
                     
-                    Divider()
-                    
-                    Text("Edition Number: ")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.subheadline)
-                    TextField("Edition Number: ", text: $editionNumber)
-                        .focused($focusedField, equals: .editionNumber)
-                        .font(.subheadline)
-                        .textContentType(.none)
-                        .submitLabel(.next)
-                        .accessibilityLabel("Edition Number")
-                    
-                    Divider()
-                    
-                    Text("Genre: ")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.subheadline)
-                    TextField("Genre: ", text: $genre)
-                        .focused($focusedField, equals: .genre)
-                        .font(.subheadline)
-                        .textContentType(.none)
-                        .submitLabel(.next)
-                        .accessibilityLabel("Genre")
-                    
-                    Divider()
-                    
-                    Text("ISBN: ")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.subheadline)
-                    TextField("ISBN: ", text: $ISBN)
-                        .focused($focusedField, equals: .ISBN)
-                        .font(.subheadline)
-                        .textContentType(.none)
-                        .submitLabel(.next)
-                        .accessibilityLabel("ISBN")
-                    
-                    Divider()
-                    
-                    Text("Published Date: ")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.subheadline)
-                    TextField("Published date: ", text: $publishingDate)
-                        .focused($focusedField, equals: .publishingDate)
-                        .font(.subheadline)
-                        .textContentType(.none)
-                        .submitLabel(.next)
-                        .accessibilityLabel("Published Date")
-                    
-                    Divider()
-                    
-                    Text("Publishing House: ")
-                        .foregroundStyle(Color.accentColor)
-                        .font(.subheadline)
-                    TextField("Publisher: ", text: $publishingHouse)
-                        .focused($focusedField, equals: .publishingHouse)
-                        .font(.subheadline)
-                        .textContentType(.none)
-                        .submitLabel(.done)
-                        .accessibilityLabel("Publishing House")
-                }
-                .onSubmit {
-                    switch focusedField {
-                    case .selectedType:
-                        focusedField = .editionNumber
-                    case .editionNumber:
-                        focusedField = .genre
-                    case .genre:
-                        focusedField = .ISBN
-                    case .ISBN:
-                        focusedField = .publishingDate
-                    case .publishingDate:
-                        focusedField = .publishingHouse
-                    case .publishingHouse:
-#if DEBUG
-                        let logger = appLogger()
-                        logger.log(level: .info, message: "Case publishingHouse has been reached.")
-#endif
-                    default:
-#if DEBUG
-                        let logger = appLogger()
-                        logger.log(level: .info, message: "Case default has been reached.")
-#endif
-                    }
-                }
-                
-                HStack {
-                    Button("Cancel Without Saving") { dismiss() }
-                }
-                
-                if !newRecord {
-                    if additionalAuthors.count > 0 {
-                        HStack(alignment: .top, content: {
-                            Text("All Authors: ")
-                                .accessibilityLabel("All authors.")
-                            VStack(alignment: .leading, content: {
-                                ForEach(additionalAuthors, id: \.self) { coAuthor in
-                                    Text("\(coAuthor)")
-                                        .accessibilityValue("\(coAuthor)")
-                                }
+                    if selectedType == "Audio" {
+                        if narratorListForTitle.count > 0 {
+                            HStack(alignment: .top, content: {
+                                Text("All Narrators: ")
+                                    .accessibilityLabel("All narrators.")
+                                VStack(alignment: .leading, content: {
+                                    ForEach(narratorListForTitle, id: \.self) { narrator in
+                                        Text("\(narrator)")
+                                            .accessibilityValue("\(narrator)")
+                                    }
+                                })
+                                .font(.caption)
                             })
-                            .font(.caption)
-                        })
+                        }
                     }
+                } //Form
+                .onAppear {
+                    focusedField = .title
+                    LoadValues()
                 }
-                
-                if selectedType == "Audio" {
-                    if narratorListForTitle.count > 0 {
-                        HStack(alignment: .top, content: {
-                            Text("All Narrators: ")
-                                .accessibilityLabel("All narrators.")
-                            VStack(alignment: .leading, content: {
-                                ForEach(narratorListForTitle, id: \.self) { narrator in
-                                    Text("\(narrator)")
-                                        .accessibilityValue("\(narrator)")
-                                }
-                            })
-                            .font(.caption)
-                        })
-                    }
-                }
-            }
-            .onAppear(perform: LoadValues)
-            .autocorrectionDisabled(true)
+                .autocorrectionDisabled(true)
+
+
+//                .onSubmit {
+//                    switch focusedField {
+//                    case .title:
+//                        focusedField = .selectedType
+//                    case .selectedType:
+//                        focusedField = .editionNumber
+//                    case .editionNumber:
+//                        focusedField = .genre
+//                    case .genre:
+//                        focusedField = .ISBN
+//                    case .ISBN:
+//                        focusedField = .publishingDate
+//                    case .publishingDate:
+//                        focusedField = .publishingHouse
+//                    case .publishingHouse:
+//#if DEBUG
+//                        let logger = appLogger()
+//                        logger.log(level: .info, message: "Case publishingHouse has been reached.")
+//#endif
+//                    default:
+//#if DEBUG
+//                        let logger = appLogger()
+//                        logger.log(level: .info, message: "Case default has been reached.")
+//#endif
+//                        
+//                    } //switch
+//                } //onSubmit
+
+
+            } //VStack
             .toolbar(id: "return") {
                 ToolbarItem(id: "home", placement: .bottomBar) {
                     NavigationLink("Return to Main Screen") {
@@ -273,21 +275,8 @@ struct TitleDetailsView: View {
                 }
             }
             .toolbarRole(.automatic)
-        } //nav stack
-        .alert(isPresented: $unsavedWarning) {
-            Alert(
-                title: Text("Save Warning"),
-                message: Text("Any changes made to this title's details have not been saved. Save now?"),
-                primaryButton: .default(Text("OK")) {
-                    SaveProcess()
-                    hideKeyboard()
-                },
-                secondaryButton: .cancel()
-            )
-            
-        }
-        .safeAreaPadding()
-    }
+        } //NavStack
+    } //body
     
     func SaveProcess() {
         CheckForFormChanges ()
@@ -318,15 +307,15 @@ struct TitleDetailsView: View {
     func LoadValues() {
         
         if !newRecord {
-            //this brings back title
+            //this brings back title2
             GetTitleById()
             beginningTitle = title
+            focusedField = .title
             authorIdString = GetAuthorId(filter: titleIdString)
             GetTitleDetailsById()
             GetCoAuthors()
                         
             if titleDetails.count > 0 {
-                
                 titleDetailsId = titleDetails[0].titleDetailsId.uuidString
                 titleIdString = titleDetails[0].titleId.uuidString
                 selectedType = titleDetails[0].bookType
@@ -359,6 +348,6 @@ struct TitleDetailsView: View {
         beginningPublishingDate = publishingDate
         beginningPublishingHouse = publishingHouse
     }
-}
+} //struct
 
 
