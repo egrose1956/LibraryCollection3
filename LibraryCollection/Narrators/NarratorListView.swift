@@ -66,6 +66,8 @@ struct NarratorListView: View {
             .onAppear {
                 if !titleIdString.isEmpty {
                     NarratorFilteredForTitle()
+                } else {
+                    //brings back all narrators...
                 }
             }
             .foregroundColor(Color.accentColor)

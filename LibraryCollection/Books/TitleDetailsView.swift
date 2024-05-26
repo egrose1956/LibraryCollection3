@@ -44,7 +44,7 @@ struct TitleDetailsView: View {
     @State var additionalAuthors: [String] = []
     
     enum Field: String, CaseIterable, Identifiable, Hashable {
-            case title, selectedType, editionNumber, genre, ISBN, publishingDate, publishingHouse
+            case picker, title, selectedType, editionNumber, genre, ISBN, publishingDate, publishingHouse
             var id: Self { self }
         }
     @FocusState private var focusedField: Field?
@@ -70,12 +70,30 @@ struct TitleDetailsView: View {
         NavigationStack {
             VStack(alignment: .leading) {
                 Form {
+                    
+                    Text("Book Type: (select an option) ")
+                        .foregroundStyle(Color.accentColor)
+                        .font(.caption)
+                    
+                    Picker("Book Type", selection: $selectedType) {
+                        ForEach (bookTypes, id:\.self) { bookType in
+                            Text(bookType)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .focusable(interactions: .activate)
+                    .focused($focusedField, equals: .selectedType)
+                    .accessibilityLabel("Book Type Picker")
+                    
+                    
                     if !newRecord {
                         HStack {
                             Text("Title: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
                             TextField("Title: \(title)", text: $title)
+                                .focusable(interactions: .edit)
+                                .focused($focusedField, equals: .title)
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .accessibilityLabel("Title Details for \(title)")
@@ -85,7 +103,7 @@ struct TitleDetailsView: View {
                         }
                     } else {
                         HStack {
-                            Text("Title")
+                            Text("Title: ")
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
                             TextField ("New Title: ", text: $title)
@@ -97,18 +115,7 @@ struct TitleDetailsView: View {
                                 .accessibilityLabel("New Title")
                         }
                     }
-                    VStack {
-                        Text("Book Type")
-                            .foregroundStyle(Color.accentColor)
-                            .font(.caption)
-                        Picker("Book Type", selection: $selectedType) {
-                            ForEach (bookTypes, id:\.self) { bookType in
-                                Text(bookType)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .accessibilityLabel("Book Type Picker")
-                    }
+
                     HStack {
                         Text("Edition Number: ")
                             .foregroundStyle(Color.accentColor)
@@ -203,40 +210,37 @@ struct TitleDetailsView: View {
                     }
                 } //Form
                 .onAppear {
-                    focusedField = .title
+                    focusedField = .picker
                     LoadValues()
                 }
+                .onSubmit {
+                    switch focusedField {
+                    case .selectedType:
+                        focusedField = .title
+                    case .title:
+                        focusedField = .editionNumber
+                    case .editionNumber:
+                        focusedField = .genre
+                    case .genre:
+                        focusedField = .ISBN
+                    case .ISBN:
+                        focusedField = .publishingDate
+                    case .publishingDate:
+                        focusedField = .publishingHouse
+                    case .publishingHouse:
+#if DEBUG
+                        let logger = appLogger()
+                        logger.log(level: .info, message: "Case publishingHouse has been reached.")
+#endif
+                    default:
+#if DEBUG
+                        let logger = appLogger()
+                        logger.log(level: .info, message: "Case default has been reached.")
+#endif
+
+                    } //switch
+                } //onSubmit
                 .autocorrectionDisabled(true)
-
-
-//                .onSubmit {
-//                    switch focusedField {
-//                    case .title:
-//                        focusedField = .selectedType
-//                    case .selectedType:
-//                        focusedField = .editionNumber
-//                    case .editionNumber:
-//                        focusedField = .genre
-//                    case .genre:
-//                        focusedField = .ISBN
-//                    case .ISBN:
-//                        focusedField = .publishingDate
-//                    case .publishingDate:
-//                        focusedField = .publishingHouse
-//                    case .publishingHouse:
-//#if DEBUG
-//                        let logger = appLogger()
-//                        logger.log(level: .info, message: "Case publishingHouse has been reached.")
-//#endif
-//                    default:
-//#if DEBUG
-//                        let logger = appLogger()
-//                        logger.log(level: .info, message: "Case default has been reached.")
-//#endif
-//                        
-//                    } //switch
-//                } //onSubmit
-
 
             } //VStack
             .toolbar(id: "return") {
