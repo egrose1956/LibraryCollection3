@@ -85,7 +85,6 @@ struct TitleDetailsView: View {
                     .focused($focusedField, equals: .selectedType)
                     .accessibilityLabel("Book Type Picker")
                     
-                    
                     if !newRecord {
                         HStack {
                             Text("Title: ")
@@ -159,7 +158,6 @@ struct TitleDetailsView: View {
                             .textContentType(.none)
                             .submitLabel(.next)
                             .accessibilityLabel("Published Date")
-
                     }
                     HStack {
                         Text("Publishing House: ")
@@ -171,7 +169,6 @@ struct TitleDetailsView: View {
                             .textContentType(.none)
                             .submitLabel(.done)
                             .accessibilityLabel("Publishing House")
-
                     }
                     
                     Button("Cancel Without Saving") { dismiss() }

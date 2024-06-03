@@ -37,6 +37,7 @@ struct AuthorView: View {
         case authorFirstName
         case authorMiddleName
         case authorLastName
+        case addTitle
     }
     @FocusState private var focusedField: Field?
     
@@ -89,14 +90,24 @@ struct AuthorView: View {
                     case .authorMiddleName:
                         focusedField = .authorLastName
                     case .authorLastName:
+                        focusedField = .addTitle
                         if authorLastName.count < 2 {
                             lastNameWarning = true
+                        }
+                        CheckFormForChanges()   //to see if we must save
+                        if recordHasChanges && !saveIsComplete {
+                            PerformValidateAndSave()
                         }
                     default:
 #if DEBUG
                         let logger = appLogger()
                         logger.log(level: .info, message: "Case default has been reached.")
 #endif
+                    }
+                       
+                    CheckFormForChanges()   //to see if we must save
+                    if recordHasChanges && !saveIsComplete {
+                        PerformValidateAndSave()
                     }
                 }
                 if !addingCoAuthor {
@@ -107,25 +118,17 @@ struct AuthorView: View {
                                          authorLastName: authorLastName,
                                          authorFirstName: authorFirstName,
                                          authorMiddleName: authorMiddleName)
-                        .onTapGesture {
-                            CheckFormForChanges()   //to see if we must save
-                            if recordHasChanges && !saveIsComplete {
-                                unSavedWarning = true
-                            }
-                        }
-                        
                     } label: {
-                        Text("Add a new Title for this Author")
+                        Text("If you are adding a co-Author for an existing title, pleasse use the title details screen - Additional Actions menu item. Otherwise, add a new Title for this Author by selecting this link.")
                             .font(.subheadline)
-                            .foregroundStyle(Color.accentColor)
+                            //.foregroundStyle(Color.accentColor)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(5)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top)
                             .padding(.bottom)
-                            
                     }
-                    
                 }
-                
                 if authorTitles.count > 0 {
                     AuthorsWorksView(filteredTitles: authorTitles, authorIdString: authorIdString)
                         .onTapGesture {
@@ -208,9 +211,7 @@ struct AuthorView: View {
         //if we compare what is in the field at the time
         //of a save request or the form disappearance, we can determine
         //if there have been any changes.
-        if ((authorLastName != beginningAuthorLastName)
-            || (authorFirstName != beginningAuthorFirstName)
-            || (authorMiddleName != beginningAuthorMiddleName)) {
+        if ((authorLastName != beginningAuthorLastName) || (authorFirstName != beginningAuthorFirstName) || (authorMiddleName != beginningAuthorMiddleName)) {
             
             recordHasChanges = true
         }

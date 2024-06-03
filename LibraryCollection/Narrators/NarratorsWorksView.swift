@@ -13,25 +13,24 @@ struct NarratorsWorksView: View {
     @Environment(\.managedObjectContext) var moc
     
     @State var narratorIdString: String
+    @State var displayName: String = ""
     @State var titleIdString: String = ""
     @State var narratorTitles: [String] = []
     
     var body: some View {
-        
-        VStack(alignment: .center) {
-            Text("Narrators's Works Previously Entered:")
-                .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
-                .font(.title3)
-                .foregroundStyle(Color.accentColor)
-            
-            NavigationStack {
+        NavigationStack {
+            VStack(alignment: .center) {
+                Text("\(displayName)'s Works Previously Entered:")
+                    .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.accentColor)
+                        
                 ScrollView {
                     ForEach (narratorTitles, id:\.self) { selectedItem in
                         
                         Text("\(selectedItem.components(separatedBy: "*")[0])")
-//                        NavigationLink("\(selectedItem.components(separatedBy: "*")[0])",
-//                                       destination: TitleDetailsView(authorIdString: authorIdString,
-//                                                                     titleIdString: selectedItem.components(separatedBy: "*")[1]))
+
                     }
                 }
                 .onAppear {

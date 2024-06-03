@@ -22,41 +22,76 @@ extension TitleDetailsView {
         
         //add a new title and titleAuthor record
         if returnValue == false {
-            do {
-                //get the object contexts
-                let titleRecord = Title(context: moc)
+            
+            if !titleIdString.isEmpty {
                 
-                //assign values to the objecs for the title table
-                titleRecord.titleId = UUID()
-                titleRecord.title = title
-                
-                titleIdString = titleRecord.titleId.uuidString
-                
-                let titleAuthor = TitleAuthor(context: moc)
-                
-                //assign values to the objects for the titleauthor table
-                titleAuthor.titleAuthorId = UUID()
-                titleAuthor.authorId = UUID(uuidString: authorIdString)!
-                titleAuthor.titleId = titleRecord.titleId
-                
-                //save the title
-                try moc.save()
-                moc.refreshAllObjects()
-                
-                //may need this later
-                //GetAllTitlesByAuthor()
-                
-            } catch {
-                let logger = appLogger()
-                logger.log(level: .error, message: "No save at: AddAuthorAndTitleExtension:SaveTitle. \(error), \(error.localizedDescription)")
-                return false
+                //we found a record of the same title name, but not by this author,
+                //so we should be allowed to add it to the database.
+                //This will, in some circumstances, cause a co-Author to be entered
+                //as a main author of the same book.
+                do {
+                    //get the object contexts
+                    let titleRecord = Title(context: moc)
+                    
+                    //assign values to the objecs for the title table
+                    titleRecord.titleId = UUID()
+                    titleRecord.title = title
+                    
+                    titleIdString = titleRecord.titleId.uuidString
+                    
+                    let titleAuthor = TitleAuthor(context: moc)
+                    
+                    //assign values to the objects for the titleauthor table
+                    titleAuthor.titleAuthorId = UUID()
+                    titleAuthor.authorId = UUID(uuidString: authorIdString)!
+                    titleAuthor.titleId = titleRecord.titleId
+                    
+                    //save the title
+                    try moc.save()
+                    moc.refreshAllObjects()
+                    
+                } catch {
+                    let logger = appLogger()
+                    logger.log(level: .error, message: "No save at: AddAuthorAndTitleExtension:SaveTitle. \(error), \(error.localizedDescription)")
+                    return false
+                }
+                return true
+     
+            } else {
+                do {
+                    //get the object contexts
+                    let titleRecord = Title(context: moc)
+                    
+                    //assign values to the objecs for the title table
+                    titleRecord.titleId = UUID()
+                    titleRecord.title = title
+                    
+                    titleIdString = titleRecord.titleId.uuidString
+                    
+                    let titleAuthor = TitleAuthor(context: moc)
+                    
+                    //assign values to the objects for the titleauthor table
+                    titleAuthor.titleAuthorId = UUID()
+                    titleAuthor.authorId = UUID(uuidString: authorIdString)!
+                    titleAuthor.titleId = titleRecord.titleId
+                    
+                    //save the title
+                    try moc.save()
+                    moc.refreshAllObjects()
+   
+                    
+                } catch {
+                    let logger = appLogger()
+                    logger.log(level: .error, message: "No save at: AddAuthorAndTitleExtension:SaveTitle. \(error), \(error.localizedDescription)")
+                    return false
+                }
+                return true
             }
-            return true
         } else {
             
             //so update the title in the title table
             let _fetchRequest = NSFetchRequest<Title>(entityName: "Title")
-            _fetchRequest.predicate = NSPredicate(format: "titleId == %@", titleIdString)
+            _fetchRequest.predicate = NSPredicate(format: "titleId == %@", UUID(uuidString: titleIdString)! as CVarArg)
             _fetchRequest.resultType = NSFetchRequestResultType.managedObjectResultType
             _fetchRequest.fetchLimit = 1
             
@@ -279,6 +314,9 @@ extension TitleDetailsView {
                             //already have for this author
                             titleIdString = _titles[0].titleId.uuidString
                             return true
+                        } else {
+                            titleIdString = _title[0].titleId.uuidString
+                            return false
                         }
                     }
                 }

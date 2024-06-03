@@ -49,7 +49,10 @@ struct NarratorListView: View {
                     List(narrators, id: \.narratorId) { selectedNarrator in
 
                         NavigationLink { 
-                            NarratorsWorksView(narratorIdString: selectedNarrator.narratorId.uuidString)
+                            NarratorsWorksView(narratorIdString: selectedNarrator.narratorId.uuidString, displayName: nameFormatter.ConcatenateNameFields(
+                                    lastName: selectedNarrator.narratorLastName,
+                                    firstName: selectedNarrator.wrappedNarratorFirstName,
+                                    middleName: selectedNarrator.wrappedNarratorMiddleName))
                         } label: {
                             Text(nameFormatter.ConcatenateNameFields(lastName: selectedNarrator.narratorLastName,
                                                                      firstName: selectedNarrator.wrappedNarratorFirstName,
@@ -66,8 +69,6 @@ struct NarratorListView: View {
             .onAppear {
                 if !titleIdString.isEmpty {
                     NarratorFilteredForTitle()
-                } else {
-                    //brings back all narrators...
                 }
             }
             .foregroundColor(Color.accentColor)
