@@ -31,11 +31,20 @@ struct NarratorListView: View {
         NavigationStack {
             VStack {
                 if narrators.isEmpty {
-                    ContentUnavailableView {
-                        Image(systemName: "person.slash")
-                            .font(.largeTitle)
-                    } description: {
+                    if #available(iOS 17.0, *) {
+                        ContentUnavailableView {
+                            Image(systemName: "person.slash")
+                                .font(.largeTitle)
+                        } description: {
+                            VStack(alignment: .center) {
+                                Text("No Narrators Created.")
+                                Text("Narrators are created from the Title details screen.")
+                            }
+                        }
+                    } else {
                         VStack(alignment: .center) {
+                            Image(systemName: "person.slash")
+                                .font(.largeTitle)
                             Text("No Narrators Created.")
                             Text("Narrators are created from the Title details screen.")
                         }

@@ -26,16 +26,27 @@ struct TitlesView: View {
         NavigationStack {
             Group {
                 if titles.isEmpty {
-                    ContentUnavailableView {
-                        Image(systemName: "books.vertical")
-                            .font(.largeTitle)
-                    } description: {
-                        Text("No Books Available. Add an Author or add a new title to a current author.")
-                    } actions: {
-                        NavigationLink("Return to Main Screen") {
-                            ContentView(returning: true)
+                    if #available(iOS 17.0, *) {
+                        ContentUnavailableView {
+                            Image(systemName: "books.vertical")
+                                .font(.largeTitle)
+                        } description: {
+                            Text("No Books Available. Add an Author or add a new title to a current author.")
+                        } actions: {
+                            NavigationLink("Return to Main Screen") {
+                                ContentView(returning: true)
+                            }
                         }
-                    }                    
+                    } else {
+                        VStack(alignment: .center) {
+                            Image(systemName: "books.vertical")
+                                .font(.largeTitle)
+                            Text("No Books Available. Add an Author or add a new title to a current author.")
+                            NavigationLink("Return to Main Screen") {
+                                ContentView(returning: true)
+                            }
+                        }
+                    }
                 } else {
                     Text("Titles")
                         .font(.title3)

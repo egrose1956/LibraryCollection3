@@ -237,7 +237,7 @@ struct NarratorView: View {
         }
         .keyboardType(.default)
         .autocorrectionDisabled(true)
-        .safeAreaPadding()
+        //.safeAreaPadding()
     }
     
     func CheckForFormChanges() {

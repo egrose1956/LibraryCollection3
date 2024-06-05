@@ -30,17 +30,32 @@ struct AuthorsListView: View {
         NavigationStack {
             Group {
                 if authors.isEmpty {
-                    ContentUnavailableView {
-                        Image(systemName: "person.slash")
-                            .font(.largeTitle)
-                    } description: {
-                        Text("Add New Author")
-                    } actions: {
-                        NavigationLink("Create Author") {
-                            AuthorView()
+                    if #available(iOS 17.0, *) {
+                        // On iOS, this branch runs in versions 17.0 and greater.
+                        // On any other OS, this branch runs in any version of that OS.
+                        ContentUnavailableView {
+                            Image(systemName: "person.slash")
+                                .font(.largeTitle)
+                        } description: {
+                            Text("Add New Author")
+                        } actions: {
+                            NavigationLink("Create Author") {
+                                AuthorView()
+                            }
+                            .buttonStyle(CustomButtonStyle())
                         }
-                        .buttonStyle(CustomButtonStyle())
+                    } else {
+                       // This branch runs in earlier iOS versions.
+                        VStack(alignment: .center) {
+                            Image(systemName: "person.slash")
+                                .font(.largeTitle)
+                            Text("Add New Author")
+                            NavigationLink("Create Author") {
+                                AuthorView()
+                            }
+                        }
                     }
+                
                 } else {
                     Text("Authors")
                         .font(.title3)

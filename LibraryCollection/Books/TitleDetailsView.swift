@@ -81,7 +81,7 @@ struct TitleDetailsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .focusable(interactions: .activate)
+                    //.focusable(interactions: .activate)
                     .focused($focusedField, equals: .selectedType)
                     .accessibilityLabel("Book Type Picker")
                     
@@ -91,7 +91,7 @@ struct TitleDetailsView: View {
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
                             TextField("Title: \(title)", text: $title)
-                                .focusable(interactions: .edit)
+                                //.focusable(interactions: .edit)
                                 .focused($focusedField, equals: .title)
                                 .font(.title3)
                                 .fontWeight(.bold)
@@ -106,7 +106,7 @@ struct TitleDetailsView: View {
                                 .foregroundStyle(Color.accentColor)
                                 .font(.subheadline)
                             TextField ("New Title: ", text: $title)
-                                .focusable(interactions: .edit)
+                                //.focusable(interactions: .edit)
                                 .focused($focusedField, equals: .title)
                                 .font(.subheadline)
                                 .submitLabel(.next)

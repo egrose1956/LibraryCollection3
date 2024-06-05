@@ -89,7 +89,7 @@ struct Search: View {
         .navigationTitle("Search For:  ")
         .keyboardType(.default)
         .autocorrectionDisabled(true)
-        .safeAreaPadding()
+        //.safeAreaPadding()
     }
 }
 
