@@ -23,7 +23,6 @@ Notes are kept on possible feature and other enhancements. **In no particular or
     Are there specific defined genres?
         Add tags??
     IPad split screen - (automatic -- anything to add?)
-    iCloud- ?sharing data
     Dictation for entry-available with system funnctionality
     Images for items
     Purchase Dates
@@ -33,14 +32,8 @@ Notes are kept on possible feature and other enhancements. **In no particular or
             -categories
             -authors books in order of series
     
-    
     Possible for use in educational setting:
             -Section for kids
             -Section for teachers
 
-    Administrator functionality
-    
-    "About" view - 
-    with thanks to: Paul Hudson (Hacking With Swift), Tibor Bodecs (Binary Birds), 
-    Apple documentation and Tutorials, Colin Thompson artwork
-    anybody else??
+    Administrator functionality -specifically deletes
