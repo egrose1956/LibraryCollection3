@@ -219,7 +219,7 @@ extension TitleDetailsView {
         _fetchRequestTA.resultType = NSFetchRequestResultType.managedObjectResultType
         
         do {
-            //get all the titleIds for the titlesRunn
+            //get all the titleIds
             //matching the passed in authorId in the TitleAuthor table
             let _TA = try moc.fetch(_fetchRequestTA)
             if _TA.count > 0  {
