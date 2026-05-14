@@ -19,75 +19,24 @@
     {
       "layers" : [
         {
-          "blend-mode" : "normal",
-          "hidden" : false,
-          "image-name-specializations" : [
-            {
-              "value" : "3_Yellow.png"
-            },
-            {
-              "idiom" : "square",
-              "value" : "3_Yellow.png"
-            }
-          ],
-          "name" : "3_Yellow",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              0,
-              0
-            ]
-          }
+          "blend-mode" : "darken",
+          "fill" : "none",
+          "image-name" : "3_Yellow 2.png",
+          "name" : "3_Yellow 2",
+          "opacity" : 1
         },
         {
-          "image-name" : "2_Yellow.png",
-          "name" : "2_Yellow"
-        }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
+          "image-name" : "2_Yellow 2.png",
+          "name" : "2_Yellow 2"
+        },
         {
-          "image-name" : "1_Yellow.png",
-          "name" : "1_Yellow"
-        }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
+          "image-name" : "1_Yellow 2.png",
+          "name" : "1_Yellow 2"
+        },
         {
-          "image-name" : "0_Yellow.png",
-          "name" : "0_Yellow"
+          "image-name" : "0_Yellow 2.png",
+          "name" : "0_Yellow 2"
         }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
-
       ],
       "shadow" : {
         "kind" : "neutral",
