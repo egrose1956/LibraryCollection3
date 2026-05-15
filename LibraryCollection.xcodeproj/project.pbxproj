@@ -10,8 +10,6 @@
 		06038A3B2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06038A3A2BD5778F007FFD57 /* AuthorsWorksViewExtension.swift */; };
 		060F93872B5B463400CAACDD /* LibraryCollectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060F93862B5B463400CAACDD /* LibraryCollectionApp.swift */; };
 		060F93892B5B463400CAACDD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060F93882B5B463400CAACDD /* ContentView.swift */; };
-		063421832FB648C000CDD502 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 063421822FB648C000CDD502 /* Media.xcassets */; };
-		063421852FB6490200CDD502 /* AccentColor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 063421842FB6490200CDD502 /* AccentColor.xcassets */; };
 		065C6ED12B90F5CA00208BB4 /* CoAuthorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065C6ECF2B90F5CA00208BB4 /* CoAuthorListView.swift */; };
 		065C6ED42B90F66000208BB4 /* NarratorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065C6ED22B90F66000208BB4 /* NarratorListView.swift */; };
 		065C6ED52B90F66000208BB4 /* AuthorsWorksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065C6ED32B90F66000208BB4 /* AuthorsWorksView.swift */; };
@@ -64,8 +62,6 @@
 		060F93882B5B463400CAACDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		060F938F2B5B463500CAACDD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		060F93922B5B463500CAACDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		063421822FB648C000CDD502 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		063421842FB6490200CDD502 /* AccentColor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AccentColor.xcassets; sourceTree = "<group>"; };
 		065C6ECF2B90F5CA00208BB4 /* CoAuthorListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoAuthorListView.swift; sourceTree = "<group>"; };
 		065C6ED22B90F66000208BB4 /* NarratorListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NarratorListView.swift; sourceTree = "<group>"; };
 		065C6ED32B90F66000208BB4 /* AuthorsWorksView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorsWorksView.swift; sourceTree = "<group>"; };
@@ -160,8 +156,6 @@
 		060F938E2B5B463500CAACDD /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				063421842FB6490200CDD502 /* AccentColor.xcassets */,
-				063421822FB648C000CDD502 /* Media.xcassets */,
 				060F938F2B5B463500CAACDD /* Preview Assets.xcassets */,
 				06B39BA52FB56124001CF3B3 /* magnifyingglass.svg */,
 				065D3FEB2FB3AC0500213E3C /* oldbigbookshelf-cropped.png */,
@@ -319,10 +313,8 @@
 			files = (
 				06B39BA62FB56124001CF3B3 /* magnifyingglass.svg in Resources */,
 				06A36F752BB709D700380DD9 /* LibraryCollection.entitlements in Resources */,
-				063421832FB648C000CDD502 /* Media.xcassets in Resources */,
 				06C1551D2B5EDF1E005D2635 /* Launch Screen.storyboard in Resources */,
 				065D3FEC2FB3AC0500213E3C /* oldbigbookshelf-cropped.png in Resources */,
-				063421852FB6490200CDD502 /* AccentColor.xcassets in Resources */,
 				068F89A92FB40E0D00700554 /* oldbigbookshelf.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
